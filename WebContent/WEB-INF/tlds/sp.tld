@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib version="2.0" xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd">
+	<description>JSTL 1.1 Math library</description>
+	<display-name>JSTL math</display-name>
+	<tlib-version>1.1</tlib-version>
+	<short-name>f</short-name>
+	<uri>http://voj.or.kr/jsp/jstl/math</uri>
+	<tag>
+		<name>sp</name>
+		<tag-class>kr.or.voj.webapp.tag.SimpleProcessTag</tag-class>
+		<body-content>scriptless</body-content>
+		<description>Database </description>
+		<attribute>
+			<name>queryPath</name>
+			<description>쿼리경로(스프링설정파일의 processorServiceFactory설정에 root위치 있음)</description>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<name>exception</name>
+			<description>오류를 외부로 던질지 여부</description>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>boolean</type>
+		</attribute>
+		<attribute>
+			<name>processorList</name>
+			<description>실행될 프로세서 이이디 리스트</description>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<name>action</name>
+			<description>쿼리실행 그룹정보</description>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<name>loopId</name>
+			<description>iBatis에서 사용할 배열 구조를 만들어줌</description>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<name>actionFild</name>
+			<description>쿼리실행 그룹정보가 있는 필드명</description>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+	</tag>
+
+</taglib>
