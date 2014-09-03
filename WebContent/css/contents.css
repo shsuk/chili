@@ -46,7 +46,7 @@ table td {height:25px;}
 table.lst {border-collapse: collapse; width: 100%; margin-top: 0px; border: 1px solid #c5dbec;}
 table.lst th {
 	padding:3px; 
-	background: url("ui-bg_glass_85_dfeffc_1x400.png") repeat-x scroll 50% 50% #dfeffc;
+	background: url("../jquery/development-bundle/themes/redmond/images/ui-bg_glass_85_dfeffc_1x400.png") repeat-x scroll 50% 50% #dfeffc;
     border: 1px solid #c5dbec;
     color: #2e6e9e;
     font-weight: bold;
@@ -58,7 +58,7 @@ table.lst td {
 table.vw {border-collapse: collapse; width: 100%; margin-top: 0px; border: 1px solid #c5dbec;}
 table.vw th {
 	padding:3px; 
-	background: url("ui-bg_glass_85_dfeffc_1x400.png") repeat-x scroll 50% 50% #dfeffc;
+	background: url("../jquery/development-bundle/themes/redmond/images/ui-bg_glass_85_dfeffc_1x400.png") repeat-x scroll 50% 50% #dfeffc;
     border: 1px solid #c5dbec;
     color: #2e6e9e;
     font-weight: bold;

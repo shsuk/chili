@@ -18,10 +18,12 @@ import kr.or.voj.webapp.utils.CacheService;
 
 import org.apache.commons.collections.map.CaseInsensitiveMap;
 import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.type.JdbcType;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
+import org.springframework.util.LinkedCaseInsensitiveMap;
 
 /**
  * <pre>
@@ -33,8 +35,9 @@ import org.springframework.core.io.Resource;
  * </pre>
  */
 public class ProcessorServiceFactory  implements ApplicationContextAware {
-	private static Map<String, ProcessorService> processorServiceMap = new HashMap<String, ProcessorService>();;
-	private static Map<String, DefaultDaoSupportor> daoSupportorMap = new HashMap<String, DefaultDaoSupportor>();;
+	private static Map<String, ProcessorService> processorServiceMap = new HashMap<String, ProcessorService>();
+	private static Map<String, DefaultDaoSupportor> daoSupportorMap = new HashMap<String, DefaultDaoSupportor>();
+	private static Map<String, Map<String, String>> rsColumnTypes = new HashMap<String, Map<String,String>>();
 	private static ApplicationContext applicationContext;
 	private static final Logger logger = Logger.getLogger(ProcessorServiceFactory.class);
 	private static String queryFullPath = null;
@@ -49,7 +52,18 @@ public class ProcessorServiceFactory  implements ApplicationContextAware {
 		
 		cacheService.put(key, data);
 	}
-	
+	public static void setRsColumnTypes(String id, List<String> names, List<JdbcType> types){
+		Map<String, String> typeMap = new LinkedCaseInsensitiveMap<String>();
+		
+		for(int i=0; i<names.size(); i++){
+			typeMap.put(names.get(i), types.get(i).name());
+		}
+		
+		rsColumnTypes.put(id, typeMap);
+	}
+	public static Map<String, String> getRsColumnTypes(String id){
+		return rsColumnTypes.get(id);
+	}
 	public static String getRepositoryPath() {
 		new File(repositoryPath).mkdirs();
 		return repositoryPath;

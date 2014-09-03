@@ -1,5 +1,6 @@
 package kr.or.voj.webapp.processor;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -11,13 +12,21 @@ import java.util.Map;
 
 
 
+
+
+
+
+import javax.servlet.ServletRequest;
+
 import org.apache.commons.collections.map.CaseInsensitiveMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.type.JdbcType;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.util.FieldUtils;
 import org.springframework.stereotype.Service;
 
 import com.ibatis.sqlmap.client.SqlMapClient;
@@ -33,26 +42,37 @@ public class MyBatisProcessor implements ProcessorService{
 		String path = processorParam.getQueryPath();
 		CaseInsensitiveMap params = processorParam.getParams();
 		String action = processorParam.getAction();
-		
+		ServletRequest request = processorParam.getRequest();
 		Map<String, Object> resultSet = new HashMap<String, Object>();
+		Map<String, Map<String, String>> resultMeta = new HashMap<String, Map<String,String>>();
+
 		List<MappedStatementInfo> msList = getList(path, action);
 		
 		for(MappedStatementInfo msi : msList){
 			Object result = null;
-
 			if (msi.isSelect) {
 				 List list = sqlSession.selectList(msi.id, params);
+				 Map<String, String> jdbcTypes = ProcessorServiceFactory.getRsColumnTypes(msi.id+"-Inline"); 
 				 
+				 resultMeta.put(msi.returnId , jdbcTypes);
+				//	sqlSession.getConfiguration().getMappedStatement(msi.id).getResultMaps()
+				// sqlSession.
+				// Connection con = sqlSession.getConnection();
+				// con.
 				 if(msi.isSingleRow){
 					 result = list.size()>0 ? list.get(0) : new HashMap();
 				 }else{
 					 result = list;
 				 }
+				 
+				 
 			}else{
 				result = sqlSession.update(msi.id, params);
 			}
-			//리턴결과 설정
+			//쿼리결과 리턴값으로 설정
 			resultSet.put(msi.returnId, result);
+			//컬럼정보를 request에 설정한다.
+			request.setAttribute("__META__", resultMeta);
 			//결과를 쿼리의 인자로 설정한다.
 			params.put(msi.returnId, result);
 		}
@@ -131,7 +151,7 @@ public class MyBatisProcessor implements ProcessorService{
 			if(!id.equals(mappedStatement.getId())){
 				continue;
 			}
-			
+			//mappedStatement.getConfiguration().
 			if (mappedStatement.getSqlCommandType() == SqlCommandType.SELECT ) {
 				isSelect = true;
 			}

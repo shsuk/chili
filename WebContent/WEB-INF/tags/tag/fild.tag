@@ -10,7 +10,7 @@
 <%@ attribute name="index" type="java.lang.String" description="${src_id} index"%>
 <%@ attribute name="valid" type="java.lang.String" description="필드 정합성 체크 정보"%>
 <%@ attribute name="keyValid" type="java.lang.String" description="필드 정합성 체크 정보"%>
-
+<span class="field">
 <c:if test="${!empty(link) }">
 	<c:set var="linkName">onclick="link_${name }(this)"</c:set>
 	<c:set var="linkClass">link</c:set>
@@ -24,16 +24,16 @@
 
 <c:choose>
 	<c:when test="${type=='text'}">
-		<input type="text" name="${name }"  value="${'$'}{${src_id}.${name }}" style="width: 90%;" maxlength="" ${valid } ${keyValid } >
+		<input class="in_control" type="text" name="${name }"  value="${'$'}{${src_id}.${name }}" style="width: 90%;" maxlength="" ${valid } ${keyValid } >
 	</c:when>
 	<c:when test="${type=='label'}">
 		<span name="${name }" ${linkName } class="${linkClass }">${'$'}{${src_id}.${name }}</span>
 	</c:when>
 	<c:when test="${type=='date'}">
-		<input type="text" name="${name }" value="${'$'}{${src_id}.${name }}" class="datepicker" style="width: 100px;" maxlength="" ${valid } ${keyValid } >
+		<input class="in_control datepicker" type="text" name="${name }" value="${'$'}{${src_id}['${name }@yyyy-MM-dd']}" style="width: 100px;" maxlength="" ${valid } ${keyValid } >
 	</c:when>
 	<c:when test="${type=='number'}">
-		<input type="text" name="${name }" value="${'$'}{${src_id}.${name }}" class="spinner" style="width: 100px;" maxlength="" ${valid } ${keyValid } >
+		<input class="in_control spinner" type="text" name="${name }" value="${'$'}{${src_id}.${name }}" style="width: 100px;" maxlength="" ${valid } ${keyValid } >
 	</c:when>
 	<c:when test="${type=='select'}">
 		&lt;tag:select name="${name }" groupId="${name }" selected="${'$'}{${src_id}.${name }}" ${valid }/>
@@ -48,14 +48,14 @@
 		<tag:files name="${name }" style="width: 90%;"/>
 	</c:when>
 	<c:when test="${type=='code'}">${'$'}{code:name('${name }', ${src_id}['${name}'],null)}</c:when>
-	<c:when test="${type=='date_view'}">${'$'}{${src_id}['${name }@yyyy-MM-dd']}</c:when>
+	<c:when test="${type=='date_view'}">${'$'}{${src_id}['${name }@yyyy-MM-dd hh:mm:ss']}</c:when>
 	<c:when test="${type=='number_view'}">${'$'}{${src_id}['${name }@#,##0']}</c:when>
 	<c:otherwise>
-		<input type="${type }" name="${name }" value="${'$'}{${src_id}.${name }}" style="width: 90%;" maxlength="" ${valid } ${keyValid } >
+		<input class="in_control" type="${type }" name="${name }" value="${'$'}{${src_id}.${name }}" style="width: 90%;" maxlength="" ${valid } ${keyValid } >
 	</c:otherwise>
 </c:choose>
 
 <c:if test="${link=='link'}">
 	</span>
 </c:if>
-	
+</span>

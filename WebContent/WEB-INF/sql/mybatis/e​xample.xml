@@ -5,12 +5,17 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
    
 <mapper namespace="notice">
-	<select id="view_1_#row"  parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
+	<select id="add_1_#row" useCache="true" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
+		SELECT *
+		FROM (SELECT 1 tmp) t2
+		LEFT JOIN sys_notice_m t1 ON t1.notice_id = 0
+	</select>
+	<select id="view_1_#row"  useCache="true" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
 		SELECT *
 		FROM sys_notice_m t1
-		WHERE notice_id = ${notice_id}
+		WHERE notice_id = #{notice_id}
 	</select>
-	<select id="list_2_rows"  parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
+	<select id="list_2_rows"  useCache="true" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
 		SELECT SQL_CALC_FOUND_ROWS
 			notice_id,
 			subject,
