@@ -11,7 +11,13 @@ $(function() {
 		var trg = $(e.currentTarget);
 		trg.hide();
 		var view = $('.view_control',trg.parent());
-		view.text(trg.val());
+		var val = $('.control',trg).val();
+		if(val==''){
+			view.html('&nbsp;')
+		}else{
+			view.text(val);
+		}
+		
 		view.show();
 	});
 });
@@ -34,11 +40,12 @@ function initAutoPage(){
 		var ctl = $('.in_control', fld);
 		
 		if(ctl.length>0){
-			var width = ctl.outerWidth() + 'px';
-			var height = ctl.outerHeight() + 'px';
+			//var width = ctl.outerWidth() + 'px';
+			var width ='95%';
+			//var height = ctl.outerHeight() + 'px';
 			var view = $('<div class="view_control"></div>');
-			view.text(ctl.val());
-			view.css({width: width, height: height, disply:'inline', overflow:'hidden', 'margin-right':'8px'});
+			view.text($('.control', fld).val());
+			view.css({width: width, disply:'inline', overflow:'hidden', 'margin-right':'8px'});
 			ctl.hide();
 			fld.append(view);
 		}

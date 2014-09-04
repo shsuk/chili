@@ -95,7 +95,7 @@ public class MyBatisProcessor implements ProcessorService{
 		}
 	}
 	
-	private List<MappedStatementInfo> getList(String path, String action) {
+	public List<MappedStatementInfo> getList(String path, String action) {
 		String key = path + "." + action;
 		
 		if(mappedStatementInfoMap!=null){
@@ -169,7 +169,8 @@ public class MyBatisProcessor implements ProcessorService{
 		}
 		
 		mappedStatementInfoMap = msInfoMap;
-
+		ProcessorServiceFactory.setMyBatisMappedStatementInfoMap(mappedStatementInfoMap);
+		
 		return mappedStatementInfoMap.get(key);
 	}
 }

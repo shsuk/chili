@@ -6,6 +6,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -14,10 +15,12 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import kr.or.voj.webapp.db.DefaultDaoSupportor;
+import kr.or.voj.webapp.processor.MyBatisProcessor.MappedStatementInfo;
 import kr.or.voj.webapp.utils.CacheService;
 
 import org.apache.commons.collections.map.CaseInsensitiveMap;
 import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -44,7 +47,27 @@ public class ProcessorServiceFactory  implements ApplicationContextAware {
 	private static String repositoryPath = null;
 	private static String defaultDataSourceName = null;
 	private static CacheService cacheService = null;
+	private static Map<String, List<MappedStatementInfo>> myBatisMappedStatementInfoMap = null;
 
+	public static Map<String, List<MappedStatementInfo>> getMyBatisMappedStatementInfoMap() {
+		if(myBatisMappedStatementInfoMap==null){
+			MyBatisProcessor myBatisProcessor = (MyBatisProcessor)ProcessorServiceFactory.getBean(MyBatisProcessor.class);
+			myBatisProcessor.getList("", "");
+		}
+		return myBatisMappedStatementInfoMap;
+	}
+	public static Set<String> getMyBatisNameSpace() {
+		if(myBatisMappedStatementInfoMap==null){
+			MyBatisProcessor myBatisProcessor = (MyBatisProcessor)ProcessorServiceFactory.getBean(MyBatisProcessor.class);
+			myBatisProcessor.getList("", "");
+		}
+		List<String> list = new ArrayList<String>();
+		
+		return myBatisMappedStatementInfoMap.keySet();
+	}
+	public static void setMyBatisMappedStatementInfoMap(Map<String, List<MappedStatementInfo>> myBatisMappedStatementInfoMap) {
+		ProcessorServiceFactory.myBatisMappedStatementInfoMap = myBatisMappedStatementInfoMap;
+	}
 	public static Object getCache(String key) {
 		return cacheService.get(key);
 	}

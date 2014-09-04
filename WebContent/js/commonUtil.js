@@ -1,21 +1,24 @@
 	var oEditors = [];
 	var option = {
-		monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월' ],
+		monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월' ],
 		dayNamesMin: ["일","월","화","수","목","금","토"],
 		//showOn: "button",
-		buttonImage: 'images/calendar.gif',
+		buttonImage: '/images/calendar.gif',
 		buttonImageOnly: true,
 		dateFormat: 'yy-mm-dd',
 		changeYear: true,
-		changeMonth: false
+		changeMonth: true
 
 	};
 
+	function ininControl(){
+		$('.datepicker').datepicker(option);
+		$('.spinner').spinner({ min: 1 });
+		
+	}
 	$(function() {
 		try {
-			$('.datepicker').datepicker(option);
-			$('.spinner').spinner({ min: 1 });
-			
+			ininControl();
 		} catch (e) {
 			// TODO: handle exception
 		}
@@ -34,8 +37,7 @@
 
 			$( document ).ajaxComplete(function() {
 				mask_off();
-				$('.datepicker').datepicker(option);
-				$('.spinner').spinner({ min: 1 });
+				ininControl();
 			});
 		} catch (e) {
 			// TODO: handle exception
@@ -129,44 +131,12 @@
 			var opt = valids[n].split(':');
 			var fnc = opt[0].trim();
 			
-			var isValid = eval(fnc)(ctl, opt);
+			var isValid = $.valid_fnc[fnc](ctl, opt);
 			if(!isValid){
 				return false;
 			}
 		}
 		return true;
-	}
-	function notempty(ctl){
-		if(ctl.val().trim()=='' || ctl.val().trim()=='<br>'){
-			alert($('[label='+ctl.attr('name')+']').text() + '에 값이 없습니다.');
-			ctl.focus();
-			return false;
-		}
-		return true;
-	}
-	function rangedate(ctl, opt){
-		if($('#'+opt[1]).val() > $('#'+opt[2]).val()){
-			alert($('[label='+ctl.attr('name')+']').text() + "의 시작일이 종료일보다 클 수 없습니다.");
-			ctl.focus();
-			return false;
-		}
-		return true;
-	}
-	function ext(ctl, opt){
-		var val = ctl.val().toLowerCase();
-		if(val=='') {
-			return true;
-		}
-		for(var i=1; i<opt.length; i++){
-			if(val.endsWith('.'+opt[i])){
-				return true;
-			}
-		}
-		
-		alert($('[label='+ctl.attr('name')+']').text() + "에 첨부한 문서 종류는 등록 할 수 없습니다.");
-		ctl.focus();
-		return false;
-		
 	}
 	
 	
@@ -217,3 +187,55 @@
 			$('#mask').hide();
 		}, 1000);		
 	}
+	//정합성 체크함수 구현
+	$.valid_fnc = {
+		notempty : function(ctl){
+			if(ctl.val().trim()=='' || ctl.val().trim()=='<br>'){
+				alert($('[label='+ctl.attr('name')+']').text() + '에 값이 없습니다.');
+				ctl.focus();
+				return false;
+			}
+			return true;
+		},
+		date : function(ctl){
+			if(ctl.val().trim()==''){
+				return true;
+			}
+
+			try{
+				$.datepicker.parseDate( option.dateFormat, ctl.val());
+			}catch(e){
+				alert($('[label='+ctl.attr('name')+']').text() + '의 값이 올바른 날짜의 값이 아닙니다. 날짜를 입력하세요.');
+				ctl.focus();
+				return false;
+			}
+
+			return true;
+		},
+		rangedate : function(ctl, opt){
+			if($('#'+opt[1]).val() > $('#'+opt[2]).val()){
+				alert($('[label='+ctl.attr('name')+']').text() + "의 시작일이 종료일보다 클 수 없습니다.");
+				ctl.focus();
+				return false;
+			}
+			return true;
+		},
+		ext : function(ctl, opt){
+			var val = ctl.val().toLowerCase();
+			if(val=='') {
+				return true;
+			}
+			for(var i=1; i<opt.length; i++){
+				if(val.endsWith('.'+opt[i])){
+					return true;
+				}
+			}
+			
+			alert($('[label='+ctl.attr('name')+']').text() + "에 첨부한 문서 종류는 등록 할 수 없습니다.");
+			ctl.focus();
+			return false;
+			
+		}
+				
+	}
+	

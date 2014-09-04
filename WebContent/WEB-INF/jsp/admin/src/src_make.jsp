@@ -7,7 +7,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt"%>
 <%@ taglib prefix="sp" uri="/WEB-INF/tlds/sp.tld"%>
 <%@ taglib prefix="tag"  tagdir="/WEB-INF/tags/tag" %> 
-<sp:sp queryPath="${param.queryPath }" action="${param.action }" processorList="mybatis" exception="false">
+<sp:sp queryPath="${fn:substringBefore(param.queryPath,'.') }" action="${fn:substringAfter(param.queryPath,'.' ) }" processorList="mybatis" exception="false">
 	{
 		${param.defaultValue }
 	}

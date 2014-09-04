@@ -9,6 +9,7 @@
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko" lang="ko">
 <head>
+<title>Chili 프로젝트</title>
 <link href="../../jquery/development-bundle/themes/redmond/jquery.ui.all.css"  rel="stylesheet" type="text/css" media="screen" />
 <link href="../../jquery/jqGrid/css/ui.jqgrid.css"  rel="stylesheet" type="text/css" media="screen" />
 <link href="../../jquery/jqGrid/plugins/ui.multiselect.css" rel="stylesheet" type="text/css" media="screen" />
@@ -37,11 +38,34 @@
 			data = $.parseJSON(formData);
 		}
 
-		$('#tabs-1').load('src_load/bit.sh',data, function(){
+    	$('#prg_bar').animate({width: '0%'},1);
+
+    	$('#ui_set').load('src_load/bit.sh',data, function(){
 			$( window ).resize();
 			$('#formData').val('');
-			//$('.field' ).draggable();
+			$('.field' ).draggable({ revert: "invalid" });
+			$('.field_name' ).draggable({ revert: "invalid" });
+			
+			$( ".to_field" ).droppable({
+				activeClass: "ui-state-default",
+				hoverClass: "ui-state-hover",
+				out: function( event, ui ) {
+					if($(ui.draggable).attr('type')=='field_name'){
+						$($( this ).parent()).removeClass( "th" );
+					}
+				},
+				drop: function( event, ui ) {
+					if($(ui.draggable).attr('type')=='field_name'){
+						$($( this ).parent()).addClass( "th" );
+					}
+				}
+			});
+			
+			
+	    	$('#prg_bar').animate({width: '100%'},500);
 		});
+		
+		$( "#tab" ).tabs( "option", "active", 0);	
 	}
 	
 	
@@ -56,7 +80,6 @@
 		$('#tabs-2').load('src_make/bit.sh',data, function(){
 			$( window ).resize();
 			$('#formData').val('');
-			//$('.field' ).draggable();
 		});
 	}
 	
@@ -92,8 +115,9 @@
 		$('#tabs-3').load('src_run/bit.sh',data, function(){
 			$( window ).resize();
 			$('#formData').val('');
-			//$('.field' ).draggable();
 		});
+		
+		$( "#tab" ).tabs( "option", "active", 2);	
 	}
 	
 	function openPage(){
@@ -109,8 +133,9 @@
 
 	<form id="main_form" action="aa" method="post">
 		<div id="defaultData"  style="float: left;padding:1px;">
-			<div class="border f_l p_1 m_3 ui-widget-header" >쿼리경로 <input type="text" id="queryPath" name="queryPath" value="notice"></div>
-			<div class="border f_l p_1 m_3 ui-widget-header" >실행쿼리 그룹 <input type="text" id="action" name="action" value="list"></div>
+			<div class="border f_l p_1 m_3 ui-widget-header" >
+				쿼리경로 <tag:select_query_name name="queryPath" selected="${req.queryPath }"/>
+			</div>
 			<div class="border f_l p_1 m_3 ui-widget-header" >기본값 <input type="text" id="defaultValue" name="defaultValue" style="width: 200px;" value="rows:10,_start:1,notice_id:72"></div>
 			<div class=" ui-widget-header ui-corner-all  m_3" style="float: left; cursor:pointer;  margin-left: 10px; padding: 3px;" onclick="loadData()">읽기</div>
 			<div class=" ui-widget-header ui-corner-all  m_3" style="float: left; cursor:pointer;  margin-left: 10px; padding: 3px;" onclick="makeData()">생성</div>
@@ -129,7 +154,10 @@
 				</ul>
 				
 				<!-- UI설정 -->
-				<div id="tabs-1"></div>
+				<div id="tabs-1">
+					<div style="float: left; border: 1px solid #c5dbec; width: 300px; height: 10px;"><div id="prg_bar" style="border: 1px solid #c5dbec; height: 8px;background: #c5dbec;"></div></div>
+					<div id="ui_set" ></div>
+				</div>
 				<!-- UI소스 -->
 				<div id="tabs-2"></div>
 				<!-- 미리보기 -->

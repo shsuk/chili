@@ -40,6 +40,12 @@ img{border:0;}
 .to_h{white-space:nowrap;}
 .link{cursor: pointer; color:#0000DB;}
 .border{border: 1px solid #c5dbec;}
+
+.th {
+	background: url("../jquery/development-bundle/themes/redmond/images/ui-bg_glass_85_dfeffc_1x400.png") repeat-x scroll 50% 50% #dfeffc;
+}
+
+
 table {cellspacing:0; cellpadding:0; border: 0px; }
 table th {height:25px;}
 table td {height:25px;}
