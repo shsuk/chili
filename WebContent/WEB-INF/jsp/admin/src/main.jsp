@@ -43,32 +43,91 @@
     	$('#ui_set').load('src_load/bit.sh',data, function(){
 			$( window ).resize();
 			$('#formData').val('');
+			
 			$('.field' ).draggable({ revert: "invalid" });
+			$(".field" ).resizable({grid: 32, minWidth: 40, containment: '#resizable_container', stop: function( event, ui ) {
+				span($(this));
+			}});
+			
 			$('.field_name' ).draggable({ revert: "invalid" });
+			$(".field_name" ).resizable({grid: 32, minWidth: 40, containment: '#resizable_container', stop: function( event, ui ) {
+				span($(this));
+			}});
 			
 			$( ".to_field" ).droppable({
 				activeClass: "ui-state-default",
 				hoverClass: "ui-state-hover",
 				out: function( event, ui ) {
-					if($(ui.draggable).attr('type')=='field_name'){
-						$($( this ).parent()).removeClass( "th" );
+					var td = $($( this ).parent());
+					var src = $(ui.draggable);
+					var type = src.attr('type');
+					if(type=='field_name'){
+						td.removeClass( "th" );
 					}
+					td.removeClass(src.attr('title'));
+					td.attr('type', '');
+					td.attr('title', '');
+					td.attr('colspan', 1);
+					td.attr('rowspan', 1);
 				},
 				drop: function( event, ui ) {
-					if($(ui.draggable).attr('type')=='field_name'){
-						$($( this ).parent()).addClass( "th" );
+					var td = $($( this ).parent());
+					var src = $(ui.draggable);
+					var type = src.attr('type');
+					var title = src.attr('title');
+					if(type=='field_name'){
+						td.addClass( "th" );
 					}
+					td.addClass(title);
+					td.attr('type', type);
+					td.attr('title', title);
+					
+					span(src);
 				}
 			});
 			
 			
-	    	$('#prg_bar').animate({width: '100%'},500);
+	    	$('#prg_bar').animate({width: '100%'}, 300);
 		});
 		
 		$( "#tab" ).tabs( "option", "active", 0);	
 	}
 	
+	function span(obj){
+		var title = obj.attr('title');
+		var type =  obj.attr('type');
+		var cspan =  Math.round((obj.outerWidth()+40)/100);
+		$('.'+title+'[type='+type+']').attr('colspan', cspan);
+		var rspan =  Math.round((obj.outerHeight()+10)/32);
+		$('.'+title+'[type='+type+']').attr('rowspan', rspan);
+
+	}
 	
+	function makeUi(){
+		var fields = $('.to_field');
+
+		for(var i=0; i<fields.length; i++){
+			var td = $(fields[i]).parent();
+			var tit = td.attr('title');
+			var type = td.attr('type');
+			if(type==null || type==''){
+				td.hide();
+			}else{
+				td.append($('.'+type+'s[name='+tit+']'));
+			}
+		}
+		
+		fields.hide();
+		$('.drg').hide();
+	}
+	function editUi(){
+		$('.to_field_td').show();
+		$('.to_field').show();
+		$('.drg').show();
+		$('.fields').remove();
+		$('.field_names').remove();
+		
+	}
 	function makeData(){
 		var data = $('#main_form').serializeArray();
 		var formData = $('#formData').val();
@@ -139,7 +198,7 @@
 			<div class="border f_l p_1 m_3 ui-widget-header" >기본값 <input type="text" id="defaultValue" name="defaultValue" style="width: 200px;" value="rows:10,_start:1,notice_id:72"></div>
 			<div class=" ui-widget-header ui-corner-all  m_3" style="float: left; cursor:pointer;  margin-left: 10px; padding: 3px;" onclick="loadData()">읽기</div>
 			<div class=" ui-widget-header ui-corner-all  m_3" style="float: left; cursor:pointer;  margin-left: 10px; padding: 3px;" onclick="makeData()">생성</div>
-			<div class=" ui-widget-header ui-corner-all  m_3" style="float: right; cursor:pointer;  margin-left: 10px; padding: 3px;" onclick="runPage()" >미리보기</div>
+			<div class=" ui-widget-header ui-corner-all  m_3" style="float: left; cursor:pointer;  margin-left: 10px; padding: 3px;" onclick="runPage()" >실행</div>
 		</div>
 		<div class=" ui-widget-header ui-corner-all  m_3" style="float: right; cursor:pointer;  margin-left: 10px; padding: 3px;" onclick="save()">임시저장</div>
 		<div class=" ui-widget-header ui-corner-all  m_3" style="float: right; cursor:pointer;  margin-left: 10px; padding: 3px;" onclick="openPage()" >미리보기</div>

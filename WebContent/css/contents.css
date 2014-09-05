@@ -73,6 +73,11 @@ table.vw td {
 	padding:3px; 
     border: 1px solid #c5dbec;
 }
+table.tpl {border-collapse: collapse; width: 100%; margin-top: 0px; border: 1px solid #c5dbec;}
+table.tpl td {
+	padding:3px; 
+    border: 1px solid #c5dbec;
+}
 
 .btn_sm {
     -moz-border-bottom-colors: none;
