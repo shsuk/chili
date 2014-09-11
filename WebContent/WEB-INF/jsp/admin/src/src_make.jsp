@@ -93,7 +93,7 @@ function link_${info.key }(obj){
 <!-- ************* -->
 
 <form id="src_form">
-<textarea style="width:100%; height:400px; " name="src">
+<textarea id="make_src" style="width:100%; height:400px; " name="src">
 &lt;%@ page contentType="text/html; charset=utf-8"%>
 &lt;%@ page language="java" pageEncoding="UTF-8"%>
 &lt;%@ page trimDirectiveWhitespaces="true" %>

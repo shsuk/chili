@@ -10,11 +10,6 @@
 		FROM (SELECT 1 tmp) t2
 		LEFT JOIN sys_notice_m t1 ON t1.notice_id = 0
 	</select>
-	<select id="view_1_#row"  useCache="true" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
-		SELECT *
-		FROM sys_notice_m t1
-		WHERE notice_id = #{notice_id}
-	</select>
 	<select id="list_2_rows"  useCache="true" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
 		SELECT SQL_CALC_FOUND_ROWS
 			notice_id,
@@ -45,24 +40,102 @@
 		SELECT FOUND_ROWS() cnt
 	</select>
 
+	<select id="view_1_#row"  useCache="true" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
+		SELECT t1.*, concat('f1_', notice_id) file_ref_id, concat('t1_', notice_id) t1_files_ref_id, concat('t2_', notice_id) t2_files_ref_id
+		FROM sys_notice_m t1
+		WHERE notice_id = #{notice_id}
+	</select>
 
-   	<update id="i_2" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap">
-		INSERT INTO sys_notice_file_m(
-			 notice_id, file_id,file_name, file_path
+   	<update id="insert_1" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap">
+		INSERT INTO sys_notice_m(
+			subject, contents, stt_dt, end_dt, 
+			reg_id,reg_dt,chg_id,chg_dt
+		)VALUES(
+			#{subject}, #{contents}, #{stt_dt}, concat(#{end_dt},' 23:59:59'),
+			#{session.user_id}, now(), #{session.user_id}, now()
+		)
+	</update>
+   	<update id="insert_2" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap">
+		INSERT INTO attach_tbl(
+			 file_id,file_name,file_ext,file_path,file_size,ref_id
 		)
 		SELECT 
-			 notice_id, file_id,file_name, file_path
-		FROM sys_notice_file_m
+			 file_id,file_name,file_ext,file_path,file_size,ref_id
+		FROM attach_tbl
 		WHERE 1=2
-
-	  	<foreach item="loop"  collection="loop_" >
-	  		UNION ALL
-			SELECT
-				LAST_INSERT_ID(),
-				#{loop.attach},
-				#{loop.attach_name},
-				#{loop.attach_path}
-		</foreach>
+		<if test="_atach['t1_files_ref_id']!=null">
+		  	<foreach item="loop"  collection="_atach.t1_files_ref_id" >
+		  		UNION ALL
+				SELECT
+					#{loop.id},#{loop.name},#{loop.ext},#{loop.path},#{loop.size},concat('t1_', last_insert_id())
+			</foreach>
+		</if>
+		<if test="_atach['t2_files_ref_id']!=null">
+		  	<foreach item="loop"  collection="_atach.t2_files_ref_id" >
+		  		UNION ALL
+				SELECT
+					#{loop.id},#{loop.name},#{loop.ext},#{loop.path},#{loop.size},concat('t2_', last_insert_id())
+			</foreach>
+		</if>
+		<if test="_atach['file_ref_id']!=null">
+		  	<foreach item="loop"  collection="_atach.file_ref_id" >
+		  		UNION ALL
+				SELECT
+					#{loop.id},#{loop.name},#{loop.ext},#{loop.path},#{loop.size},concat('f1_', last_insert_id())
+			</foreach>
+		</if>
 	</update>
+
+   	<update id="update_1" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap">
+ 		UPDATE sys_notice_m
+		SET 
+			subject = #{subject}, 
+			contents = #{contents}, 
+			stt_dt = #{stt_dt}, 
+			end_dt = concat(#{end_dt},' 23:59:59'), 
+			chg_id = #{session.user_id}, 
+			chg_dt = now()
+		WHERE notice_id = #{notice_id}
+   	</update>
+   	<update id="update_2" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap">
+		INSERT INTO attach_tbl(
+			 file_id,file_name,file_ext,file_path,file_size,ref_id
+		)
+		SELECT 
+			 file_id,file_name,file_ext,file_path,file_size,ref_id
+		FROM attach_tbl
+		WHERE 1=2
+		<if test="_atach['t1_files_ref_id']!=null">
+		  	<foreach item="loop"  collection="_atach.t1_files_ref_id" >
+		  		UNION ALL
+				SELECT
+					#{loop.id},#{loop.name},#{loop.ext},#{loop.path},#{loop.size},concat('t1_', #{notice_id})
+			</foreach>
+		</if>
+		<if test="_atach['t2_files_ref_id']!=null">
+		  	<foreach item="loop"  collection="_atach.t2_files_ref_id" >
+		  		UNION ALL
+				SELECT
+					#{loop.id},#{loop.name},#{loop.ext},#{loop.path},#{loop.size},concat('t2_', #{notice_id})
+			</foreach>
+		</if>
+		<if test="_atach['file_ref_id']!=null">
+		  	<foreach item="loop"  collection="_atach.file_ref_id" >
+		  		UNION ALL
+				SELECT
+					#{loop.id},#{loop.name},#{loop.ext},#{loop.path},#{loop.size},concat('f1_', #{notice_id})
+			</foreach>
+		</if>
+	</update>
+   	<update id="update_3" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap">
+		UPDATE attach_tbl
+		SET ref_id = concat('del_', ref_id)
+		WHERE 1=1
+			and file_id in
+			  	<foreach item="id"  collection="del_file_id_"  open="(" close=")" separator=",">
+						#{id}
+				</foreach>
+	</update>
+	
 	
 </mapper>

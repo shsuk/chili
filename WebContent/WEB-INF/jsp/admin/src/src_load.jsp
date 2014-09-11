@@ -8,22 +8,22 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt"%>
 <%@ taglib prefix="sp" uri="/WEB-INF/tlds/sp.tld"%>
 <%@ taglib prefix="tag"  tagdir="/WEB-INF/tags/tag" %> 
+<sp:sp queryPath="ui" action="design" processorList="mybatis" exception="false"/>
+<c:set var="ui_design" value="${ui.UI_DESIGN }"/>
+<c:set var="ui_field" value="${sp:str2jsonObj(ui.UI_FIELD) }"/>
 <sp:sp queryPath="${fn:substringBefore(param.queryPath,'.') }" action="${fn:substringAfter(param.queryPath,'.' ) }" processorList="mybatis" exception="false">
 	{
 		${param.defaultValue }
 	}
 </sp:sp>
 
-<c:set var="isInit" value="${!empty(param.col_count)}"/>
-<c:set var="col_count" value="${empty(param.col_count) ? 4 : param.col_count}"/>
+<c:set var="isInit" value="${!empty(ui_field.col_count)}"/>
+<c:set var="col_count" value="${empty(ui_field.col_count) ? 4 : ui_field.col_count}"/>
 
-<span  style="float: right;"> 
-	<span style="float: left;"><b>Col Count : </b></span><input type="text" name="col_count" value="${col_count }"  class="spinner" style="width: 20px;"/>
-	<span style="float: left;"><b>Unit of width : </b><tag:check_array name="wUnit" codes="wUnit=%"  checked="${param['wUnit'] }" /></span>
-</span>
+<input type="hidden" name="ui_id" value="${ui.id }">
+<table id="resizable_container" class="ui_design_form" style="clear: both;width:${col_count*100*2 +800 }px; "><tr><td valign="top">
 
-<table id="resizable_container"  style="clear: both;"><tr><td valign="top">
-	<table style="width:800px ;" class="lst" border="0" cellspacing="0" cellpadding="0" >
+	<table id="ui_source_config" style="width:800px ;" class="lst" border="0" cellspacing="0" cellpadding="0" >
 		<colgroup>
 			<col width="100">
 			<col width="100">
@@ -43,7 +43,7 @@
 					<td colspan="10" style="text-align: left; background: #D9E5FF;">
 						<span  style="float: left;"><b>레코드 아이디</b> : ${map.key}</span>
 						<c:set var="use_set" value="use_${map.key}"/>
-						<span  style="float: right;"><tag:check_array name="${use_set}" codes="use=사용"  checked="${isInit ? param[use_set] : 'use' }" /></span>
+						<span  style="float: right;"><tag:check_array name="${use_set}" codes="use=사용"  checked="${isInit ? ui_field[use_set] : 'use' }" /></span>
 					</td>
 				</tr>
 				<tr>
@@ -65,21 +65,23 @@
 						<c:set var="keyValid">${info.key}_key_valid</c:set>
 						<c:set var="width">${info.key}_width</c:set>
 						
-						<c:set var="isInit" value="${!empty(param[label])}"/>
+						<c:set var="isInit" value="${!empty(ui_field[label])}"/>
 	
 						<td class="label" label="${info.key}" title='${info }'>
 							${info.key }
 						</td>
-						<td>
-							<div class="field_name${isList } drg${isList } th${isList }" type="field_name" title="${info.key }" style="border${isList }: 1px solid #c5dbec; height: 20px;cursor${isList }: move;">
-								${isList=='Y' ? '' : '☺' }<input class="field_label" type="text" name="${label}" style="width: 70px;" value="${isInit ?  param[label] : info.key }">
+						<td><!-- 필드명 -->
+							<div class="field_name${isList } drg${isList } th${isList }" type="field_name" title="${info.key }" style="border${isList }: 1px solid #c5dbec; height: 20px;cursor${isList }: move; display: inline;">
+								${isList=='Y' ? '' : '☺' }<input class="field_label" type="text" name="${label}" style="width: 70px;" value="${isInit ?  ui_field[label] : info.key }">
 							</div>
 						</td>
-						<td>
-							<c:set var="fieldType" value="${param[type] }"/>
+						<td><!-- 필드타입 -->
+							<c:set var="fieldType" value="${ui_field[type] }"/>
 							<c:if test="${!isInit}">
 								<c:set var="fieldType">
 									<c:choose>
+										<c:when test="${fn:endsWith(info.key, 'file_ref_id')}">file</c:when>
+										<c:when test="${fn:endsWith(info.key, 'files_ref_id')}">files</c:when>
 										<c:when test="${info.value == 'INTEGER' || info.value == 'BIGINT'}">number</c:when>
 										<c:when test="${info.value == 'TIMESTAMP'}">date</c:when>
 										<c:otherwise>text</c:otherwise>
@@ -89,45 +91,50 @@
 							
 							<c:set var="tmpFieldType">$(info.key)</c:set>
 							
-							<div class="field${isList } drg${isList }" type="field"  title="${info.key }" style="border${isList }: 1px solid #c5dbec; height: 20px;cursor${isList }: move;">
-								${isList=='Y' ? '' : '☺' }<tag:select_array codes="text=텍스트,date=날짜,number=숫자,select=콤보,check=체크박스,radio=라디오박스,hidden=Hidden,file=첨부파일,files=첨부파일들,view=---------,label=라벨,date_view=날짜,datetime_view=날짜시간,number_view=숫자,code=name" name="${type }" selected="${fieldType }" style="width: 70px;" attr=" title='${info.value }'"/>
+							<div class="field${isList } drg${isList }" type="field"  title="${info.key }" style="border${isList }: 1px solid #c5dbec; height: 20px;cursor${isList }: move;  display: inline;">
+								${isList=='Y' ? '' : '☺' }<tag:select_array codes="text=문자열,textarea=문장,date=날짜,number=숫자,select=콤보,check=체크박스,radio=라디오박스,hidden=Hidden,file=첨부파일,files=첨부파일들,view=---------,label=라벨,date_view=날짜,datetime_view=날짜시간,number_view=숫자,code=name" name="${type }" selected="${fieldType }" style="width: 70px;" attr=" title='${info.value }'"/>
 							</div>
 						</td>
 						<td>
-							<tag:check_array name="${link}" codes="link=링크"  checked="${param[link] }" />
+							<tag:check_array name="${link}" codes="link=링크"  checked="${ui_field[link] }" />
 						</td>
 						<td>
 							<c:set var="valids">${valid}[]</c:set>
 							<c:set var="validValue">notempty${fieldType=='date' ? ',date' : '' }</c:set>
-							<tag:check_array name="${valid}" codes="notempty=필수입력,date=날짜,rangedate=기간날짜,ext:jpg:jpeg:png:gif=업로드 ext"  checked="${isInit ? req[valids] : validValue}" />
+							<tag:check_array name="${valid}" codes="notempty=필수입력,date=날짜,rangedate=기간날짜,ext:jpg:jpeg:png:gif=업로드 ext"  checked="${isInit ? ui_field[valids] : validValue}" />
 						</td>
-						<td><tag:radio_array name="${keyValid}" codes="alpa=영문,numeric=숫자,alpa_numeric=영숫자"  checked="${isInit ? param[keyValid] : (fieldType=='number' ? 'numeric' : '') }" /></td>
-						<td><input type="text" name="${width}" style="width: 100%" value="${isInit ? param[width] : 10 }"></td>
+						<td><tag:radio_array name="${keyValid}" codes="alpa=영문,numeric=숫자,alpa_numeric=영숫자"  checked="${isInit ? ui_field[keyValid] : (fieldType=='number' ? 'numeric' : '') }" /></td>
+						<td><input type="text" name="${width}" style="width: 100%" value="${isInit ? ui_field[width] : 10 }"></td>
 					</tr>
 				</c:forEach>
 	
 			</c:if>
 		</c:forEach>
 	</table>
-</td><td valign="top"  >
-	<table class="tpl">
-		<tr>
-			<td colspan="100" style="text-align: center; background: #D9E5FF;">
-				<b>UI 디자인</b><br>☺아이콘을 드래그하여 배치하세요.
-				<br>빈공간은 삭제되니 콘트롤 사이즈를 조절하여 영역을 확보하세요.
-			</td>
-		</tr>
-		<c:forEach begin="1" end="10" step="1">
-			<tr >
-				<c:forEach begin="1" end="${col_count }" step="1">
-					<td class="to_field_td" style="width: 100px;"><div class="to_field" style="height: 20px; margin: 0px ;"></div></td>
+
+</td><td valign="top"  style="width:${col_count*100*2 }px; ">
+
+	<div style="text-align:left;  ; background: #cccccc;">
+		<b>UI 디자인</b><br>☺아이콘을 드래그하여 배치하세요.
+		<br>빈 공간은 삭제되니 콘트롤 사이즈를 조절하거나 아래 아이콘을 끌어 놓으세요.
+		<div class="to_field_td to_field" style="width: 100%;"><div class="to_field" style="height: 20px; margin: 0px ;border: 1px solid #c5dbec; background: #ffffff;">
+			<c:forEach begin="1" end="5" step="1">
+				<span class="field drg" type="field"  title="empty" style="border: 1px solid #c5dbec; height: 20px; cursor: move;">☺&nbsp;&nbsp;&nbsp;&nbsp;</span>
+			</c:forEach>
+		</div></div>
+	</div>
+	<div id="ui_source_dgn">
+		${ui_design}
+		<c:if test="${empty(ui_design) }">
+			<table class="tpl" >
+				<c:forEach begin="1" end="10" step="1">
+					<tr>
+						<c:forEach begin="1" end="${col_count }" step="1">
+							<td class="to_field_td" style="width: 100px;"><div class="to_field" style="height: 20px; margin: 0px ;"></div></td>
+						</c:forEach>
+					</tr>
 				</c:forEach>
-			</tr>
-		</c:forEach>
-	</table>
-	<div style="clear: both;width: 100%;height: 25px;margin-top: 10px;">
-		<div class=" ui-widget-header ui-corner-all  m_3" style="float: left; cursor:pointer;  margin-left: 10px; padding: 3px;" onclick="makeUi()" >미리보기</div>
-		<div class=" ui-widget-header ui-corner-all  m_3" style="float: left; cursor:pointer;  margin-left: 10px; padding: 3px;" onclick="editUi()" >디자인</div>
-		<div class=" ui-widget-header ui-corner-all" style="float: right; cursor: pointer; padding: 3px 10px;margin-left: 10px;" onclick="edit()">수정</div>
+			</table>
+		</c:if>
 	</div>
 </td></table>

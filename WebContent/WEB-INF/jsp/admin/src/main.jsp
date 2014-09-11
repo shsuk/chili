@@ -25,109 +25,118 @@
 	
 	$(function() {
 		$( window ).resize(function(e,e1) {
-			$("textarea").css('height', (window.innerHeight-170) + 'px');		
+			$("#ui_set").css('height', (window.innerHeight-200) + 'px');		
 		}).resize();
 		$('#tab' ).tabs();
 	});
 	
-	function loadData(){
+	function loadMain(){
 		var data = $('#main_form').serializeArray();
-		var formData = $('#formData').val();
-		
-		if(formData!=''){
-			data = $.parseJSON(formData);
-		}
 
-    	$('#prg_bar').animate({width: '0%'},1);
+		$('#prg_bar').animate({width: '0%'}, 1);
 
-    	$('#ui_set').load('src_load/bit.sh',data, function(){
+		$('#ui_set').load('src_load/bit.sh', data, function(){
 			$( window ).resize();
-			$('#formData').val('');
+			removeDupControl();
+			initDrDg();
 			
-			$('.field' ).draggable({ revert: "invalid" });
-			$(".field" ).resizable({grid: 32, minWidth: 40, containment: '#resizable_container', stop: function( event, ui ) {
-				span($(this));
-			}});
-			
-			$('.field_name' ).draggable({ revert: "invalid" });
-			$(".field_name" ).resizable({grid: 32, minWidth: 40, containment: '#resizable_container', stop: function( event, ui ) {
-				span($(this));
-			}});
-			
-			$( ".to_field" ).droppable({
-				activeClass: "ui-state-default",
-				hoverClass: "ui-state-hover",
-				out: function( event, ui ) {
-					var td = $($( this ).parent());
-					var src = $(ui.draggable);
-					var type = src.attr('type');
-					if(type=='field_name'){
-						td.removeClass( "th" );
-					}
-					td.removeClass(src.attr('title'));
-					td.attr('type', '');
-					td.attr('title', '');
-					td.attr('colspan', 1);
-					td.attr('rowspan', 1);
-				},
-				drop: function( event, ui ) {
-					var td = $($( this ).parent());
-					var src = $(ui.draggable);
-					var type = src.attr('type');
-					var title = src.attr('title');
-					if(type=='field_name'){
-						td.addClass( "th" );
-					}
-					td.addClass(title);
-					td.attr('type', type);
-					td.attr('title', title);
-					
-					span(src);
-				}
-			});
-			
-			
-	    	$('#prg_bar').animate({width: '100%'}, 300);
+			$('#prg_bar').animate({width: '100%'}, 300);
 		});
 		
 		$( "#tab" ).tabs( "option", "active", 0);	
 	}
+	function removeDupControl(){
+		var ui_source_dgn = $('#ui_source_dgn');
+		var ui_source_config = $('#ui_source_config');
+		var configFieldName = $('.field_name', ui_source_config );
+			
+		for(var i=0; i<configFieldName.length; i++){
+			var fld = $(configFieldName[i]);
+			var name = fld.attr('title');
+			var dgnFld = $('.field_name[title='+name+']', ui_source_dgn);
+			dgnFld.parent().append(fld);
+			dgnFld.remove();
+		}
+		var configField = $('.field', ui_source_config );
+		for(var i=0; i<configField.length; i++){
+			var fld = $(configField[i]);
+			var name = fld.attr('title');
+			var dgnFld = $('.field[title='+name+']', ui_source_dgn);
+			dgnFld.parent().append(fld);
+			dgnFld.remove();
+		}
+	}
+	function saveUi(){
+		var ui_source_dgn = '';
+		if($('.drg', $('#ui_source_dgn')).length>0){
+			ui_source_dgn = $('#ui_source_dgn').html();
+		}
+		$('#ui_design').val(ui_source_dgn);
+		var data = $('#main_form').serializeArray();
+
+		$('#prg_bar').animate({width: '0%'}, 1);
+
+		$('#ui_set').load('src_save/bit.sh', data, function(){
+			loadMain();
+		});
+	}
 	
-	function span(obj){
+	function tdSpan(obj){
 		var title = obj.attr('title');
 		var type =  obj.attr('type');
+		$('td', $('#ui_source_dgn')).css({width:'100px'});
 		var cspan =  Math.round((obj.outerWidth()+40)/100);
-		$('.'+title+'[type='+type+']').attr('colspan', cspan);
-		var rspan =  Math.round((obj.outerHeight()+10)/32);
-		$('.'+title+'[type='+type+']').attr('rowspan', rspan);
-
+		obj.parent().parent().attr('colspan', cspan);
+		//var rspan =  Math.round((obj.outerHeight()+10)/32);
+		//$('.'+title+'[type='+type+']').attr('rowspan', rspan);
+		obj.css({position: 'relative', top:'', left:''});
 	}
 	
-	function makeUi(){
-		var fields = $('.to_field');
+	function initDrDg(){
+		var ui_design_form = $('.ui_design_form');
+		$('.field', ui_design_form ).draggable({ revert: "invalid" });
+		$(".field", ui_design_form ).resizable({helper: 'ui-resizable-helper', maxHeight: 20, minHeight: 20, minWidth: 60, containment: '#resizable_container', stop: function( event, ui ) {
+			tdSpan($(this));
+		}});
+		
+		$('.field_name', ui_design_form ).draggable({ revert: "invalid" });
+		$('.field_name', ui_design_form ).resizable({helper: 'ui-resizable-helper', maxHeight: 20, minHeight: 20, minWidth: 60, containment: '#resizable_container', stop: function( event, ui ) {
+			tdSpan($(this));
+		}});
+		
+		$('.to_field', ui_design_form ).droppable({
+			activeClass: "ui-state-default",
+			hoverClass: "ui-state-hover",
+			out: function( event, ui ) {
+				var td = $($( this ).parent());
+				var src = $(ui.draggable);
+				var type = src.attr('type');
+				if(type=='field_name'){
+					td.removeClass( "th" );
+				}
+				
+				td.attr('colspan', 1);
+				td.attr('rowspan', 1);
+			},
+			drop: function( event, ui ) {
+				var td = $($( this ).parent());
+				var src = $(ui.draggable);
+				var type = src.attr('type');
+				//필드명인 경우 색상처리
+				if(type=='field_name'){
+					td.addClass( "th" );
+				}
 
-		for(var i=0; i<fields.length; i++){
-			var td = $(fields[i]).parent();
-			var tit = td.attr('title');
-			var type = td.attr('type');
-			if(type==null || type==''){
-				td.hide();
-			}else{
-				td.append($('.'+type+'s[name='+tit+']'));
+				$( this ).append(src);
+				src.css({top:'', left:''});
+				tdSpan(src);
 			}
-		}
+		});
 		
-		fields.hide();
-		$('.drg').hide();
-	}
-	function editUi(){
-		$('.to_field_td').show();
-		$('.to_field').show();
-		$('.drg').show();
-		$('.fields').remove();
-		$('.field_names').remove();
 		
 	}
+	
+/* 	
 	function makeData(){
 		var data = $('#main_form').serializeArray();
 		var formData = $('#formData').val();
@@ -141,16 +150,7 @@
 			$('#formData').val('');
 		});
 	}
-	
-	function save(){
-		var data = $('#src_form').serializeArray();
-
-		$.post('src_save/bit.sh', data, function(){
-			alert('저장되었습니다.');
-		});
-	}
-	
-	function loadQuery(){
+ 	function loadQuery(){
 		var data = $('#main_form').serializeArray();
 		var formData = $('#formData').val();
 		
@@ -163,20 +163,27 @@
 		});
 		
 	}
+*/	
+	function save(){
+		var data = $('#src_form').serializeArray();
+
+		$.post('src_save/bit.sh', data, function(){
+			alert('저장되었습니다.');
+		});
+	}
+	
+	function runDefaultPage(){
+		runPage();
+		$( "#tab" ).tabs( "option", "active", 1);	
+	}
 	function runPage(){
 		var data = $('#main_form').serializeArray();
-		var formData = $('#formData').val();
-		
-		if(formData!=''){
-			data = $.parseJSON(formData);
-		}
 
-		$('#tabs-3').load('src_run/bit.sh',data, function(){
+		$('#auto_generated_uI_main').load('src_run/bit.sh',data, function(){
 			$( window ).resize();
-			$('#formData').val('');
+			//$('#formData').val('');
 		});
 		
-		$( "#tab" ).tabs( "option", "active", 2);	
 	}
 	
 	function openPage(){
@@ -196,31 +203,38 @@
 				쿼리경로 <tag:select_query_name name="queryPath" selected="${req.queryPath }"/>
 			</div>
 			<div class="border f_l p_1 m_3 ui-widget-header" >기본값 <input type="text" id="defaultValue" name="defaultValue" style="width: 200px;" value="rows:10,_start:1,notice_id:72"></div>
-			<div class=" ui-widget-header ui-corner-all  m_3" style="float: left; cursor:pointer;  margin-left: 10px; padding: 3px;" onclick="loadData()">읽기</div>
-			<div class=" ui-widget-header ui-corner-all  m_3" style="float: left; cursor:pointer;  margin-left: 10px; padding: 3px;" onclick="makeData()">생성</div>
-			<div class=" ui-widget-header ui-corner-all  m_3" style="float: left; cursor:pointer;  margin-left: 10px; padding: 3px;" onclick="runPage()" >실행</div>
+			<div class=" ui-widget-header ui-corner-all  m_3" style="float: left; cursor:pointer;  margin-left: 5px; padding: 3px;" onclick="loadMain()">읽기</div>
+			<div class=" ui-widget-header ui-corner-all  m_3" style="float: left; cursor:pointer;  margin-left: 5px; padding: 3px;" onclick="saveUi()">저장</div>
+			<div class=" ui-widget-header ui-corner-all  m_3" style="float: left; cursor:pointer;  margin-left: 5px; padding: 3px;" onclick="runDefaultPage()" >실행</div>
 		</div>
+<!-- 		
+			<div class=" ui-widget-header ui-corner-all  m_3" style="float: left; cursor:pointer;  margin-left: 10px; padding: 3px;" onclick="makeData()">생성</div>
 		<div class=" ui-widget-header ui-corner-all  m_3" style="float: right; cursor:pointer;  margin-left: 10px; padding: 3px;" onclick="save()">임시저장</div>
 		<div class=" ui-widget-header ui-corner-all  m_3" style="float: right; cursor:pointer;  margin-left: 10px; padding: 3px;" onclick="openPage()" >미리보기</div>
-		<div class=" ui-widget-header ui-corner-all  m_3" style="float: right; cursor:pointer;  margin-left: 10px; padding: 3px;" onclick="loadQuery()">쿼리보기</div>
-		<input type="text" id="formData" name="formData" value="" style="width: 100%" placeholder="소스 생성 정보 (생성된 소스의 하단 주석에 있는 코드)">
+		<div class=" ui-widget-header ui-corner-all  m_3" style="float: right; cursor:pointer;  margin-left: 10px; padding: 3px;" onclick="loadQuery()">쿼리보기</div>	
+ -->
+ 		<input type="hidden" id="ui_design" name="ui_design" value="">
+ 		<div id="form_data"></div>
+		<div style="clear: both;">
+			<div style=" float: left; border: 1px solid #c5dbec; width: 300px; height: 10px;"><div id="prg_bar" style="border: 1px solid #c5dbec; height: 8px;background: #c5dbec;"></div></div>
+			<span  style="float: right;"> 
+				<span style="float: left;"><b>Col Count : </b></span><input type="text" name="col_count" value="${col_count }"  class="spinner" style="width: 20px;height: 14px;"/>
+				<span style="float: left;"><b>Unit of width : </b><tag:check_array name="wUnit" codes="wUnit=%"  checked="${param['wUnit'] }" /></span>
+			</span>
+			<span style=" clear:both;"></span>
+		</div>
 		<div id="source" style="clear: both;">
 			<div id="tab">
 				<ul>
 					<li><a href="#tabs-1">UI설정</a></li>
-					<li><a href="#tabs-2">소스</a></li>
-					<li><a href="#tabs-3">미리보기</a></li>
+					<li><a href="#auto_generated_uI_main">미리보기</a></li>
 				</ul>
-				
 				<!-- UI설정 -->
-				<div id="tabs-1">
-					<div style="float: left; border: 1px solid #c5dbec; width: 300px; height: 10px;"><div id="prg_bar" style="border: 1px solid #c5dbec; height: 8px;background: #c5dbec;"></div></div>
-					<div id="ui_set" ></div>
+				<div id="tabs-1">					
+					<div id="ui_set" style="overflow:auto;"></div>
 				</div>
-				<!-- UI소스 -->
-				<div id="tabs-2"></div>
 				<!-- 미리보기 -->
-				<div id="tabs-3"></div>
+				<div  id="auto_generated_uI_main"></div>
 			</div>
 		</div>
 	</form>

@@ -41,6 +41,8 @@ img{border:0;}
 .link{cursor: pointer; color:#0000DB;}
 .border{border: 1px solid #c5dbec;}
 
+.ui-resizable-helper { border: 2px dotted #00F; }
+
 .th {
 	background: url("../jquery/development-bundle/themes/redmond/images/ui-bg_glass_85_dfeffc_1x400.png") repeat-x scroll 50% 50% #dfeffc;
 }
@@ -73,7 +75,7 @@ table.vw td {
 	padding:3px; 
     border: 1px solid #c5dbec;
 }
-table.tpl {border-collapse: collapse; width: 100%; margin-top: 0px; border: 1px solid #c5dbec;}
+table.tpl {border-collapse: collapse; margin-top: 0px; border: 1px solid #c5dbec;}
 table.tpl td {
 	padding:3px; 
     border: 1px solid #c5dbec;

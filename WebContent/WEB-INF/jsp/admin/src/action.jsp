@@ -11,15 +11,10 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt"%>
 <%@ taglib prefix="sp" uri="/WEB-INF/tlds/sp.tld"%>
-<%@ taglib prefix="tag"  tagdir="/WEB-INF/tags/tag" %> 
-<sp:sp queryPath="ui" action="save" processorList="" exception="false"/>
-<c:forEach var="data" items="${req }">
-	<c:if test="${!fn:startsWith(data.key, 'ui_design') }">
-		<c:set var="paramData">${paramData }, "${data.key }" : "${data.value }"</c:set>
-	</c:if>
-</c:forEach>
-<sp:sp queryPath="ui" action="save" processorList="mybatis" exception="false">
+<%@ taglib prefix="tag"  tagdir="/WEB-INF/tags/tag" %>
+<c:set scope="session" var="user_id" value="tester"/>
+<sp:sp queryPath="${param.queryPath }" action="update" loopId="t1_files_ref_id" processorList="attach,mybatis" exception="true">
 	{
-		ui_field: '${fn:substring(paramData, 1, fn:length(paramData))}'
+		${param.defaultValue }
 	}
 </sp:sp>

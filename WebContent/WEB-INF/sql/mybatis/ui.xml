@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   
+<mapper namespace="ui">
+	<select id="design_1_#ui" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
+		SELECT *
+		FROM sys_ui_tbl
+		WHERE query_path = #{queryPath}
+	</select>
+	<update id="save_1"  parameterType="org.apache.commons.collections.map.CaseInsensitiveMap">
+		<if test="ui_id == ''">
+			INSERT INTO sys_ui_tbl (query_path, ui_design, ui_field)
+			VALUES(
+				#{queryPath}, #{ui_design}, #{ui_field}
+			)
+		</if>
+		<if test="ui_id != ''">
+			UPDATE sys_ui_tbl
+			SET ui_design = #{ui_design},
+				ui_field = #{ui_field}
+			WHERE query_path = #{queryPath}
+		</if>
+	</update>
+</mapper>

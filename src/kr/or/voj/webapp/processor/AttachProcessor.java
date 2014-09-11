@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -16,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.collections.map.CaseInsensitiveMap;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.security.util.FieldUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 @Service
 public class AttachProcessor implements ProcessorService{
 
-	private static final SimpleDateFormat YYYYMM_FORMAT = new SimpleDateFormat("yyyy_MM");
+	private static final SimpleDateFormat YYYYMM_FORMAT = new SimpleDateFormat("yyyy_MM/dd");
 
 	public  Object execute(ProcessorParam processorParam) throws Exception {
 		CaseInsensitiveMap params = processorParam.getParams();
@@ -60,42 +60,8 @@ public class AttachProcessor implements ProcessorService{
 
 			}
 		}
-		
-		Map<String, String[]> parameterMap = request.getParameterMap();
-		//request의 파일콘트롤 값을 파일 아이디로 치환한다. ParameterMap과 가공된 정보 모두 치환한다.
-		//Map<String, String[]> reqParameterMap = mRequest.getParameterMap();
-		//Map<String, String[]> parameterMap = new HashMap<String, String[]>(); //(Map<String, String[]>)request.getAttribute(ProcessService.REQUEST_REPLACE_PARAMS);
-		//List<String> attIds1 = new ArrayList<String>();
-		
-		for(String key : result.keySet()){
-			List<Map<String, Object>> attchFileList = result.get(key);
-			
-			//attIds.add(key);//오류시 롤백을 위해 첨부파일의 필드명을 저장한다.
-			List<String> ids = new ArrayList<String>();
-			List<String> names = new ArrayList<String>();
-			List<String> paths = new ArrayList<String>();
-			
-			for(Map<String, Object> map : attchFileList){
-				Object o = map.get("fileId");
-				String fileId = o==null ? null : o.toString();
-				ids.add(fileId);
 
-				o = map.get("fileName");
-				String name = o==null ? null : o.toString();
-				names.add(name);
-				
-				o = map.get("filePath");
-				String path = o==null ? null : o.toString();
-				paths.add(path);
-			}
-			parameterMap.put(key, ids.toArray(new String[0]));
-			parameterMap.put(key+"_name", names.toArray(new String[0]));
-			parameterMap.put(key+"_path", paths.toArray(new String[0]));
-		}
-		//request.getParameterMap();
-		FieldUtils.setProtectedFieldValue("multipartParameters", mRequest, parameterMap);
-		//첨부파일의 추가정보를 반영하기 위해 다시 설정한다.
-		processorParam.setRequest(mRequest);
+		params.put("_atach", result);
 		return null;
 	}
 
@@ -116,7 +82,13 @@ public class AttachProcessor implements ProcessorService{
 		String fileId = UUID.randomUUID().toString();
 		Map<String, Object> fileMap = new HashMap<String, Object>();
 		//파일저장 TODO
-		String filePath = ProcessorServiceFactory.getRepositoryPath() + fileId;
+		String filePath = ProcessorServiceFactory.getRepositoryPath() + YYYYMM_FORMAT.format(new Date());
+		File f = new File(filePath);
+		
+		if(!f.exists()){
+			f.mkdirs();
+		}
+		filePath += "/" + fileId;
 		FileOutputStream fos = null;
 		
 		try {
@@ -131,10 +103,10 @@ public class AttachProcessor implements ProcessorService{
 				}
 			}
 		}
-		fileMap.put("id", attachId);
-		fileMap.put("fileId", fileId);
-		fileMap.put("fileName", fileName);
-		fileMap.put("filePath", filePath);
+		fileMap.put("fieldId", attachId);
+		fileMap.put("id", fileId);
+		fileMap.put("name", fileName);
+		fileMap.put("path", filePath);
 		fileMap.put("ext", ext);
 		fileMap.put("size", fileSize);
 		

@@ -1,12 +1,12 @@
 package kr.or.voj.webapp.processor;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedCaseInsensitiveMap;
 
 
 @Service
@@ -15,7 +15,7 @@ public class MainTransactionProcessor implements ProcessorService{
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
 	public Object execute(ProcessorParam processorParam) throws Exception {
-		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> result = new LinkedCaseInsensitiveMap<Object>();
 		List<String> processorList = processorParam.getProcessorList();
 		
 		for(String processorId : processorList){

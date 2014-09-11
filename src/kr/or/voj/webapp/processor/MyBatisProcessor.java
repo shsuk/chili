@@ -1,12 +1,12 @@
 package kr.or.voj.webapp.processor;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 
 
@@ -23,13 +23,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.type.JdbcType;
-import org.mybatis.spring.SqlSessionFactoryBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.util.FieldUtils;
 import org.springframework.stereotype.Service;
-
-import com.ibatis.sqlmap.client.SqlMapClient;
+import org.springframework.util.LinkedCaseInsensitiveMap;
 
 @Service
 public class MyBatisProcessor implements ProcessorService{
@@ -43,7 +38,7 @@ public class MyBatisProcessor implements ProcessorService{
 		CaseInsensitiveMap params = processorParam.getParams();
 		String action = processorParam.getAction();
 		ServletRequest request = processorParam.getRequest();
-		Map<String, Object> resultSet = new HashMap<String, Object>();
+		Map<String, Object> resultSet = new LinkedCaseInsensitiveMap<Object>();
 		Map<String, Map<String, String>> resultMeta = new HashMap<String, Map<String,String>>();
 
 		List<MappedStatementInfo> msList = getList(path, action);

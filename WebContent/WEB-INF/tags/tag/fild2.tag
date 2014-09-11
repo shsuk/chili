@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="tag"  tagdir="/WEB-INF/tags/tag" %> 
 <%@ attribute name="src_id" type="java.lang.String" description="레코드 아이디"%>
 <%@ attribute name="type" type="java.lang.String" description="콘트롤 타입"%>
 <%@ attribute name="name" type="java.lang.String" description="필드명"%>
@@ -24,6 +25,10 @@
 			<c:set var="isInputColtrol" value="${true}"/>
 			<input class="control" type="text" name="${name }"  value="${values[name]}" style="width: 90%;" maxlength="" ${valid } ${keyValid } >
 		</c:when>
+		<c:when test="${type=='textarea'}">
+			<c:set var="isInputColtrol" value="${true}"/>
+			<textarea class="control" name="${name }" style="width: 90%;height: 150px;" maxlength="" ${valid } ${keyValid } >${values[name]}</textarea>
+		</c:when>
 		<c:when test="${type=='date'}">
 			<c:set var="isInputColtrol" value="${true}"/>
 			<c:set var="name_fmt">${name }@yyyy-MM-dd</c:set>
@@ -33,6 +38,14 @@
 			<c:set var="isInputColtrol" value="${true}"/>
 			<input class="control spinner" type="text" name="${name }" value="${values[name]}" style="min-width: 30px;" maxlength="" ${valid } ${keyValid } >
 		</c:when>
+		<c:when test="${type=='file'}">
+			<c:set var="isInputColtrol" value="${true}"/>
+			<tag:file className="control" name="${name }"  value="${values[name]}" style="width: 90%;"/>
+		</c:when>
+		<c:when test="${type=='files'}">
+			<c:set var="isInputColtrol" value="${true}"/>
+			<tag:files className="control" name="${name }"  value="${values[name]}" style="width: 90%;"/>
+		</c:when>
 		<c:when test="${type=='select'}">
 			&lt;tag:select name="${name }" groupId="${name }" selected="${values[name]}" ${valid }/>
 		</c:when>
@@ -41,9 +54,6 @@
 		</c:when>
 		<c:when test="${type=='radio'}">
 			&lt;tag:radio name="${name }" groupId="${name }" checked="${values[name]}" ${valid }/>
-		</c:when>
-		<c:when test="${type=='files'}">
-			<tag:files name="${name }" style="width: 90%;"/>
 		</c:when>
 		<c:when test="${type=='code'}">
 			${'$'}{code:name('${name }', ${src_id}['${name}'],null)}
@@ -65,13 +75,13 @@
 		</c:when>
 		<c:otherwise>
 			<c:set var="isInputColtrol" value="${true}"/>
-			<input type="${type }" name="${name }" value="${values}" style="width: 90%;" maxlength="" ${valid } ${keyValid } >
+			<input class="control" type="${type }" name="${name }" value="${values}" style="width: 90%;" maxlength="" ${valid } ${keyValid } >
 		</c:otherwise>
 	</c:choose>
 </c:set>
 
 <span class="field">
-	<span ${isInputColtrol ? 'class="in_control"' : '' }>
+	<span ${isInputColtrol ? 'class="in_control"' : '' } type="${type}">
 		<c:if test="${link=='link'}">
 			<span name="${name }" value="${values[name]}"  ${linkName } class="${linkClass }" ${src_id}_index="${index }">
 				${ctl }

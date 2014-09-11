@@ -55,5 +55,11 @@
 			<type>java.lang.String</type>
 		</attribute>
 	</tag>
+	<function>
+		<description>String to Json</description>
+		<name>str2jsonObj</name>
+		<function-class>kr.or.voj.webapp.utils.Function</function-class>
+		<function-signature>java.util.Map str2jsonObj(java.lang.String)</function-signature>
+	</function>
 
 </taglib>

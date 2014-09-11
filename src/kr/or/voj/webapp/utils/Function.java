@@ -3,6 +3,9 @@ package kr.or.voj.webapp.utils;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
+
+import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -138,5 +141,12 @@ public class Function {
 	
 	public static void main(String[] args) {
 		System.out.println(		format("12121232", "___@___.___"));
+	}
+	
+	public static Map str2jsonObj(String str) {
+		if(!str.startsWith("{")){
+			str = "{" + str + "}";
+		}
+		return JSONObject.fromObject(str);
 	}
 }

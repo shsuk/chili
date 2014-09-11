@@ -7,15 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletRequest;
-
-import kr.or.voj.webapp.db.DefaultDaoSupportor;
-import kr.or.voj.webapp.db.QueryInfoFactory;
-import net.sf.json.JSONObject;
-
 import org.apache.commons.collections.map.CaseInsensitiveMap;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ibatis.sqlmap.client.SqlMapClient;

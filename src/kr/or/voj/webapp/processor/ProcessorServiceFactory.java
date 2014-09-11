@@ -38,7 +38,7 @@ import org.springframework.util.LinkedCaseInsensitiveMap;
  * </pre>
  */
 public class ProcessorServiceFactory  implements ApplicationContextAware {
-	private static Map<String, ProcessorService> processorServiceMap = new HashMap<String, ProcessorService>();
+	private static Map<String, ProcessorService> processorServiceMap = new LinkedCaseInsensitiveMap<ProcessorService>();
 	private static Map<String, DefaultDaoSupportor> daoSupportorMap = new HashMap<String, DefaultDaoSupportor>();
 	private static Map<String, Map<String, String>> rsColumnTypes = new HashMap<String, Map<String,String>>();
 	private static ApplicationContext applicationContext;
@@ -61,7 +61,6 @@ public class ProcessorServiceFactory  implements ApplicationContextAware {
 			MyBatisProcessor myBatisProcessor = (MyBatisProcessor)ProcessorServiceFactory.getBean(MyBatisProcessor.class);
 			myBatisProcessor.getList("", "");
 		}
-		List<String> list = new ArrayList<String>();
 		
 		return myBatisMappedStatementInfoMap.keySet();
 	}
@@ -121,6 +120,7 @@ public class ProcessorServiceFactory  implements ApplicationContextAware {
 			e.printStackTrace();
 		}
 	}
+	@SuppressWarnings("static-access")
 	public void setDefaultDataSourceName(String defaultDataSourceName) {
 		this.defaultDataSourceName = defaultDataSourceName;
 	}
@@ -200,9 +200,10 @@ public class ProcessorServiceFactory  implements ApplicationContextAware {
 		return executeMainTransaction(processorParam);
 
 	}
+	@SuppressWarnings("unchecked")
 	public static Map<String, Object> executeMainTransaction(ProcessorParam processorParam) throws Exception{
 		
-		return (Map<String, Object>)processorServiceMap.get("maintransaction").execute(processorParam);
+		return (Map<String, Object>)processorServiceMap.get("mainTransaction").execute(processorParam);
 
 	}
 	public static CaseInsensitiveMap getReqParam(HttpServletRequest request){
@@ -259,21 +260,19 @@ public class ProcessorServiceFactory  implements ApplicationContextAware {
 		
 		CaseInsensitiveMap sessionMap = new CaseInsensitiveMap();
 		HttpSession session = request.getSession();
-		Enumeration<String> en = session.getAttributeNames();
+		String[] names = session.getValueNames();
 		
-		while(en.hasMoreElements()){
-			String key = en.nextElement();
+		for(String key : names){
 			Object val = session.getAttribute(key);
 			
 			if (! (val instanceof String)) {
 				continue;
 			}
 			sessionMap.put(key, val);
-			params.put("session."+key, val);
 		}
 		
 		params.put("session", sessionMap);
-		params.put("request.servletPath", request.getServletPath());
+		params.put("servletPath", request.getServletPath());
 		
 		return params;
 	}	
