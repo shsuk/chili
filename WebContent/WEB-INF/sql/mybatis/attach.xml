@@ -15,5 +15,10 @@
 		FROM attach_tbl
 		WHERE ref_id = #{file_ref_id}
 	</select>
+	<select id="dowonload_1_#row" useCache="true" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
+		SELECT *
+		FROM attach_tbl
+		WHERE file_id = #{file_id}
+	</select>
 
 </mapper>

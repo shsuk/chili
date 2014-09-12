@@ -1,14 +1,20 @@
 package kr.or.voj.webapp.controller;
 
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kr.or.voj.webapp.processor.ProcessorServiceFactory;
+
+import org.apache.commons.collections.map.CaseInsensitiveMap;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.servlet.ModelAndView;
 
 
@@ -47,5 +53,16 @@ public class AutoController {
 	@RequestMapping(value = "{system}/{subSystem}/{page}/bit.sh")
 	public ModelAndView auto(HttpServletRequest request, HttpServletResponse response, @PathVariable("system") String system, @PathVariable("subSystem") String subSystem, @PathVariable("page") String page) throws Exception {
 		return new ModelAndView(system + "/" + subSystem + "/" + page);
+	}
+	@RequestMapping(value = "dl.sh")
+	public ModelAndView dowonload(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		List<String> processorList = new ArrayList<String>();
+		processorList.add("mybatis");
+		processorList.add("download");
+		
+		ProcessorServiceFactory.executeMainTransaction(processorList, new CaseInsensitiveMap(), "attach", "dowonload", null, request, response);
+			
+		
+		return null;
 	}
 }

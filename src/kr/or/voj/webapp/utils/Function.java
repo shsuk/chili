@@ -3,10 +3,12 @@ package kr.or.voj.webapp.utils;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import net.sf.json.JSONObject;
 
+import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
 
 public class Function {
@@ -149,4 +151,28 @@ public class Function {
 		}
 		return JSONObject.fromObject(str);
 	}
+	public static boolean isType(Object obj, String type) {
+		if(obj==null){
+			return false;
+		}
+		
+		List<Class> list = ClassUtils.getAllInterfaces(obj.getClass());
+		
+		for(Class cls : list){
+			if(cls.getSimpleName().equalsIgnoreCase(type)){
+				return true;
+			}
+		}
+		
+		list = ClassUtils.getAllSuperclasses(obj.getClass());
+		
+		for(Class cls : list){
+			if(cls.getSimpleName().equalsIgnoreCase(type)){
+				return true;
+			}
+		}
+		
+		return obj.getClass().getSimpleName().equalsIgnoreCase(type);
+	}
+
 }

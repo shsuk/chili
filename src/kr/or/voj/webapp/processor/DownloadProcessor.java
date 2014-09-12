@@ -27,6 +27,8 @@ public class DownloadProcessor  implements ProcessorService {
 			
 			String fileName = (String)data.get("file_name");
 			String filePath = (String)data.get("file_path");
+			String volume = (String)data.get("volume");
+			filePath = (volume==null ? "" : volume) + filePath;
 			HttpServletResponse response = (HttpServletResponse)processorParam.getResponse();
 			out = response.getOutputStream();
 			
@@ -58,9 +60,7 @@ public class DownloadProcessor  implements ProcessorService {
 			Map<String, Object> rtnMap = processorParam.getProcessorResult();
 			Map<String, Object> data = null;
 			for(String key : rtnMap.keySet()){
-				if(key.endsWith("_meta_")){
-					continue;
-				}
+
 				Object obj = rtnMap.get(key);
 				if (obj instanceof List) {
 					List<Object> list = (List) obj;

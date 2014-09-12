@@ -38,13 +38,13 @@
 			<c:set var="isInputColtrol" value="${true}"/>
 			<input class="control spinner" type="text" name="${name }" value="${values[name]}" style="min-width: 30px;" maxlength="" ${valid } ${keyValid } >
 		</c:when>
-		<c:when test="${type=='file'}">
+		<c:when test="${type=='file' || type=='file_img'}">
 			<c:set var="isInputColtrol" value="${true}"/>
-			<tag:file className="control" name="${name }"  value="${values[name]}" style="width: 90%;"/>
+			<tag:file className="control" name="${name }"  value="${values[name]}" type="${type }" style="width: 90%;"/>
 		</c:when>
-		<c:when test="${type=='files'}">
+		<c:when test="${type=='files' || type=='files_img'}">
 			<c:set var="isInputColtrol" value="${true}"/>
-			<tag:files className="control" name="${name }"  value="${values[name]}" style="width: 90%;"/>
+			<tag:files className="control" name="${name }"  value="${values[name]}" type="${type }" style="width: 90%;"/>
 		</c:when>
 		<c:when test="${type=='select'}">
 			&lt;tag:select name="${name }" groupId="${name }" selected="${values[name]}" ${valid }/>

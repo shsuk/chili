@@ -28,8 +28,33 @@
 			$("#ui_set").css('height', (window.innerHeight-200) + 'px');		
 		}).resize();
 		$('#tab' ).tabs();
+		//콘트롤 설정시 마우스 이동에 대한 백그라운드 처리
+		$(document).on('mouseenter', '.field_settion', function(){
+			var ts = $(this);
+			ts.css({background:'#cccccc'});
+			var field_id = ts.attr('field_id');
+			$('[title='+field_id+']').css('color','red');
+		});
+		$(document).on('mouseleave', '.field_settion', function(){
+			var ts = $(this);
+			ts.css({background:''});
+			var field_id = ts.attr('field_id');
+			$('[title='+field_id+']').css('color','');
+		});
+		$(document).on('mouseenter', '.drg[title]', function(){
+			var ts = $(this);
+			ts.css('color','red');
+			var field_id = ts.attr('title');
+			$('.field_settion[field_id='+field_id+']').css({background:'#cccccc'});
+		});
+		$(document).on('mouseleave', '.drg[title]', function(){
+			var ts = $(this);
+			ts.css('color','');
+			var field_id = ts.attr('title');
+			$('.field_settion[field_id='+field_id+']').css({background:''});
+		});
 	});
-	
+
 	function loadMain(){
 		var data = $('#main_form').serializeArray();
 
@@ -136,34 +161,6 @@
 		
 	}
 	
-/* 	
-	function makeData(){
-		var data = $('#main_form').serializeArray();
-		var formData = $('#formData').val();
-		
-		if(formData!=''){
-			data = $.parseJSON(formData);
-		}
-
-		$('#tabs-2').load('src_make/bit.sh',data, function(){
-			$( window ).resize();
-			$('#formData').val('');
-		});
-	}
- 	function loadQuery(){
-		var data = $('#main_form').serializeArray();
-		var formData = $('#formData').val();
-		
-		if(formData!=''){
-			data = $.parseJSON(formData);
-		}
-
-		$('#query').load('src_query/bit.sh',data, function(){
-			$( "#query" ).dialog();
-		});
-		
-	}
-*/	
 	function save(){
 		var data = $('#src_form').serializeArray();
 
@@ -228,13 +225,23 @@
 				<ul>
 					<li><a href="#tabs-1">UI설정</a></li>
 					<li><a href="#auto_generated_uI_main">미리보기</a></li>
+					<li><a href="#tabs-3">할일</a></li>
 				</ul>
 				<!-- UI설정 -->
 				<div id="tabs-1">					
 					<div id="ui_set" style="overflow:auto;"></div>
 				</div>
 				<!-- 미리보기 -->
-				<div  id="auto_generated_uI_main"></div>
+				<div id="auto_generated_uI_main"></div>
+				<div id="tabs-3">					
+					코드 및 각종 콘트롤 구현<br>
+					타이틀 스타일 안됨<br>
+					페이징<br>
+					볼륨처리<br>
+					이미지 미리보기 타입추가<br>
+					테이블 생성<br>
+					맵퍼<br>
+				</div>
 			</div>
 		</div>
 	</form>

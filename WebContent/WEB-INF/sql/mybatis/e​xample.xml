@@ -10,7 +10,7 @@
 		FROM (SELECT 1 tmp) t2
 		LEFT JOIN sys_notice_m t1 ON t1.notice_id = 0
 	</select>
-	<select id="list_2_rows"  useCache="true" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
+	<select id="list_1_rows"  useCache="true" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
 		SELECT SQL_CALC_FOUND_ROWS
 			notice_id,
 			subject,
@@ -24,6 +24,7 @@
 			(SELECT count(file_id) FROM sys_notice_file_m WHERE notice_id = t1.notice_id) attach
 		FROM sys_notice_m t1
 		WHERE use_yn = 'Y' 
+		
 		<if test="search_type=='subject'">
 			and subject  like concat('%', #{search_text}, '%') 
 		</if>
@@ -34,10 +35,10 @@
 			and contents  like concat('%', #{search_text}, '%') 
 		</if>
 		ORDER BY notice_id desc
-		LIMIT ${_start} , ${rows}
+		LIMIT ${_start==null ? 0 : _start} , ${_rows==null  ? 20 : _rows}
 	</select>
-	<select id="list_3_#cnt"  parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
-		SELECT FOUND_ROWS() cnt
+	<select id="list_2_#cnt"  parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
+		SELECT FOUND_ROWS() cnt, ${_start==null ? 0 : _start} _start, ${_rows==null  ? 20 : _rows} _rows
 	</select>
 
 	<select id="view_1_#row"  useCache="true" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">

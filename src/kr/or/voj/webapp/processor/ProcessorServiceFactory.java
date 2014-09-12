@@ -225,8 +225,8 @@ public class ProcessorServiceFactory  implements ApplicationContextAware {
 				loopList.add(new HashMap<String, String>());
 			}
 		}
-		//request정보를 맵에 추가한다.
 		
+		//request정보를 맵에 추가한다.
 		for(String key :  parameterMap.keySet()){
 			String[] vals = parameterMap.get(key);
 			params.put(key, vals[0]);
@@ -278,14 +278,14 @@ public class ProcessorServiceFactory  implements ApplicationContextAware {
 	}	
 	
 	public static Object executeQuery(String queryPath, String action, CaseInsensitiveMap params) throws Exception {
-		List<String> processorList = new ArrayList<String>();
-		processorList.add("db");
+		//List<String> processorList = new ArrayList<String>();
+		//processorList.add("mybatis");
 		ProcessorParam processorParam = new ProcessorParam(null);
 		processorParam.setQueryPath(queryPath);
 		processorParam.setAction(action);
 		processorParam.setParams(params);
-		processorParam.setProcessorList(processorList);
-		Object obj = ProcessorServiceFactory.getProcessorService("db").execute(processorParam);
+		//processorParam.setProcessorList(processorList);
+		Object obj = ProcessorServiceFactory.getProcessorService("mybatis").execute(processorParam);
 		
 		return obj;
 	}

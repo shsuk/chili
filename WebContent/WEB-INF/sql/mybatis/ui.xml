@@ -24,4 +24,8 @@
 			WHERE query_path = #{queryPath}
 		</if>
 	</update>
+	<select id="lang_1_rows" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
+		SELECT message_id,message,lang
+		FROM sys_lang_tbl
+	</select>
 </mapper>

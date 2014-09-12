@@ -8,6 +8,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt"%>
 <%@ taglib prefix="sp" uri="/WEB-INF/tlds/sp.tld"%>
 <%@ taglib prefix="tag"  tagdir="/WEB-INF/tags/tag" %> 
+<%@ taglib prefix="src"  tagdir="/WEB-INF/tags/src" %> 
 <sp:sp queryPath="ui" action="design" processorList="mybatis" exception="false"/>
 <c:set var="ui_design" value="${ui.UI_DESIGN }"/>
 <c:set var="ui_field" value="${sp:str2jsonObj(ui.UI_FIELD) }"/>
@@ -57,7 +58,7 @@
 				</tr>
 				
 				<c:forEach var="info" items="${__META__[map.key]}">
-					<tr>
+					<tr class="field_settion" field_id="${info.key }">
 						<c:set var="label">${info.key}_label</c:set>
 						<c:set var="type">${info.key}_type</c:set>
 						<c:set var="link">${info.key}_link</c:set>
@@ -71,8 +72,9 @@
 							${info.key }
 						</td>
 						<td><!-- 필드명 -->
+							<c:set var="label_lang"><src:lang id="${info.key }"/></c:set>
 							<div class="field_name${isList } drg${isList } th${isList }" type="field_name" title="${info.key }" style="border${isList }: 1px solid #c5dbec; height: 20px;cursor${isList }: move; display: inline;">
-								${isList=='Y' ? '' : '☺' }<input class="field_label" type="text" name="${label}" style="width: 70px;" value="${isInit ?  ui_field[label] : info.key }">
+								${isList=='Y' ? '' : '☺' }<input class="field_label" type="text" name="${label}" style="width: 70px;" value="${(empty(ui_field[label]) || info.key==ui_field[label]) ? label_lang : ui_field[label] }">
 							</div>
 						</td>
 						<td><!-- 필드타입 -->
@@ -92,7 +94,7 @@
 							<c:set var="tmpFieldType">$(info.key)</c:set>
 							
 							<div class="field${isList } drg${isList }" type="field"  title="${info.key }" style="border${isList }: 1px solid #c5dbec; height: 20px;cursor${isList }: move;  display: inline;">
-								${isList=='Y' ? '' : '☺' }<tag:select_array codes="text=문자열,textarea=문장,date=날짜,number=숫자,select=콤보,check=체크박스,radio=라디오박스,hidden=Hidden,file=첨부파일,files=첨부파일들,view=---------,label=라벨,date_view=날짜,datetime_view=날짜시간,number_view=숫자,code=name" name="${type }" selected="${fieldType }" style="width: 70px;" attr=" title='${info.value }'"/>
+								${isList=='Y' ? '' : '☺' }<tag:select_array codes="text=문자열,textarea=문장,date=날짜,number=숫자,select=콤보,check=체크박스,radio=라디오박스,hidden=Hidden,file=첨부파일,files=첨부파일들,file_img=이미지파일,files_img=이미지파일들,view=---------,label=라벨,date_view=날짜,datetime_view=날짜시간,number_view=숫자,code=name,total_record=페이지 네비게이션" name="${type }" selected="${fieldType }" style="width: 70px;" attr=" title='${info.value }'"/>
 							</div>
 						</td>
 						<td>
@@ -104,7 +106,7 @@
 							<tag:check_array name="${valid}" codes="notempty=필수입력,date=날짜,rangedate=기간날짜,ext:jpg:jpeg:png:gif=업로드 ext"  checked="${isInit ? ui_field[valids] : validValue}" />
 						</td>
 						<td><tag:radio_array name="${keyValid}" codes="alpa=영문,numeric=숫자,alpa_numeric=영숫자"  checked="${isInit ? ui_field[keyValid] : (fieldType=='number' ? 'numeric' : '') }" /></td>
-						<td><input type="text" name="${width}" style="width: 100%" value="${isInit ? ui_field[width] : 10 }"></td>
+						<td><input type="text" name="${width}" style="width: 100%;" value="${isInit ? ui_field[width] : 10 }"></td>
 					</tr>
 				</c:forEach>
 	
@@ -130,7 +132,7 @@
 				<c:forEach begin="1" end="10" step="1">
 					<tr>
 						<c:forEach begin="1" end="${col_count }" step="1">
-							<td class="to_field_td" style="width: 100px;"><div class="to_field" style="height: 20px; margin: 0px ;"></div></td>
+							<td class="to_field_td" style="width: 100px;background: #eeeeee;"><div class="to_field" style="height: 20px; margin: 0px ;"></div></td>
 						</c:forEach>
 					</tr>
 				</c:forEach>

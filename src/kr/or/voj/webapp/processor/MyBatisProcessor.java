@@ -67,7 +67,9 @@ public class MyBatisProcessor implements ProcessorService{
 			//쿼리결과 리턴값으로 설정
 			resultSet.put(msi.returnId, result);
 			//컬럼정보를 request에 설정한다.
-			request.setAttribute("__META__", resultMeta);
+			if(request!=null){
+				request.setAttribute("__META__", resultMeta);
+			}
 			//결과를 쿼리의 인자로 설정한다.
 			params.put(msi.returnId, result);
 		}

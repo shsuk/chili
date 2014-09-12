@@ -61,5 +61,59 @@
 		<function-class>kr.or.voj.webapp.utils.Function</function-class>
 		<function-signature>java.util.Map str2jsonObj(java.lang.String)</function-signature>
 	</function>
+	<function>
+		<description>Data Type</description>
+		<name>isType</name>
+		<function-class>kr.or.voj.webapp.utils.Function</function-class>
+		<function-signature>java.lang.Boolean isType(java.lang.Object, java.lang.String)</function-signature>
+	</function>
+	<function>
+		<description>double to long</description>
+		<name>double2long</name>
+		<function-class>kr.or.voj.webapp.utils.Function</function-class>
+		<function-signature>long double2long(double)</function-signature>
+	</function>
 
+	<function>
+		<description>버림</description>
+		<name>floor</name>
+		<function-class>java.lang.Math</function-class>
+		<function-signature>double floor(double)</function-signature>
+	</function>
+	<function>
+		<description>랜덤함수</description>
+		<name>random</name>
+		<function-class>java.lang.Math</function-class>
+		<function-signature>double random()</function-signature>
+	</function>
+	<function>
+		<description>올림</description>
+		<name>ceil</name>
+		<function-class>java.lang.Math</function-class>
+		<function-signature>double ceil(double)</function-signature>
+	</function>
+	<function>
+		<description>반올림</description>
+		<name>round</name>
+		<function-class>java.lang.Math</function-class>
+		<function-signature>long round(double)</function-signature>
+	</function>
+	<function>
+		<description>parseLong</description>
+		<name>parseLong</name>
+		<function-class>java.lang.Long</function-class>
+		<function-signature>long parseLong(java.lang.String)</function-signature>
+	</function>
+	<function>
+		<description>parseInt</description>
+		<name>parseInt</name>
+		<function-class>java.lang.Integer</function-class>
+		<function-signature>int parseInt(java.lang.String)</function-signature>
+	</function>
+	<function>
+		<description>UUID</description>
+		<name>uuid</name>
+		<function-class>java.util.UUID</function-class>
+		<function-signature>java.util.UUID randomUUID()</function-signature>
+	</function>
 </taglib>
