@@ -52,10 +52,8 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ResultContext;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
-import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
 import org.apache.ibatis.type.TypeHandlerRegistry;
-import org.springframework.security.util.FieldUtils;
 
 /**
  * @author Clinton Begin
@@ -232,11 +230,9 @@ public class DefaultResultSetHandler implements ResultSetHandler {
 
   private void handleResultSet(ResultSetWrapper rsw, ResultMap resultMap, List<Object> multipleResults, ResultMapping parentMapping) throws SQLException {
     try {
-      String id = resultMap.getId();
-      List<JdbcType> jdbcTypes = (List<JdbcType>)FieldUtils.getProtectedFieldValue("jdbcTypes", rsw);
-      List<String> columnNames = (List<String>)FieldUtils.getProtectedFieldValue("columnNames", rsw);
-      ProcessorServiceFactory.setRsColumnTypes(id, columnNames, jdbcTypes);
-      
+      /* 추가된 소스 시작 */
+      ProcessorServiceFactory.setRsMeta(resultMap.getId(), rsw.getResultSet(), configuration);
+      /* 추가된 소스 끝 */
       if (parentMapping != null) {
         handleRowValues(rsw, resultMap, null, RowBounds.DEFAULT, parentMapping);
       } else {

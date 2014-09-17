@@ -18,9 +18,9 @@
 			use_yn,
 			qry_cnt,
 			reg_id,
-			DATE_FORMAT(reg_dt,'%Y-%m-%d') reg_dt,
+			reg_dt,
 			chg_id,
-			DATE_FORMAT(chg_dt,'%Y-%m-%d') chg_dt,
+			chg_dt,
 			(SELECT count(file_id) FROM sys_notice_file_m WHERE notice_id = t1.notice_id) attach
 		FROM sys_notice_m t1
 		WHERE use_yn = 'Y' 

@@ -1,9 +1,17 @@
 $(function() {
 	$(document).on('click', '.view_control', function(e){
-		if(!$.isEditMode){
-			return;
-		}
 		var trg = $(e.currentTarget);
+		var parents = trg.parents();
+		for(var i=0; i<parents.length; i++){
+			if($(parents[i]).attr('type')=='page'){
+				if($(parents[i]).attr('isEditMode')=='true'){
+					break;
+				}else{
+					return;
+				}
+			}
+		}
+				
 		trg.hide();
 		$('.in_control',trg.parent()).show().focus();
 	});
@@ -24,20 +32,22 @@ $(function() {
 		
 		view.show();
 	});
+	
 });
 
-function edit(){
-	$('.view_control').hide();
-	$('.in_control').show();
-	$('#save_btn').show();
-	$('#edit_btn').hide();
-	$.isEditMode = true;
+function edit(page_id){
+	var page = $(page_id);
+	$('.view_control', page).hide();
+	$('.in_control', page).show();
+	$('#save_btn', page).show();
+	$('#edit_btn', page).hide();
+	page.attr('isEditMode', true);
 }
 //조회와 수정 모드 전환 처리를 위한 콘트롤을 생성 한다.
-function initAutoPage(){
-	$['isEditMode'] = false;
+function initAutoPage(page_id){
+	$(page_id).attr('isEditMode', false);
 	
-	var fields = $('.field');
+	var fields = $('.field', $(page_id));
 	
 	for(var i=0; i< fields.length; i++){
 		var fld = $(fields[i]);
@@ -45,10 +55,18 @@ function initAutoPage(){
 		
 		if(ctl.length>0){
 			//var width = ctl.outerWidth() + 'px';
+			var val;
 			var width ='95%';
 			//var height = ctl.outerHeight() + 'px';
 			var view = $('<span class="view_control"></span>');
-			var val = $('.control', fld).val();
+			var obj = $('.control', fld);
+			if(obj.length>0 && obj.get(0).nodeName =='SELECT'){
+				val = $('option:selected',obj).text();
+			}else if(obj.length>0 && obj.get(0).nodeName =='RADIO'){
+				val = $('label[for='+$('input:checked',ctl).attr('id')+']').text();
+			}else{
+				val = obj.val();
+			}
 			if(val && val!=''){
 				view.text(val);	
 			}else{
@@ -62,8 +80,8 @@ function initAutoPage(){
 	
 }
 //사용자정의 UI 디자인을 적용한다.
-function showRelocationUi(){
-	var auto_generated_uI = $('#auto_generated_uI');
+function showRelocationUi(auto_generated_uI_id){
+	var auto_generated_uI = $(auto_generated_uI_id);
 	var fields = $('.to_field', auto_generated_uI);
 	//드롭영역에 필드가 있으면 필드를 추가 하고 없으면 삭제한다.
 	for(var i=0; i<fields.length; i++){
@@ -91,9 +109,9 @@ function showRelocationUi(){
 	auto_generated_uI.show();
 	//$('#default_auto_generated_uI').show();
 }
-function sowDefaultUi(){
-	$('#auto_generated_uI').show();
-	$('#default_auto_generated_uI').show();
+function sowDefaultUi(id){
+	$('#auto_generated_uI_'+id).show();
+	$('#default_auto_generated_uI_'+id).show();
 
 }
 
@@ -106,9 +124,9 @@ function delFile(file_id){
 	$('.'+file_id).hide();
 }
 
-function form_submit(){	
-	var url = 'action/bit.sh';
-	var form = $('#body_form');
+function form_submit(page_id){	
+	var url = '../action/bit.sh';
+	var form = $('#body_form', $(page_id));
 	//폼 정합성 체크
 	if(!valid(form)){
 		return;
@@ -168,4 +186,40 @@ function attach_form_submit(url, form){
 	      
 	xhr.send(fd);
 	
+}
+function linkLoad(ui_id, data, selector){
+	data['ui_id'] = ui_id;
+	$(selector ? selector : '#auto_generated_uI_main').load('../src_run/form.sh',data);
+}
+function linkPopup(ui_id, data){
+	data['ui_id'] = ui_id;
+	var dialog = $( "#dialog" );
+	if(dialog.length==0){
+		dialog = $('<div id="dialog"></div>');
+		$('body').append(dialog);
+		dialog.dialog({
+			autoOpen: false,
+			modal: true,
+			position:{ my: "top", at: "top", of: '#auto_generated_uI_main' },
+			minWidth: 1040, 
+			show: {
+				 effect: "blind",
+				 duration: 1500
+			},
+			hide: {
+				effect: "explode",
+				duration: 1000
+			}
+		});
+	}
+	dialog.load('../src_run/form.sh',data);
+	dialog.dialog('open');
+}
+function linkPage(ui_id, data, path){
+	data['ui_id'] = ui_id;
+	document.location.href = (path ? path : '') + '.sh?' + $.param(data);
+}
+function linkWin(ui_id, data){
+	data['ui_id'] = ui_id;
+	$('#auto_generated_uI_main').load('../src_run/bit.sh',data);
 }

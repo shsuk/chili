@@ -13,7 +13,7 @@
 <%@ attribute name="attr" type="java.lang.String" %>
 <sp:sp queryPath="attach" action="list" processorList="mybatis" exception="false">
 	{
-		files_ref_id: ${value }
+		files_ref_id: '${value }'
 	}
 </sp:sp>
 <script type="text/javascript">

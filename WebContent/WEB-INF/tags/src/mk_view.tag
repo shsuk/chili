@@ -18,8 +18,11 @@
 	<c:set var="label">${info.key}_label</c:set>
 	<c:set var="type">${info.key}_type</c:set>
 	<c:set var="link">${info.key}_link</c:set>
+	<c:set var="link_type">${info.key}_link_type</c:set>
 	<c:set var="valid">${info.key}_valid[]</c:set>
 	<c:set var="keyValid">${info.key}_key_valid</c:set>
+	<c:set var="maxlength">${info.key}_maxlength</c:set>
+
 	<c:if test="${!empty(ui_field[link]) }">
 		<c:set var="links">
 			${links }
@@ -40,7 +43,7 @@
 		<c:otherwise>
 			<tr style="${ui_field[type]=='hidden' ? 'display: none;' : ''}">
 				<th label="${info.key}"><span class="field_names" name="${info.key}">${ui_field[label] }</span></th>
-				<td><span class="fields" name="${info.key}"><src:mk_field src_id="${rcd_key}" name="${info.key }" values="${rcd_value}" type="${ui_field[type] }" link="${ui_field[link] }" valid="${req[valid] }"  keyValid="${ui_field[keyValid] }" /></span></td>
+				<td><span class="fields" name="${info.key}"><src:mk_field src_id="${rcd_key}" name="${info.key }" values="${rcd_value}" type="${ui_field[type] }" link="${ui_field[link] }" link_type="${ui_field[link_type] }" valid="${req[valid] }"  keyValid="${ui_field[keyValid] }" maxlength="${ui_field[maxlength] }"/></span></td>
 			</tr>
 		</c:otherwise>
 	</c:choose>

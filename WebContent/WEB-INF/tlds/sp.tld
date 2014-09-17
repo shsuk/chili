@@ -55,6 +55,8 @@
 			<type>java.lang.String</type>
 		</attribute>
 	</tag>
+	
+	
 	<function>
 		<description>String to Json</description>
 		<name>str2jsonObj</name>
@@ -73,6 +75,13 @@
 		<function-class>kr.or.voj.webapp.utils.Function</function-class>
 		<function-signature>long double2long(double)</function-signature>
 	</function>
+	<function>
+		<description>EL Value</description>
+		<name>el</name>
+		<function-class>kr.or.voj.webapp.utils.ELUtil</function-class>
+		<function-signature>java.lang.Object evaluate(java.lang.String, java.util.Map)</function-signature>
+	</function>
+
 
 	<function>
 		<description>버림</description>

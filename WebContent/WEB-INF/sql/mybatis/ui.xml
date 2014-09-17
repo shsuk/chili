@@ -5,27 +5,44 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
    
 <mapper namespace="ui">
+	<select id="uilist_1_rows" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
+		SELECT ui_id,query_path
+		FROM sys_ui_tbl
+		ORDER BY ui_id
+	</select>
 	<select id="design_1_#ui" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
 		SELECT *
 		FROM sys_ui_tbl
-		WHERE query_path = #{queryPath}
+		WHERE ui_id = #{ui_id}
 	</select>
 	<update id="save_1"  parameterType="org.apache.commons.collections.map.CaseInsensitiveMap">
-		<if test="ui_id == ''">
-			INSERT INTO sys_ui_tbl (query_path, ui_design, ui_field)
+		<selectKey keyProperty="ui_count" resultType="int" order="BEFORE">
+			SELECT count(*) ui_count
+			FROM sys_ui_tbl
+			WHERE ui_id = #{ui_id}
+		</selectKey>
+		<if test="ui_count ==  0">
+			INSERT INTO sys_ui_tbl (ui_id, query_path, ui_design, ui_field)
 			VALUES(
-				#{queryPath}, #{ui_design}, #{ui_field}
+				#{ui_id}, #{queryPath}, #{ui_design}, #{ui_field}
 			)
 		</if>
-		<if test="ui_id != ''">
+		<if test="ui_count != 0">
 			UPDATE sys_ui_tbl
 			SET ui_design = #{ui_design},
-				ui_field = #{ui_field}
-			WHERE query_path = #{queryPath}
+				ui_field = #{ui_field},
+				query_path = #{queryPath},
+				ui_id = #{ui_id}
+			WHERE ui_id = #{ui_id}
 		</if>
 	</update>
 	<select id="lang_1_rows" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
 		SELECT message_id,message,lang
 		FROM sys_lang_tbl
+	</select>
+	<select id="codeList_1_rows" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
+		SELECT group_id,code_value,code_name,reference_value,order_no,depth,use_yn,edit_type
+		FROM code_tbl
+		ORDER bY group_id, order_no
 	</select>
 </mapper>

@@ -27,7 +27,9 @@
 	<c:set var="val" value="${fn:trim(code[0])}" />
 	<c:set var="sel_val" value=",${val}," />
 	<c:if test="${!view }">
-		<input name="${name}" id="${name}_${val }"  type="checkbox" value="${val }" ${att } ${fn:contains(checked, sel_val) ? 'checked' : ''}  ${valid }  style="float: left;"  ${attr } ><label style="float: left;line-height: 20px;" for="${name}_${val }">${fn:trim(code[1])}&nbsp;&nbsp;</label>
+		<span style="white-space : nowrap; ">
+			<input name="${name}" id="${name}_${val }"  type="checkbox" value="${val }" ${att } ${fn:contains(checked, sel_val) ? 'checked' : ''}  ${valid }  style="display:inline;margin:0px; height: 20px; vertical-align: middle; "  ${attr } ><label style="height: 20px;display:inline;vertical-align: middle; " for="${name}_${val }">${fn:trim(code[1])}${empty(fn:trim(fn:trim(code[1]))) ? '' : '&nbsp;&nbsp;' }</label>
+		</span>
 	</c:if>
 	<c:if test="${view && fn:contains(checked, sel_val) }">
 		${fn:trim(code[1])}&nbsp;&nbsp;

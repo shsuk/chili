@@ -14,8 +14,9 @@
 <%@ taglib prefix="tag"  tagdir="/WEB-INF/tags/tag" %> 
 <sp:sp queryPath="ui" action="save" processorList="" exception="false"/>
 <c:forEach var="data" items="${req }">
-	<c:if test="${ !fn:startsWith(data.key, 'ui_design') && sp:isType(data.value,'string')}">
-		<c:set var="paramData">${paramData }, "${data.key }" : "${data.value }"</c:set>
+	<c:if test="${ !fn:startsWith(data.key, 'ui_design') && sp:isType(data.value,'string') && !fn:endsWith(data.key,']') || fn:endsWith(data.key,'[]')}">
+		
+		<c:set var="paramData">${paramData }, "${data.key }" : "${fn:replace(fn:replace(data.value,"'","\\'"),'"',"\\'") }"</c:set>
 	</c:if>
 </c:forEach>
 <sp:sp queryPath="ui" action="save" processorList="mybatis" exception="false">

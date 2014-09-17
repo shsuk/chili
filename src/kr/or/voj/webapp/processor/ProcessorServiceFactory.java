@@ -1,6 +1,9 @@
 package kr.or.voj.webapp.processor;
 
 import java.io.File;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -17,9 +20,11 @@ import javax.sql.DataSource;
 import kr.or.voj.webapp.db.DefaultDaoSupportor;
 import kr.or.voj.webapp.processor.MyBatisProcessor.MappedStatementInfo;
 import kr.or.voj.webapp.utils.CacheService;
+import kr.or.voj.webapp.utils.RSMeta;
 
 import org.apache.commons.collections.map.CaseInsensitiveMap;
 import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.log4j.Logger;
@@ -40,7 +45,7 @@ import org.springframework.util.LinkedCaseInsensitiveMap;
 public class ProcessorServiceFactory  implements ApplicationContextAware {
 	private static Map<String, ProcessorService> processorServiceMap = new LinkedCaseInsensitiveMap<ProcessorService>();
 	private static Map<String, DefaultDaoSupportor> daoSupportorMap = new HashMap<String, DefaultDaoSupportor>();
-	private static Map<String, Map<String, String>> rsColumnTypes = new HashMap<String, Map<String,String>>();
+	private static Map<String, Map<String, RSMeta>> rsMeta = new HashMap<String, Map<String,RSMeta>>();
 	private static ApplicationContext applicationContext;
 	private static final Logger logger = Logger.getLogger(ProcessorServiceFactory.class);
 	private static String queryFullPath = null;
@@ -74,17 +79,23 @@ public class ProcessorServiceFactory  implements ApplicationContextAware {
 		
 		cacheService.put(key, data);
 	}
-	public static void setRsColumnTypes(String id, List<String> names, List<JdbcType> types){
-		Map<String, String> typeMap = new LinkedCaseInsensitiveMap<String>();
+	public static void setRsMeta(String id, ResultSet resultSet, Configuration configuration) throws SQLException{
+		ResultSetMetaData metaData = resultSet.getMetaData();
+		Map<String, RSMeta> typeMap = new LinkedCaseInsensitiveMap<RSMeta>();
+		int columnCount = metaData.getColumnCount();
 		
-		for(int i=0; i<names.size(); i++){
-			typeMap.put(names.get(i), types.get(i).name());
+		for (int i = 1; i <= columnCount; i++) {
+	    	String name = configuration.isUseColumnLabel() ? metaData.getColumnLabel(i) : metaData.getColumnName(i);
+	    	String type = JdbcType.forCode(metaData.getColumnType(i)).name();
+	    	
+	    	RSMeta meta = new RSMeta(name, type, metaData.getPrecision(i), metaData.getScale(i), metaData.getColumnDisplaySize(i));
+	    	typeMap.put(name, meta);
 		}
-		
-		rsColumnTypes.put(id, typeMap);
+
+		rsMeta.put(id, typeMap);
 	}
-	public static Map<String, String> getRsColumnTypes(String id){
-		return rsColumnTypes.get(id);
+	public static Map<String, RSMeta> getRsMeta(String id){
+		return rsMeta.get(id);
 	}
 	public static String getRepositoryPath() {
 		new File(repositoryPath).mkdirs();

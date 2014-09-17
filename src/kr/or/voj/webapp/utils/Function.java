@@ -171,8 +171,21 @@ public class Function {
 				return true;
 			}
 		}
-		
 		return obj.getClass().getSimpleName().equalsIgnoreCase(type);
+	}
+	public static String replaceValue(String str, Map map) throws Exception {
+		String rtn = str;
+		String[] fields = StringUtils.substringsBetween(str, "${", "}");
+		
+		for(String field : fields){
+			Object obj = map.get(field.trim());
+			if(obj==null){
+				throw new Exception(str + "의 ${" + field + "}가 정의되지 않은 값을 참조할려고 합니다.");
+			}
+			rtn = StringUtils.replace(rtn, "${" + field + "}", obj.toString());
+		}
+		
+		return rtn;
 	}
 
 }

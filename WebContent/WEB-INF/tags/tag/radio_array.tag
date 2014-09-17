@@ -20,6 +20,8 @@
 <c:forEach var="row" items="${codeList}"> 
 	<c:set var="code" value="${fn:split(row, secederF)}" />
 	<c:set var="val" value="${fn:trim(code[0])}" />
-	<input name="${name}" id="${name}_${val }"  type="radio" value="${val }" ${att } ${checked == val ? 'checked' : ''} ${valid } style="float: left;"  ${attr } ><label style="float: left;line-height: 20px;" for="${name}_${val }">${fn:trim(code[1])}&nbsp;&nbsp;</label>
+	<span style="white-space : nowrap; ">
+		<input name="${name}" id="${name}_${val }"  type="radio" value="${val }" ${att } ${checked == val ? 'checked' : ''} ${valid } style="display:inline;margin:0px; height: 20px; vertical-align: middle; "  ${attr } ><label style="height: 20px;display:inline;vertical-align: middle; "  for="${name}_${val }">${fn:trim(code[1])}&nbsp;&nbsp;</label>
+	</span>
 </c:forEach>
 </div>

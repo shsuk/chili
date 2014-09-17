@@ -22,21 +22,15 @@
 			<c:set var="label">${info.key}_label</c:set>
 			<c:set var="type">${info.key}_type</c:set>
 			<c:set var="link">${info.key}_link</c:set>
+			<c:set var="link_type">${info.key}_link_type</c:set>
 			<c:set var="valid">${info.key}_valid</c:set>
 			<c:set var="keyValid">${info.key}_key_valid</c:set>
 			<c:set var="width">${info.key}_width</c:set>
+			<c:set var="maxlength">${info.key}_maxlength</c:set>
 			<c:if test="${status.index==0 }">
 				<c:set scope="request" var="title">${title }<th style="${ui_field[type]=='hidden' ? 'display: none;' : ''}" label="${info.key}" width="${ui_field[width]=='*' ? '*' : ui_field[width]*tot_width }${tot_width==1 ? '' : '%'}">${ui_field[label] }</th></c:set>
 			</c:if>
-			<c:if test="${!empty(ui_field[link]) }">
-				<c:set var="links">
-					${links }
-					function link_${info.key }(obj){
-						var ${info.key} = getVal('${info.key}', obj);
-						alert(${info.key});
-					}
-				</c:set>
-			</c:if>
+
 			<c:choose>
 				<c:when test="${type=='total_record'}">
 					<c:if test="${empty(paging) }">
@@ -46,8 +40,8 @@
 					</c:if>
 				</c:when>
 				<c:otherwise>
-					<td  style="${ui_field[type]=='hidden' ? 'display: none;' : ''}" ${ui_field[type]=='date' ? 'align="center"' : (ui_field[type]=='number' ? 'align="right"' : '') }>
-						<src:mk_field src_id="row" name="${info.key }" type="${ui_field[type] }" values="${row }" link="${ui_field[link] }" index="row_${status.index + 1}" valid="${ui_field[valid] }"  keyValid="${ui_field[keyValid] }" /> 
+					<td  style="${ui_field[type]=='hidden' ? 'display: none;' : ''}" ${fn:startsWith(ui_field[type],'date') || ui_field[type] == 'select' || ui_field[type] == 'code' ? 'align="center"' : (fn:startsWith(ui_field[type],'number') ? 'align="right"' : '') }>
+						<src:mk_field src_id="row" name="${info.key }" type="${ui_field[type] }" values="${row }" link="${ui_field[link] }"  link_type="${ui_field[link_type] }" index="row_${status.index + 1}" valid="${ui_field[valid] }"  keyValid="${ui_field[keyValid] }" maxlength="${ui_field[maxlength] }"/> 
 					</td>
 				</c:otherwise>
 			</c:choose>

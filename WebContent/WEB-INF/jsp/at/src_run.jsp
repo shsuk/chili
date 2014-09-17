@@ -9,10 +9,11 @@
 <%@ taglib prefix="tag"  tagdir="/WEB-INF/tags/tag" %> 
 <%@ taglib prefix="src"  tagdir="/WEB-INF/tags/src" %> 
 <sp:sp queryPath="ui" action="design" processorList="mybatis" exception="false"/>
+<c:set var="page_id" value="${sp:uuid()}"/>
 <c:set scope="request" var="ui_design" value="${ui.UI_DESIGN }"/>
 <c:set scope="request" var="ui_field" value="${sp:str2jsonObj(ui.UI_FIELD) }"/>
 
-<sp:sp queryPath="${fn:substringBefore(param.queryPath,'.') }" action="${fn:substringAfter(param.queryPath,'.' ) }" processorList="mybatis" exception="true">
+<sp:sp queryPath="${fn:substringBefore(ui.query_path,'.') }" action="${fn:substringAfter(ui.query_path,'.' ) }" processorList="mybatis" exception="true">
 	{
 		${param.defaultValue }
 	}
@@ -55,13 +56,16 @@
 <script type="text/javascript">
 	$(function() {
 		$['isEditMode'] = false;
-		initAutoPage();
+		initAutoPage('#auto_generated_uI_${page_id}');
 		//콘트롤 변경시 정합성 체크(미사용시 삭제)
-		checkValidOnChange();
-		${empty(ui_design) ? 'sowDefaultUi()' : 'showRelocationUi()' };
+		checkValidOnChange('${page_id}');
+		if('${empty(ui_design)}' == 'true'){
+			sowDefaultUi("${page_id}");
+		}else{
+			showRelocationUi("#auto_generated_uI_${page_id}");
+		}
 		
-		${isEdit};
-		var auto_generated_uI = $('#auto_generated_uI');
+		var auto_generated_uI = $('#auto_generated_uI_${page_id}');
 		$('.tpl', auto_generated_uI).css({width:'100%'});
 		$('td', auto_generated_uI).css({width:''});
 		$('.th', auto_generated_uI).css({width:'150px'});
@@ -70,18 +74,19 @@
 	${links}
 	
 </script> 
-<div id="auto_generated_uI" style="margin: 0 auto; padding:3px; width: 90%; min-width:1000px; border:1px solid #cccccc; display: none;">
-	<form id="body_form" action="" method="post" enctype="multipart/form-data">
-		${ui_design }
-		<div id="default_auto_generated_uI" style="margin: 0 auto; padding:3px; width: 90%; min-width:1000px; border:1px solid #cccccc;display: none;">
-				<input type="hidden" name="queryPath" value="${fn:substringBefore(ui_field.querypath,'.') }">
-				${html }	
-		</div>
-	</form>
-	<div style="clear: both;width: 100%;height: 25px;margin-top: 10px;">
-		<div id="save_btn" class=" ui-widget-header ui-corner-all" style="float: right; cursor: pointer; padding: 3px 10px;margin-left: 10px;display: none;" onclick="form_submit()">저장</div>
-		<div id="edit_btn" class=" ui-widget-header ui-corner-all" style="float: right; cursor: pointer; padding: 3px 10px;margin-left: 10px;" onclick="edit()">수정</div>
+<div id="auto_generated_uI_${page_id}" type="page" style=" display: none;">
+	${ui_design }
+	<div id="default_auto_generated_uI_${page_id}" style=" padding:3px; display: none;">
+		<input type="hidden" name="queryPath" value="${fn:substringBefore(ui_field.querypath,'.') }">
+		${html }	
 	</div>
-	
-	<iframe name="submit_frame" style="width: 0px; height: 0px; display: none;"></iframe>
+	<c:if test="${isForm }">
+		<div style="clear: both; height: 25px; margin-top: 10px;padding:3px; ">
+			<div id="save_btn" class=" ui-widget-header ui-corner-all" style="float: right; cursor: pointer; padding: 3px 10px;margin-left: 10px;display: none;" onclick="form_submit('#auto_generated_uI_${page_id}')">저장</div>
+			<div id="edit_btn" class=" ui-widget-header ui-corner-all" style="float: right; cursor: pointer; padding: 3px 10px;margin-left: 10px;" onclick="edit('#auto_generated_uI_${page_id}')">수정</div>
+		</div>
+		
+		<iframe name="submit_frame" style="width: 0px; height: 0px; display: none;"></iframe>
+	</c:if>
 </div>
+

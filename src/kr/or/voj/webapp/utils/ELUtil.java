@@ -53,6 +53,12 @@ public class ELUtil {
 			pc.setAttribute(key.toLowerCase(), data);
 		}
 		
+		return evaluate(src, pc);
+	}
+	
+	public static Object evaluate(String src, PageContext pc) throws Exception{
+		Object value = src;
+		
 		VariableResolverImpl varResolver = new VariableResolverImpl(pc); 
 		
 		ExpressionEvaluatorImpl exprEval = new ExpressionEvaluatorImpl();

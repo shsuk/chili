@@ -48,11 +48,27 @@ public class AutoController {
 	}
 	@RequestMapping(value = "{system}/{page}/bit.sh")
 	public ModelAndView auto(HttpServletRequest request, HttpServletResponse response, @PathVariable("system") String system, @PathVariable("page") String page) throws Exception {
-		return new ModelAndView(system + "/" + page);
+		ModelAndView mv = new ModelAndView(system + "/" + page);
+		mv.addObject("isForm", false);
+		return mv;
 	}
 	@RequestMapping(value = "{system}/{subSystem}/{page}/bit.sh")
 	public ModelAndView auto(HttpServletRequest request, HttpServletResponse response, @PathVariable("system") String system, @PathVariable("subSystem") String subSystem, @PathVariable("page") String page) throws Exception {
-		return new ModelAndView(system + "/" + subSystem + "/" + page);
+		ModelAndView mv = new ModelAndView(system + "/" + subSystem + "/" + page);
+		mv.addObject("isForm", false);
+		return mv;
+	}
+	@RequestMapping(value = "{system}/{page}/form.sh")
+	public ModelAndView autoForm(HttpServletRequest request, HttpServletResponse response, @PathVariable("system") String system, @PathVariable("page") String page) throws Exception {
+		ModelAndView mv = new ModelAndView(system + "/" + page);
+		mv.addObject("isForm", true);
+		return mv;
+	}
+	@RequestMapping(value = "{system}/{subSystem}/{page}/form.sh")
+	public ModelAndView autoForm(HttpServletRequest request, HttpServletResponse response, @PathVariable("system") String system, @PathVariable("subSystem") String subSystem, @PathVariable("page") String page) throws Exception {
+		ModelAndView mv = new ModelAndView(system + "/" + subSystem + "/" + page);
+		mv.addObject("isForm", true);
+		return mv;
 	}
 	@RequestMapping(value = "dl.sh")
 	public ModelAndView dowonload(HttpServletRequest request, HttpServletResponse response) throws Exception {

@@ -53,6 +53,13 @@
 			var field_id = ts.attr('title');
 			$('.field_settion[field_id='+field_id+']').css({background:''});
 		});
+		//UI리스트 숨김
+		$('#main_form').click(function(e){
+			var nodes = $(e.target).parentsUntil('#ui_list_btn');
+			if($(nodes[nodes.length-1]).attr('id')!='ui_list'){
+				$('#ui_list').hide();
+			}
+		});
 	});
 
 	function loadMain(){
@@ -64,7 +71,8 @@
 			$( window ).resize();
 			removeDupControl();
 			initDrDg();
-			
+			var old_query_path = $('#old_query_path').val();
+			$("#queryPath").val(old_query_path).attr("selected", "selected");
 			$('#prg_bar').animate({width: '100%'}, 300);
 		});
 		
@@ -107,14 +115,33 @@
 	}
 	
 	function tdSpan(obj){
-		var title = obj.attr('title');
-		var type =  obj.attr('type');
 		$('td', $('#ui_source_dgn')).css({width:'100px'});
+
 		var cspan =  Math.round((obj.outerWidth()+40)/100);
-		obj.parent().parent().attr('colspan', cspan);
-		//var rspan =  Math.round((obj.outerHeight()+10)/32);
-		//$('.'+title+'[type='+type+']').attr('rowspan', rspan);
 		obj.css({position: 'relative', top:'', left:''});
+		var td = obj.parent().parent();
+		td.attr('colspan', cspan);
+		
+		hideTd(td);
+	}
+	function hideTd(trgTd){
+		var allSpan = 0;
+		var tr = trgTd.parent();
+		var tds = $('td', tr);
+		var len = tds.length;
+		
+		for(var i=0; i<len; i++){
+			var td = $(tds[i]);
+			var span = td.attr('colspan');
+			span = span ? parseInt(span,10) : 1;
+			allSpan += span;
+			if(allSpan > len){
+				td.hide();
+			}else{
+				td.show();
+			}
+		}
+		
 	}
 	
 	function initDrDg(){
@@ -142,6 +169,8 @@
 				
 				td.attr('colspan', 1);
 				td.attr('rowspan', 1);
+				
+				hideTd(td);
 			},
 			drop: function( event, ui ) {
 				var td = $($( this ).parent());
@@ -170,8 +199,11 @@
 	}
 	
 	function runDefaultPage(){
-		runPage();
-		$( "#tab" ).tabs( "option", "active", 1);	
+		var form = $('#new_form');
+		form.attr('action', '../../at/pg/.sh?ui_id='+$('#ui_id').val());
+		form.submit();
+		//runPage();
+		//$( "#tab" ).tabs( "option", "active", 1);	
 	}
 	function runPage(){
 		var data = $('#main_form').serializeArray();
@@ -190,12 +222,21 @@
 		frm.attr('action', 'src_run/bit.sh?_ps=temp&' + param);
 		frm.submit();
 	}
+	function viewUiList(){
+		$('#ui_list').load('../../at/src_run/bit.sh?ui_id=uilist', function(){
+			$('#ui_list').show();
+		});
+	}
 </script> 
 </head>
 <body >
 
 	<form id="main_form" action="aa" method="post">
 		<div id="defaultData"  style="float: left;padding:1px;">
+			<div id="ui_list_btn" class="border f_l p_1 m_3 ui-widget-header" >
+				<span onclick="viewUiList()" style="cursor: pointer;">UI ID</span> <input type="text" id="ui_id" name="ui_id" value="${param.ui_id }">
+				<div id="ui_list" style="position: absolute; z-index: 100;background: #ffffff;color: #444444;border: 1px solid #c5dbec;"></div>
+			</div>
 			<div class="border f_l p_1 m_3 ui-widget-header" >
 				쿼리경로 <tag:select_query_name name="queryPath" selected="${req.queryPath }"/>
 			</div>
@@ -215,8 +256,8 @@
 		<div style="clear: both;">
 			<div style=" float: left; border: 1px solid #c5dbec; width: 300px; height: 10px;"><div id="prg_bar" style="border: 1px solid #c5dbec; height: 8px;background: #c5dbec;"></div></div>
 			<span  style="float: right;"> 
-				<span style="float: left;"><b>Col Count : </b></span><input type="text" name="col_count" value="${col_count }"  class="spinner" style="width: 20px;height: 14px;"/>
-				<span style="float: left;"><b>Unit of width : </b><tag:check_array name="wUnit" codes="wUnit=%"  checked="${param['wUnit'] }" /></span>
+				<span><b>Col Count : </b></span><input type="text" name="col_count" value="${col_count }"  class="spinner" style="width: 20px;height: 14px;"/>
+				&nbsp;&nbsp;&nbsp;<span><b>Unit of width : </b><tag:check_array name="wUnit" codes="wUnit=%"  checked="${param['wUnit'] }" /></span>
 			</span>
 			<span style=" clear:both;"></span>
 		</div>
@@ -234,6 +275,7 @@
 				<!-- 미리보기 -->
 				<div id="auto_generated_uI_main"></div>
 				<div id="tabs-3">					
+					코드 및 각종 콘트롤 수정모드에서 값변경시 텍스트값 가져 오는 로직 구현<br>
 					코드 및 각종 콘트롤 구현<br>
 					타이틀 스타일 안됨<br>
 					페이징<br>
@@ -246,6 +288,6 @@
 		</div>
 	</form>
 	<div id="query" title="쿼리보기"></div>
-	<form id="new_form" action="/test/main.sh?_ps=temp" method="post" target="_new"></form>
+	<form id="new_form" action="" method="post" target="_new"></form>
 </body>
 </htm>

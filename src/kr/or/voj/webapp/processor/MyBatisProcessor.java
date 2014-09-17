@@ -16,7 +16,10 @@ import java.util.Map;
 
 
 
+
 import javax.servlet.ServletRequest;
+
+import kr.or.voj.webapp.utils.RSMeta;
 
 import org.apache.commons.collections.map.CaseInsensitiveMap;
 import org.apache.commons.lang.StringUtils;
@@ -39,7 +42,7 @@ public class MyBatisProcessor implements ProcessorService{
 		String action = processorParam.getAction();
 		ServletRequest request = processorParam.getRequest();
 		Map<String, Object> resultSet = new LinkedCaseInsensitiveMap<Object>();
-		Map<String, Map<String, String>> resultMeta = new HashMap<String, Map<String,String>>();
+		Map<String, Map<String, RSMeta>> resultMeta = new HashMap<String, Map<String,RSMeta>>();
 
 		List<MappedStatementInfo> msList = getList(path, action);
 		
@@ -47,9 +50,9 @@ public class MyBatisProcessor implements ProcessorService{
 			Object result = null;
 			if (msi.isSelect) {
 				 List list = sqlSession.selectList(msi.id, params);
-				 Map<String, String> jdbcTypes = ProcessorServiceFactory.getRsColumnTypes(msi.id+"-Inline"); 
+				 Map<String, RSMeta> rSMeta = ProcessorServiceFactory.getRsMeta(msi.id+"-Inline"); 
 				 
-				 resultMeta.put(msi.returnId , jdbcTypes);
+				 resultMeta.put(msi.returnId , rSMeta);
 				//	sqlSession.getConfiguration().getMappedStatement(msi.id).getResultMaps()
 				// sqlSession.
 				// Connection con = sqlSession.getConnection();
@@ -59,8 +62,6 @@ public class MyBatisProcessor implements ProcessorService{
 				 }else{
 					 result = list;
 				 }
-				 
-				 
 			}else{
 				result = sqlSession.update(msi.id, params);
 			}
