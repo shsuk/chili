@@ -105,7 +105,7 @@
 							</div>
 						</td>
 						<td>
-							<tag:select_array name="${link_type}" codes="linkLoad=Load,linkPopup=팝업,linkPage=새페이지,linkWin=새창"  selected="${ui_field[link_type]}" />
+							<tag:select_array name="${link_type}" codes="linkLoad=Load,linkPopup=팝업,linkPage=새페이지,linkFnc=함수"  selected="${ui_field[link_type]}" />
 							<input  name="${link}" type="text" value="${ui_field[link] }" style="width: 100%;">
 						</td>
 						<td>

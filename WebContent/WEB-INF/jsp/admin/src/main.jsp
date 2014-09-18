@@ -62,7 +62,7 @@
 		});
 	});
 
-	function loadMain(){
+	function loadPage(){
 		var data = $('#main_form').serializeArray();
 
 		$('#prg_bar').animate({width: '0%'}, 1);
@@ -77,6 +77,10 @@
 		});
 		
 		$( "#tab" ).tabs( "option", "active", 0);	
+	}
+	function changePage(ui_id){
+		$('#ui_id').val(ui_id);
+		loadPage();
 	}
 	function removeDupControl(){
 		var ui_source_dgn = $('#ui_source_dgn');
@@ -110,7 +114,7 @@
 		$('#prg_bar').animate({width: '0%'}, 1);
 
 		$('#ui_set').load('src_save/bit.sh', data, function(){
-			loadMain();
+			loadPage();
 		});
 	}
 	
@@ -241,7 +245,7 @@
 				쿼리경로 <tag:select_query_name name="queryPath" selected="${req.queryPath }"/>
 			</div>
 			<div class="border f_l p_1 m_3 ui-widget-header" >기본값 <input type="text" id="defaultValue" name="defaultValue" style="width: 200px;" value="rows:10,_start:1,notice_id:72"></div>
-			<div class=" ui-widget-header ui-corner-all  m_3" style="float: left; cursor:pointer;  margin-left: 5px; padding: 3px;" onclick="loadMain()">읽기</div>
+			<div class=" ui-widget-header ui-corner-all  m_3" style="float: left; cursor:pointer;  margin-left: 5px; padding: 3px;" onclick="loadPage()">읽기</div>
 			<div class=" ui-widget-header ui-corner-all  m_3" style="float: left; cursor:pointer;  margin-left: 5px; padding: 3px;" onclick="saveUi()">저장</div>
 			<div class=" ui-widget-header ui-corner-all  m_3" style="float: left; cursor:pointer;  margin-left: 5px; padding: 3px;" onclick="runDefaultPage()" >실행</div>
 		</div>
@@ -282,7 +286,11 @@
 					볼륨처리<br>
 					이미지 미리보기 타입추가<br>
 					테이블 생성<br>
-					맵퍼<br>
+					맵퍼<br><br>
+					tag구현<br>
+					&lt;c:set scope="request" var="isForm" value="${true }"/><br>
+					&lt;c:import url="../src_run.jsp"/><br>
+					
 				</div>
 			</div>
 		</div>

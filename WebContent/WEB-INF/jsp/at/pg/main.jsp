@@ -26,13 +26,18 @@
 </script> 
 </head>
 <body >
-
+	at/{pathName}/.sh?ui_id={ui_id}<br>
+	at/{pathName}에 main.jsp를 구현하여 서로다른 레이아웃을 적용할 수 있다.<br>
+	<a href="../pg2/.sh?ui_id=${param.ui_id }">../../at/pg2/.sh?ui_id=${param.ui_id }</a>
+	
 	<div id="auto_generated_uI_main" style="margin: 0 auto; padding:3px; width: 90%; min-width:1000px; border:1px solid #cccccc; ">
 		<form id="body_form" action="" method="post" enctype="multipart/form-data">
 			<c:set scope="request" var="isForm" value="${true }"/>
 			<c:import url="../src_run.jsp"/>
 		</form>
 	</div>
-				
+	p1_p2_p3~.sh : 루트에 있는 main.jsp를 사용하여 p1/p2/p3~.jsp를 include한다.<br>
+	path1/p1_p2_p3~.sh : path1에 있는 main.jsp를 사용하여 path1/p1/p2/p3~.jsp를 include한다.<br>
+<	path1/path2/p1_p2_p3~.sh : path1/path2에 있는 main.jsp를 사용하여 path1/path2/p1/p2/p3~.jsp를 include한다.<br>
 </body>
 </htm>

@@ -14,53 +14,9 @@
 <script src="jquery/js/jquery-ui-1.10.0.custom.min.js" type="text/javascript"></script>
 <script src="jquery/jqGrid/js/i18n/grid.locale-en.js" type="text/javascript"></script>
 <script src="jquery/jqGrid/js/jquery.jqGrid.min.js" type="text/javascript"></script>
-<script src="js/commonUtil.js" type="text/javascript"></script>
+<script src="../../js/autoPageUtils.js" type="text/javascript"></script>
 <script type="text/javascript">
 	
-	$(function() {
-		$['isEditMode'] = false;
-		
-		var fields = $('.field');
-		
-		for(var i=0; i< fields.length; i++){
-			var fld = $(fields[i]);
-			var ctl = $('.in_control', fld);
-			
-			if(ctl.length>0){
-				var width = ctl.outerWidth() + 'px';
-				var height = ctl.outerHeight() + 'px';
-				var view = $('<div class="view_control"></div>');
-				view.text(ctl.val());
-				view.css({width: width, height: height, disply:'inline', overflow:'hidden', 'margin-right':'8px'});
-				ctl.hide();
-				fld.append(view);
-			}
-		}
-		
-		$('.view_control').click(function(e){
-			if(!$.isEditMode){
-				return;
-			}
-			var trg = $(e.currentTarget);
-			trg.hide();
-			$('.in_control',trg.parent()).show().focus();
-		});
-		$('.in_control').change(function(e){
-			var trg = $(e.currentTarget);
-			trg.hide();
-			var view = $('.view_control',trg.parent());
-			view.text(trg.val());
-			view.show();
-		});
-	});
-	
-	function edit(){
-		$('.view_control').hide();
-		$('.in_control').show();
-		$('#save_btn').show();
-		$('#edit_btn').hide();
-		$.isEditMode = true;
-	}
 </script>
 </head>
 <body>
