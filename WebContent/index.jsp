@@ -1,6 +1,6 @@
 <html>
 <head>
-<meta http-equiv="refresh" content="0;url=admin/src/.sh">
+<meta http-equiv="refresh" content="0;url=_admin_src/.sh">
 <title>Chili 프로젝트</title>
 </head>
 <body>
