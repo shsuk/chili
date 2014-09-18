@@ -8,16 +8,13 @@
 <%@ taglib prefix="sp" uri="/WEB-INF/tlds/sp.tld"%>
 <%@ taglib prefix="tag"  tagdir="/WEB-INF/tags/tag" %> 
 <%@ taglib prefix="src"  tagdir="/WEB-INF/tags/src" %> 
-<sp:sp queryPath="ui" action="design" processorList="mybatis" exception="false"/>
+<sp:sp queryPath="ui" action="design" processorList="mybatis" exception="false">{ui_id:'${UI_ID}'}</sp:sp>
 <c:set var="page_id" value="${sp:uuid()}"/>
 <c:set scope="request" var="ui_design" value="${ui.UI_DESIGN }"/>
 <c:set scope="request" var="ui_field" value="${sp:str2jsonObj(ui.UI_FIELD) }"/>
 
-<sp:sp queryPath="${fn:substringBefore(ui.query_path,'.') }" action="${fn:substringAfter(ui.query_path,'.' ) }" processorList="mybatis" exception="true">
-	{
-		${param.defaultValue }
-	}
-</sp:sp>
+<sp:sp queryPath="${fn:substringBefore(ui.query_path,'.') }" action="${fn:substringAfter(ui.query_path,'.' ) }" processorList="mybatis" exception="true"/>
+
 <%//소스생성 %>
 <c:forEach var="map" items="${RESULT }">
 	<c:set var="use_set" value="use_${map.key}"/>

@@ -5,6 +5,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt"%>
 <%@ taglib prefix="sp" uri="/WEB-INF/tlds/sp.tld"%>
 <%@ taglib prefix="tag"  tagdir="/WEB-INF/tags/tag" %> 
+<%@ taglib prefix="src"  tagdir="/WEB-INF/tags/src" %> 
 
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko" lang="ko">
@@ -26,18 +27,58 @@
 </script> 
 </head>
 <body >
-	at/{pathName}/.sh?ui_id={ui_id}<br>
-	at/{pathName}에 main.jsp를 구현하여 서로다른 레이아웃을 적용할 수 있다.<br>
-	<a href="../pg2/.sh?ui_id=${param.ui_id }">../../at/pg2/.sh?ui_id=${param.ui_id }</a>
+	<div style="margin: 0 auto; padding:3px; width: 90%; min-width:1040px; border:1px solid #cccccc; ">
+		<img src="../images/log.png" height="100">
+		다른 디자인 예) <a href="../_at_pg2/_${UI_ID }.sh">../_at_pg2/_${UI_ID }.sh</a><br><br>
+	</div>
 	
-	<div id="auto_generated_uI_main" style="margin: 0 auto; padding:3px; width: 90%; min-width:1000px; border:1px solid #cccccc; ">
+	<div id="auto_generated_uI_main" style="margin: 5px auto; padding:3px; width: 90%; min-width:1000px; border:1px solid #cccccc; ">
 		<form id="body_form" action="" method="post" enctype="multipart/form-data">
-			<c:set scope="request" var="isForm" value="${true }"/>
-			<c:import url="../src_run.jsp"/>
+			<src:auto_make_src isForm="true"/>
 		</form>
 	</div>
-	p1_p2_p3~.sh : 루트에 있는 main.jsp를 사용하여 p1/p2/p3~.jsp를 include한다.<br>
-	path1/p1_p2_p3~.sh : path1에 있는 main.jsp를 사용하여 path1/p1/p2/p3~.jsp를 include한다.<br>
-<	path1/path2/p1_p2_p3~.sh : path1/path2에 있는 main.jsp를 사용하여 path1/path2/p1/p2/p3~.jsp를 include한다.<br>
+	<b>URL 패턴</b>
+	<table class="vw" style="width: 500px;">
+		<tr>
+			<th align="left">1. _{layerPath}/_{ui_id}.sh</th>
+			<td>전체 레이아웃이 있는 자동 생성된 페이지</td>
+		</tr>
+		<tr>
+			<th align="left">2. piece/_{uiId}.sh</th>
+			<td>자동 생성된 페이지</td>
+		</tr>
+		<tr>
+			<th align="left">3. unit/_{uiId}.sh</th>
+			<td>폼이 있는 자동 생성된 페이지</td>
+		</tr>
+		<tr>
+			<th align="left">4. _{mainPath}/{page}.sh</th>
+			<td>전체 레이아웃이 있는 개발자가 만든 페이지</td>
+		</tr>
+		<tr>
+			<th align="left">5. {path}/{page}.sh</th>
+			<td>개발자가 만든 페이지</td>
+		</tr>
+	</table>
+	
+	<b>인자 설명</b>
+	<table class="vw" style="width: 500px;">
+		<tr>
+			<th align="left">layerPath</th>
+			<td>
+				1) prefix '_'로 시작하여 레이아웃을 사용함을 알린다.
+				2) {layerPath}에 main.jsp를 구현하여 서로다른 레이아웃을 적용할 수 있다.<br>
+				3) 경로구분자 '/ 대신 '_' 로 대치하여 2 depth를 유지한다.
+			</td>
+		</tr>
+		<tr>
+			<th align="left">ui_id</th>
+			<td>
+				1) prefix '_'로 시작하여 uiID임을 알린다.
+			</td>
+		</tr>
+	</table>
+	<br>
+
 </body>
 </htm>

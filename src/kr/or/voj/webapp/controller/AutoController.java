@@ -12,10 +12,13 @@ import kr.or.voj.webapp.processor.ProcessorServiceFactory;
 
 import org.apache.commons.collections.map.CaseInsensitiveMap;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.util.FieldUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 
 
@@ -23,53 +26,48 @@ import org.springframework.web.servlet.ModelAndView;
 public class AutoController {
 	protected static final Logger LOGGER = Logger.getLogger(AutoController.class);
 
-	@RequestMapping(value = "{page}.sh")
-	public ModelAndView autoMain(HttpServletRequest request, HttpServletResponse response, @PathVariable("page") String page) throws Exception {
-		ModelAndView mv = new ModelAndView("main");
-		page = page.replace('_', '/');
-		mv.addObject("IMPORT_PATH", page);
-		return mv;
-	}
-	@RequestMapping(value = "{mainPath}/{page}.sh")
-	public ModelAndView autoMain2(HttpServletRequest request, HttpServletResponse response, @PathVariable("mainPath") String mainPath, @PathVariable("page") String page) throws Exception {
+	@RequestMapping(value = "_{mainPath}/_{uiId}.sh")
+	public ModelAndView autoMain(HttpServletRequest request, HttpServletResponse response, @PathVariable("mainPath") String mainPath, @PathVariable("uiId") String uiId) throws Exception {
+		mainPath = mainPath.replace('_', '/');
+
 		ModelAndView mv = new ModelAndView(mainPath + "/main");
-		page = page.replace('_', '/');
-		mv.addObject("IMPORT_PATH", mainPath + "/" + page);
+		mv.addObject("UI_ID", uiId);
 		return mv;
 	}
-	@RequestMapping(value = "{mainPath1}/{mainPath2}/{page}.sh")
-	public ModelAndView autoMain3(HttpServletRequest request, HttpServletResponse response, @PathVariable("mainPath1") String mainPath1, @PathVariable("mainPath2") String mainPath2, @PathVariable("page") String page) throws Exception {
-		String mainPath = mainPath1 + "/" + mainPath2;
-		
+	@RequestMapping(value = "piece/_{uiId}.sh")
+	public ModelAndView autoPiece(HttpServletRequest request, HttpServletResponse response, @PathVariable("uiId") String uiId) throws Exception {
+		ModelAndView mv = new ModelAndView("at/piece");
+		mv.addObject("UI_ID", uiId);
+		return mv;
+	}
+	@RequestMapping(value = "unit/_{uiId}.sh")
+	public ModelAndView autoUnit(HttpServletRequest request, HttpServletResponse response, @PathVariable("uiId") String uiId) throws Exception {
+		ModelAndView mv = new ModelAndView("at/unit");
+		mv.addObject("UI_ID", uiId);
+		return mv;
+	}
+
+	@RequestMapping(value = "_{mainPath}/{page}.sh")
+	public ModelAndView mainPage(HttpServletRequest request, HttpServletResponse response, @PathVariable("mainPath") String mainPath, @PathVariable("page") String page) throws Exception {
+		mainPath = mainPath.replace('_', '/');
 		ModelAndView mv = new ModelAndView(mainPath + "/main");
-		page = page.replace('_', '/');
-		mv.addObject("IMPORT_PATH", mainPath + "/" + page);
+		mv.addObject("IMPORT_PAGE", mainPath + "/" + page.replace('_', '/'));
 		return mv;
 	}
-	@RequestMapping(value = "{system}/{page}/bit.sh")
-	public ModelAndView auto(HttpServletRequest request, HttpServletResponse response, @PathVariable("system") String system, @PathVariable("page") String page) throws Exception {
-		ModelAndView mv = new ModelAndView(system + "/" + page);
-		mv.addObject("isForm", false);
+	@RequestMapping(value = "{path}/{page}.sh")
+	public ModelAndView page(HttpServletRequest request, HttpServletResponse response, @PathVariable("path") String path, @PathVariable("page") String page) throws Exception {
+		path = path.replace('_', '/');
+		ModelAndView mv = new ModelAndView(path + "/" + page);
 		return mv;
 	}
-	@RequestMapping(value = "{system}/{subSystem}/{page}/bit.sh")
-	public ModelAndView auto(HttpServletRequest request, HttpServletResponse response, @PathVariable("system") String system, @PathVariable("subSystem") String subSystem, @PathVariable("page") String page) throws Exception {
-		ModelAndView mv = new ModelAndView(system + "/" + subSystem + "/" + page);
-		mv.addObject("isForm", false);
-		return mv;
-	}
-	@RequestMapping(value = "{system}/{page}/form.sh")
-	public ModelAndView autoForm(HttpServletRequest request, HttpServletResponse response, @PathVariable("system") String system, @PathVariable("page") String page) throws Exception {
-		ModelAndView mv = new ModelAndView(system + "/" + page);
-		mv.addObject("isForm", true);
-		return mv;
-	}
-	@RequestMapping(value = "{system}/{subSystem}/{page}/form.sh")
-	public ModelAndView autoForm(HttpServletRequest request, HttpServletResponse response, @PathVariable("system") String system, @PathVariable("subSystem") String subSystem, @PathVariable("page") String page) throws Exception {
-		ModelAndView mv = new ModelAndView(system + "/" + subSystem + "/" + page);
-		mv.addObject("isForm", true);
-		return mv;
-	}
+
+	/**
+	 * 다운로드
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "dl.sh")
 	public ModelAndView dowonload(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		List<String> processorList = new ArrayList<String>();

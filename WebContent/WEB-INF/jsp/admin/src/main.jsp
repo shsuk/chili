@@ -10,17 +10,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko" lang="ko">
 <head>
 <title>Chili 프로젝트</title>
-<link href="../../jquery/development-bundle/themes/redmond/jquery.ui.all.css"  rel="stylesheet" type="text/css" media="screen" />
-<link href="../../jquery/jqGrid/css/ui.jqgrid.css"  rel="stylesheet" type="text/css" media="screen" />
-<link href="../../jquery/jqGrid/plugins/ui.multiselect.css" rel="stylesheet" type="text/css" media="screen" />
-<link href="../../css/contents.css" rel="stylesheet" type="text/css" />
+<link href="../jquery/development-bundle/themes/redmond/jquery.ui.all.css"  rel="stylesheet" type="text/css" media="screen" />
+<link href="../jquery/jqGrid/css/ui.jqgrid.css"  rel="stylesheet" type="text/css" media="screen" />
+<link href="../jquery/jqGrid/plugins/ui.multiselect.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="../css/contents.css" rel="stylesheet" type="text/css" />
 
-<script src="../../jquery/js/jquery-1.9.1.min.js" type="text/javascript"></script>
-<script src="../../jquery/js/jquery-ui-1.10.0.custom.min.js" type="text/javascript"></script>
-<script src="../../jquery/jqGrid/js/i18n/grid.locale-en.js" type="text/javascript"></script>
-<script src="../../jquery/jqGrid/js/jquery.jqGrid.min.js" type="text/javascript"></script>
-<script src="../../js/commonUtil.js" type="text/javascript"></script>
-<script src="../../js/autoPageUtils.js" type="text/javascript"></script>
+<script src="../jquery/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="../jquery/js/jquery-ui-1.10.0.custom.min.js" type="text/javascript"></script>
+<script src="../jquery/jqGrid/js/i18n/grid.locale-en.js" type="text/javascript"></script>
+<script src="../jquery/jqGrid/js/jquery.jqGrid.min.js" type="text/javascript"></script>
+<script src="../js/commonUtil.js" type="text/javascript"></script>
+<script src="../js/autoPageUtils.js" type="text/javascript"></script>
 <script type="text/javascript">
 	
 	$(function() {
@@ -67,7 +67,7 @@
 
 		$('#prg_bar').animate({width: '0%'}, 1);
 
-		$('#ui_set').load('src_load/bit.sh', data, function(){
+		$('#ui_set').load('../admin_src/src_load.sh', data, function(){
 			$( window ).resize();
 			removeDupControl();
 			initDrDg();
@@ -113,7 +113,7 @@
 
 		$('#prg_bar').animate({width: '0%'}, 1);
 
-		$('#ui_set').load('src_save/bit.sh', data, function(){
+		$('#ui_set').load('../admin_src/src_save.sh', data, function(){
 			loadPage();
 		});
 	}
@@ -193,7 +193,19 @@
 		
 		
 	}
-	
+	function runDefaultPage(){
+		var form = $('#new_form');
+		form.attr('action', '../_at_pg/_'+$('#ui_id').val()+'.sh');
+		form.submit();
+		//runPage();
+		//$( "#tab" ).tabs( "option", "active", 1);	
+	}
+	function viewUiList(){
+		$('#ui_list').load('../piece/_uilist.sh', function(){
+			$('#ui_list').show();
+		});
+	}
+/* 	
 	function save(){
 		var data = $('#src_form').serializeArray();
 
@@ -201,24 +213,8 @@
 			alert('저장되었습니다.');
 		});
 	}
-	
-	function runDefaultPage(){
-		var form = $('#new_form');
-		form.attr('action', '../../at/pg/.sh?ui_id='+$('#ui_id').val());
-		form.submit();
-		//runPage();
-		//$( "#tab" ).tabs( "option", "active", 1);	
-	}
-	function runPage(){
-		var data = $('#main_form').serializeArray();
-
-		$('#auto_generated_uI_main').load('src_run/bit.sh',data, function(){
-			$( window ).resize();
-			//$('#formData').val('');
-		});
-		
-	}
-	
+ */	
+/* 
 	function openPage(){
 
 		var frm = $('#new_form');
@@ -226,11 +222,7 @@
 		frm.attr('action', 'src_run/bit.sh?_ps=temp&' + param);
 		frm.submit();
 	}
-	function viewUiList(){
-		$('#ui_list').load('../../at/src_run/bit.sh?ui_id=uilist', function(){
-			$('#ui_list').show();
-		});
-	}
+ */	
 </script> 
 </head>
 <body >
@@ -287,9 +279,7 @@
 					이미지 미리보기 타입추가<br>
 					테이블 생성<br>
 					맵퍼<br><br>
-					tag구현<br>
-					&lt;c:set scope="request" var="isForm" value="${true }"/><br>
-					&lt;c:import url="../src_run.jsp"/><br>
+					unit과 piece에 대한 form처리
 					
 				</div>
 			</div>
