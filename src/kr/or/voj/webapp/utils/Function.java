@@ -187,5 +187,8 @@ public class Function {
 		
 		return rtn;
 	}
-
+	public static Object list2Tree(List<Map<String, Object>> list, String upperFld, String codeFld, String labelFld, String idFld, String rootId)  throws Exception {
+		List2Tree l2t = new  List2Tree(list, upperFld, codeFld, labelFld, idFld, rootId);
+		return l2t.getTree();
+	}
 }

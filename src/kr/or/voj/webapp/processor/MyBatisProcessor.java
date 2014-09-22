@@ -107,7 +107,7 @@ public class MyBatisProcessor implements ProcessorService{
 			//}
 		}
 		List<String> idList = new ArrayList<String>();
-		Map<String, List<MappedStatementInfo>> msInfoMap = new HashMap<String, List<MappedStatementInfo>>();
+		Map<String, List<MappedStatementInfo>> msInfoMap = new LinkedCaseInsensitiveMap<List<MappedStatementInfo>>();
 		
 		Collection<String> collection = sqlSession.getConfiguration().getMappedStatementNames();
 	

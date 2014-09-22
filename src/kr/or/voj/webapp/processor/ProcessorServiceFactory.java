@@ -53,6 +53,16 @@ public class ProcessorServiceFactory  implements ApplicationContextAware {
 	private static String defaultDataSourceName = null;
 	private static CacheService cacheService = null;
 	private static Map<String, List<MappedStatementInfo>> myBatisMappedStatementInfoMap = null;
+	private static Map<String, String> fieldCash = new HashMap<String, String>();
+	
+	public static void setFieldCash(String key, String value) {
+		
+		fieldCash.put(key, value);
+	}
+	public static String getFieldCash(String key) {
+		
+		return fieldCash.get(key);
+	}
 
 	public static Map<String, List<MappedStatementInfo>> getMyBatisMappedStatementInfoMap() {
 		if(myBatisMappedStatementInfoMap==null){
@@ -80,12 +90,15 @@ public class ProcessorServiceFactory  implements ApplicationContextAware {
 		cacheService.put(key, data);
 	}
 	public static void setRsMeta(String id, ResultSet resultSet, Configuration configuration) throws SQLException{
+		if(rsMeta.containsKey(id)){
+			return;
+		}
 		ResultSetMetaData metaData = resultSet.getMetaData();
 		Map<String, RSMeta> typeMap = new LinkedCaseInsensitiveMap<RSMeta>();
 		int columnCount = metaData.getColumnCount();
 		
 		for (int i = 1; i <= columnCount; i++) {
-	    	String name = configuration.isUseColumnLabel() ? metaData.getColumnLabel(i) : metaData.getColumnName(i);
+	    	String name = (configuration.isUseColumnLabel() ? metaData.getColumnLabel(i) : metaData.getColumnName(i)).toLowerCase();
 	    	String type = JdbcType.forCode(metaData.getColumnType(i)).name();
 	    	
 	    	RSMeta meta = new RSMeta(name, type, metaData.getPrecision(i), metaData.getScale(i), metaData.getColumnDisplaySize(i));

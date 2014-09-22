@@ -16,6 +16,7 @@ import net.sf.json.JSONObject;
 import org.apache.commons.collections.map.CaseInsensitiveMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.util.LinkedCaseInsensitiveMap;
 
 
 public class SimpleProcessTag extends BodyTagSupport {
@@ -25,6 +26,7 @@ public class SimpleProcessTag extends BodyTagSupport {
 	 * 
 	 */
 	private static final long serialVersionUID = -8153914754350715168L;
+	String var = null;
 	String queryPath = null;
 	String actionFild = null;
 	String action = null;
@@ -32,6 +34,9 @@ public class SimpleProcessTag extends BodyTagSupport {
 	String loopId = null;
 	boolean exception  = true;
 	
+	public void setVar(String var) {
+		this.var = var;
+	}
 	public void setLoopId(String loopId) {
 		this.loopId = loopId;
 	}
@@ -66,7 +71,8 @@ public class SimpleProcessTag extends BodyTagSupport {
 	
 	public int doEndTag() throws JspException {
 		JSONObject jsonResult = new JSONObject();
-
+		Map<String, Object> resultSet = null;
+		
 		try {	
 			ServletRequest request = pageContext.getRequest();
 			request.setAttribute("req", ProcessorServiceFactory.getReqParam((HttpServletRequest)request));
@@ -88,13 +94,14 @@ public class SimpleProcessTag extends BodyTagSupport {
 			//**************************************************
 			//				프로세서를 실행한다.
 			//**************************************************
-			Map<String, Object> resultSet = ProcessorServiceFactory.executeMainTransaction(processorList, params, queryPath, action, loopId, request, pageContext.getResponse());			
-			pageContext.setAttribute("RESULT", resultSet);;
+			resultSet = ProcessorServiceFactory.executeMainTransaction(processorList, params, queryPath, action, loopId, request, pageContext.getResponse());			
 			//결과를 페이지 컨텍스트와 JSON으로 request에 반환한다.
 			for(String key : resultSet.keySet()){
 				pageContext.setAttribute(key, resultSet.get(key));;
 			}
 			
+			pageContext.setAttribute(var, resultSet);
+
 			jsonResult.putAll(resultSet);
 			jsonResult.put("success", true);
 		} catch (Exception e) {
@@ -107,8 +114,10 @@ public class SimpleProcessTag extends BodyTagSupport {
 				throw new JspTagException(e.getMessage(), e);
 			}
 		}
-		
-		pageContext.setAttribute("JSON", jsonResult);
+		if(resultSet==null){
+			resultSet = new LinkedCaseInsensitiveMap<Object>();
+		}
+		resultSet.put("JSON", jsonResult);
 
 		action = null;
 		return SKIP_BODY;
