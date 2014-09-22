@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   
+<mapper namespace="system">
+	<select id="groupList_1_rows" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
+		SELECT code_value, code_name, (SELECT count(code_value) FROM sys_code_tbl WHERE group_id = t1.code_value) cnt
+		FROM sys_code_tbl t1
+		WHERE group_id = 'root'
+		ORDER BY order_no
+	</select>
+	<select id="codeList_1_rows" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
+		SELECT *
+		FROM sys_code_tbl
+		WHERE group_id = #{group_id}
+		ORDER BY order_no
+	</select>
+	<select id="codeTree_1_rows" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
+		SELECT rid, group_id, code_name, code_value
+		FROM sys_code_tbl
+		WHERE use_yn = 'Y'
+		ORDER BY group_id, order_no
+	</select>
+	<select id="codeView_1_#row" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
+		SELECT *
+		FROM sys_code_tbl
+		WHERE group_id = #{group_id} and code_value = #{code_value}
+	</select>
+</mapper>
