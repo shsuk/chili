@@ -13,7 +13,7 @@
 <%@ taglib prefix="sp" uri="/WEB-INF/tlds/sp.tld"%>
 <%@ taglib prefix="tag"  tagdir="/WEB-INF/tags/tag" %>
 <c:set scope="session" var="user_id" value="tester"/>
-<sp:sp queryPath="${param.queryPath }" action="update" loopId="t1_files_ref_id" processorList="attach,mybatis" exception="true">
+<sp:sp var="RESULT" queryPath="notice" action="update" loopId="t1_files_ref_id" processorList="attach,mybatis" exception="true">
 	{
 		${param.defaultValue }
 	}

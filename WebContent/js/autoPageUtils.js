@@ -1,4 +1,8 @@
 $(function() {
+	$('[key_press=]').removeAttr('key_press');
+	$('[valid=]').removeAttr('valid');
+	
+	
 	$(document).on('click', '.view_control', function(e){
 		var trg = $(e.currentTarget);
 		var parents = trg.parents();
@@ -125,7 +129,7 @@ function delFile(file_id){
 }
 
 function form_submit(page_id){	
-	var url = '../action/bit.sh';
+	var url = '../at/action.sh';
 	var form = $('#body_form', $(page_id));
 	//폼 정합성 체크
 	if(!valid(form)){

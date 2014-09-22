@@ -1,5 +1,5 @@
 <%@ tag language="java" pageEncoding="UTF-8" body-content="scriptless"%>
-<%@ tag trimDirectiveWhitespaces="true" %>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -19,30 +19,32 @@
 <c:forEach var="row" items="${rcd_value }" varStatus="status">
 	<tr class="row_${status.index + 1}">
 		<c:forEach var="info" items="${row }" >
-			<c:set var="label">${info.key}_label</c:set>
-			<c:set var="type">${info.key}_type</c:set>
-			<c:set var="link">${info.key}_link</c:set>
-			<c:set var="link_type">${info.key}_link_type</c:set>
-			<c:set var="valid">${info.key}_valid</c:set>
-			<c:set var="keyValid">${info.key}_key_valid</c:set>
-			<c:set var="width">${info.key}_width</c:set>
-			<c:set var="maxlength">${info.key}_maxlength</c:set>
+			<c:set var="key">${info.key}</c:set>
+			<c:set var="label">${key}_label</c:set>
+			<c:set var="type">${key}_type</c:set>
+			<c:set var="link">${key}_link</c:set>
+			<c:set var="link_type">${key}_link_type</c:set>
+			<c:set var="valid">${key}_valid</c:set>
+			<c:set var="keyValid">${key}_key_valid</c:set>
+			<c:set var="width">${key}_width</c:set>
+			<c:set var="maxlength">${key}_maxlength</c:set>
 			<c:if test="${status.index==0 }">
-				<c:set scope="request" var="title">${title }<th style="${ui_field[type]=='hidden' ? 'display: none;' : ''}" label="${info.key}" width="${ui_field[width]=='*' ? '*' : ui_field[width]*tot_width }${tot_width==1 ? '' : '%'}">${ui_field[label] }</th></c:set>
+				<c:set scope="request" var="title">${title }<th style="${ui_field[type]=='hidden' ? 'display: none;' : ''}" label="${key}" width="${ui_field[width]=='*' ? '*' : ui_field[width]*tot_width }${tot_width==1 ? '' : '%'}">${ui_field[label] }</th></c:set>
 			</c:if>
 
 			<c:choose>
-				<c:when test="${type=='total_record'}">
-					<c:if test="${empty(paging) }">
-						<c:set scope="request" var="paging">
-							<src:paging totCount="${rcd_value[info.key]}" _start="${rcd_value['_start'] }" rows="${rcd_value['_rows']}"/>
-						</c:set>
-					</c:if>
+				<c:when test="${type!='total_record'}">
+				<!-- 캐쉬처리 -->
+					<td  style="${ui_field[type]=='hidden' ? 'display: none;' : ''}" ${fn:startsWith(ui_field[type],'date') || ui_field[type] == 'select' || ui_field[type] == 'code' ? 'align="center"' : (fn:startsWith(ui_field[type],'number') ? 'align="right"' : '') }>
+						<src:mk_field name="${key }" type="${ui_field[type] }" values="${row }" link="${ui_field[link] }"  link_type="${ui_field[link_type] }" valid="${ui_field[valid] }"  keyValid="${ui_field[keyValid] }" maxlength="${ui_field[maxlength] }"/> 
+					</td>
 				</c:when>
 				<c:otherwise>
-					<td  style="${ui_field[type]=='hidden' ? 'display: none;' : ''}" ${fn:startsWith(ui_field[type],'date') || ui_field[type] == 'select' || ui_field[type] == 'code' ? 'align="center"' : (fn:startsWith(ui_field[type],'number') ? 'align="right"' : '') }>
-						<src:mk_field src_id="row" name="${info.key }" type="${ui_field[type] }" values="${row }" link="${ui_field[link] }"  link_type="${ui_field[link_type] }" index="row_${status.index + 1}" valid="${ui_field[valid] }"  keyValid="${ui_field[keyValid] }" maxlength="${ui_field[maxlength] }"/> 
-					</td>
+					<c:if test="${empty(paging) }">
+						<c:set scope="request" var="paging">
+							<src:paging totCount="${rcd_value[key]}" _start="${rcd_value['_start'] }" rows="${rcd_value['_rows']}"/>
+						</c:set>
+					</c:if>
 				</c:otherwise>
 			</c:choose>
 		</c:forEach>

@@ -9,7 +9,7 @@
 <%@ attribute name="id" type="java.lang.String" required="true" description="메세지 아이디"%>
 <%@ attribute name="lang" type="java.lang.String" description="언어코드"%>
 <c:if test="${empty(_lang) }">
-	<sp:sp queryPath="ui" action="lang" processorList="mybatis" exception="false"/>
+	<sp:sp var="RESULT" queryPath="ui" action="lang" processorList="mybatis" exception="false"/>
 	<tag:list2map var="_lang" key_field="message_id" list="${rows }"/>
 </c:if>
 ${empty(_lang[id]) ? id : _lang[id]['message']}

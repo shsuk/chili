@@ -43,7 +43,7 @@
 		<c:otherwise>
 			<tr style="${ui_field[type]=='hidden' ? 'display: none;' : ''}">
 				<th label="${info.key}"><span class="field_names" name="${info.key}">${ui_field[label] }</span></th>
-				<td><span class="fields" name="${info.key}"><src:mk_field src_id="${rcd_key}" name="${info.key }" values="${rcd_value}" type="${ui_field[type] }" link="${ui_field[link] }" link_type="${ui_field[link_type] }" valid="${req[valid] }"  keyValid="${ui_field[keyValid] }" maxlength="${ui_field[maxlength] }"/></span></td>
+				<td><span class="fields" name="${info.key}"><src:mk_field name="${info.key }" values="${rcd_value}" type="${ui_field[type] }" link="${ui_field[link] }" link_type="${ui_field[link_type] }" valid="${req[valid] }"  keyValid="${ui_field[keyValid] }" maxlength="${ui_field[maxlength] }"/></span></td>
 			</tr>
 		</c:otherwise>
 	</c:choose>

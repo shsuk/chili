@@ -9,28 +9,35 @@
 <%@ attribute name="uiId" type="java.lang.Boolean" description="UI ID"%>
 <%@ attribute name="isForm" required="true" type="java.lang.Boolean" description="form Tag 포함여부"%>
 <c:set scope="request" var="isForm" value="${isForm}"/>
-<sp:sp queryPath="ui" action="design" processorList="mybatis" exception="false">{ui_id:'${empty(uiId) ? UI_ID : uiId}'}</sp:sp>
+<sp:sp var="ui_info" queryPath="ui" action="design" processorList="mybatis" exception="false">{ui_id:'${empty(uiId) ? UI_ID : uiId}'}</sp:sp>
 <c:set var="page_id" value="${sp:uuid()}"/>
 <c:set scope="request" var="ui_design" value="${ui.UI_DESIGN }"/>
 <c:set scope="request" var="ui_field" value="${sp:str2jsonObj(ui.UI_FIELD) }"/>
 
-<sp:sp queryPath="${fn:substringBefore(ui.query_path,'.') }" action="${fn:substringAfter(ui.query_path,'.' ) }" processorList="mybatis" exception="true"/>
+<sp:sp var="RESULT" queryPath="${fn:substringBefore(ui.query_path,'.') }" action="${fn:substringAfter(ui.query_path,'.' ) }" processorList="mybatis" exception="true"/>
 
 <%//소스생성 %>
 <c:forEach var="map" items="${RESULT }">
 	<c:set var="use_set" value="use_${map.key}"/>
-	<c:if test="${map.key!='success'}">
+	
+	<c:if test="${map.key!='success' && map.key!='JSON'}">
 		<c:set scope="request" var="title" value=""/>
 		<c:set var="isList" value="${sp:isType(map.value,'list') }"/>
 		<c:set var="src">
 			<c:choose>
-				<c:when test="${ui_field[use_set]!='use'}">
+				<c:when test="${ui_field[use_set]=='unuse'}">
 					<src:mk_view rcd_key="${map.key }" rcd_value="${map.value }"/>
 				</c:when>
+				<c:when test="${ui_field[use_set]=='tree'}"><%//TREE인 경우 %>
+					<c:set var="ui_title"><tag:el source="${ui.ui_title}" param="${map.value[0]}"/></c:set>
+					<src:mk_tree rcd_key="${map.key }" rcd_value="${map.value }"/>
+				</c:when>
 				<c:when test="${isList}"><%//리스트인 경우 %>
-						<src:mk_list rcd_key="${map.key }" rcd_value="${map.value }"/>
+					<c:set var="ui_title"><tag:el source="${ui.ui_title}" param="${map.value[0]}"/></c:set>
+					<src:mk_list rcd_key="${map.key }" rcd_value="${map.value }"/>
 				</c:when>
 				<c:otherwise><%//상세페이지인 경우%>
+					<c:set var="ui_title"><tag:el source="${ui.ui_title}" param="${map.value}"/></c:set>
 					<src:mk_view rcd_key="${map.key }" rcd_value="${map.value }"/>
 				</c:otherwise>
 			</c:choose>
@@ -38,12 +45,17 @@
 	
 		<c:set var="html">
 			${html }
-			<c:if test="${ui_field[use_set]=='use'}">
+
+			<c:if test="${ui_field[use_set]=='tree'}"><%//TREE인 경우 %>
+				${src }
+			</c:if>
+			<c:if test="${ui_field[use_set]=='use'}"><%//TREE가 아닌 경우 %>
 				<table class="${isList ? 'lst' : 'vw' }" border="0" cellspacing="0" cellpadding="0"  style="margin-bottom: 10px;">
 					${title }
 					${src }
 				</table>
 			</c:if>
+
 			${paging }
 			<c:set scope="request" var="paging" value=""/>
 		</c:set>
@@ -67,12 +79,17 @@
 		$('.tpl', auto_generated_uI).css({width:'100%'});
 		$('td', auto_generated_uI).css({width:''});
 		$('.th', auto_generated_uI).css({width:'150px'});
+		$('#'+$('#auto_generated_uI_${page_id}').parent().attr('id')+'_title').text('${ui_title}');
 	});
 	
 	${links}
 	
 </script> 
+
 <div id="auto_generated_uI_${page_id}" type="page" style=" display: none;">
+	<c:if test="${isForm }">
+		<form id="body_form" action="" method="post" enctype="multipart/form-data">
+	</c:if>
 	${ui_design }
 	<div id="default_auto_generated_uI_${page_id}" style=" padding:3px; display: none;">
 		<input type="hidden" name="queryPath" value="${fn:substringBefore(ui_field.querypath,'.') }">
@@ -83,7 +100,7 @@
 			<div id="save_btn" class=" ui-widget-header ui-corner-all" style="float: right; cursor: pointer; padding: 3px 10px;margin-left: 10px;display: none;" onclick="form_submit('#auto_generated_uI_${page_id}')">저장</div>
 			<div id="edit_btn" class=" ui-widget-header ui-corner-all" style="float: right; cursor: pointer; padding: 3px 10px;margin-left: 10px;" onclick="edit('#auto_generated_uI_${page_id}')">수정</div>
 		</div>
-		
+		</form>
 		<iframe name="submit_frame" style="width: 0px; height: 0px; display: none;"></iframe>
 	</c:if>
 </div>

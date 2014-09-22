@@ -9,7 +9,7 @@
 <%@ attribute name="groupId" type="java.lang.String" required="true"%>
 <%@ attribute name="value" type="java.lang.String" %>
 <c:if test="${empty(_code) }">
-	<sp:sp queryPath="ui" action="codeList" processorList="mybatis" exception="false"/>
+	<sp:sp var="RESULT" queryPath="ui" action="codeList" processorList="mybatis" exception="false"/>
 	<tag:list2group var="_code" group_field="group_id" list="${rows }"/>
 </c:if>
 

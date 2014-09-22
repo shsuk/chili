@@ -7,7 +7,7 @@
 <%@ taglib prefix="sp" uri="/WEB-INF/tlds/sp.tld"%>
 <%@ taglib prefix="tag"  tagdir="/WEB-INF/tags/tag" %>
 
-<sp:sp queryPath="notice" action="view" processorList="attach,mybatis" exception="false">
+<sp:sp var="RESULT" queryPath="notice" action="view" processorList="attach,mybatis" exception="false">
 	{
 		//rows:10,_start:1,notice_id:72
 	}

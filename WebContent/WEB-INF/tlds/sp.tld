@@ -13,6 +13,16 @@
 		<body-content>scriptless</body-content>
 		<description>Database </description>
 		<attribute>
+			<name>var</name>
+			<description>리턴되는 결과를 저장할 변수명,
+				리턴구조 : var={r1=[],r2=[],r3={},..., JSON={r1:[],r2:[],r3:{},...,}},
+				각 결과는 페이지컨텍스트에도 저장되어 직접 접근이 가능하다.
+			</description>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
 			<name>queryPath</name>
 			<description>쿼리경로(스프링설정파일의 processorServiceFactory설정에 root위치 있음)</description>
 			<required>true</required>
@@ -80,6 +90,12 @@
 		<name>el</name>
 		<function-class>kr.or.voj.webapp.utils.ELUtil</function-class>
 		<function-signature>java.lang.Object evaluate(java.lang.String, java.util.Map)</function-signature>
+	</function>
+	<function>
+		<description>List를 Tree구조로 변형한다.(list, upperFld, codeFld, labelFld, idFld, rootId)</description>
+		<name>list2tree</name>
+		<function-class>kr.or.voj.webapp.utils.Function</function-class>
+		<function-signature>java.lang.Object list2Tree(java.util.List, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)</function-signature>
 	</function>
 
 

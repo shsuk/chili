@@ -9,14 +9,15 @@
 <%@ taglib prefix="sp" uri="/WEB-INF/tlds/sp.tld"%>
 <%@ taglib prefix="tag"  tagdir="/WEB-INF/tags/tag" %> 
 <%@ taglib prefix="src"  tagdir="/WEB-INF/tags/src" %> 
-<sp:sp queryPath="ui" action="design" processorList="mybatis" exception="false"/>
+<sp:sp var="RESULT" queryPath="ui" action="design" processorList="mybatis" exception="false"/>
 <c:set var="ui_design" value="${ui.UI_DESIGN }"/>
 <c:set var="ui_field" value="${sp:str2jsonObj(ui.UI_FIELD) }"/>
 <c:set var="query_path" value="${ui.query_path}"/>
 <c:set var="query_path" value="${empty(query_path) ? param.queryPath : query_path}"/>
 <input type="hidden" id="old_query_path" name="old_query_path" value="${query_path }">
+<input type="hidden" id="old_tpl_path" name="old_tpl_path" value="${empty(ui.tpl_path) ? '_at_pg' : ui.tpl_path }">
 
-<sp:sp queryPath="${fn:substringBefore(query_path,'.') }" action="${fn:substringAfter(query_path,'.' ) }" processorList="mybatis" exception="false">
+<sp:sp var="RESULT" queryPath="${fn:substringBefore(query_path,'.') }" action="${fn:substringAfter(query_path,'.' ) }" processorList="mybatis" exception="false">
 	{
 		${param.defaultValue }
 	}
@@ -25,6 +26,7 @@
 <c:set var="isInit" value="${!empty(ui_field.col_count)}"/>
 <c:set var="col_count" value="${empty(ui_field.col_count) ? 4 : ui_field.col_count}"/>
 
+타이틀 : <input type="text" id="ui_title" name="ui_title" value="${ui.ui_title }">
 
 <table id="resizable_container" class="ui_design_form" style="clear: both;width:${col_count*100+800 }px; "><tr><td valign="top">
 
@@ -48,7 +50,7 @@
 					<td colspan="10" style="text-align: left; background: #D9E5FF;">
 						<span  style="float: left;"><b>레코드 아이디</b> : ${map.key}</span>
 						<c:set var="use_set" value="use_${map.key}"/>
-						<span  style="float: right;"><tag:check_array name="${use_set}" codes="use=사용"  checked="${isInit ? ui_field[use_set] : 'use' }" /></span>
+						<span  style="float: right;"><tag:radio_array name="${use_set}" codes="unuse=미사용,use=사용,tree=Tree"  checked="${empty(ui_field[use_set]) ? 'use' : ui_field[use_set] }" /></span>
 					</td>
 				</tr>
 				<tr>
@@ -84,7 +86,7 @@
 								${isList=='Y' ? '' : '☺' }<input class="field_label" type="text" name="${label}" style="width: 70px;" value="${(empty(ui_field[label]) || info.key==ui_field[label]) ? label_lang : ui_field[label] }">
 							</div>
 						</td>
-						<td><!-- 필드타입 -->
+						<td title="구룹타입으로 지정한 경우 필드명에 최상위 아이디를 넣으세요."><!-- 필드타입 -->
 							<c:set var="fieldType" value="${ui_field[type] }"/>
 							<c:if test="${!isInit}">
 								<c:set var="fieldType">
@@ -100,13 +102,13 @@
 							
 							<c:set var="tmpFieldType">$(info.key)</c:set>
 							
-							<div class="field${isList } drg${isList }" type="field"  title="${info.key }" style="border${isList }: 1px solid #c5dbec; height: 20px;cursor${isList }: move;  display: inline;">
-								${isList=='Y' ? '' : '☺' }<tag:select_array codes="text=문자열,textarea=문장,date=날짜,number=숫자,select=셀렉트박스,check=체크박스,radio=라디오박스,hidden=Hidden,file=첨부파일,files=첨부파일들,file_img=이미지파일,files_img=이미지파일들,view=---------,label=라벨,date_view=날짜,datetime_view=날짜시간,number_view=숫자,code=코드명,total_record=페이지 네비게이션" name="${type }" selected="${fieldType }" style="width: 70px;" attr=" title='${info.value.type }'"/>
+							<div class="field${isList } drg${isList }" type="field"  title="${info.key }" style="border${isList }: 1px solid #c5dbec; height: 20px;cursor${isList }: move;  display: inline;" >
+								${isList=='Y' ? '' : '☺' }<tag:select_array codes="text=문자열,textarea=문장,date=날짜,number=숫자,select=셀렉트박스,check=체크박스,radio=라디오박스,hidden=Hidden,file=첨부파일,files=첨부파일들,file_img=이미지파일,files_img=이미지파일들,view=[View]---------,label=라벨,date_view=날짜,datetime_view=날짜시간,number_view=숫자,code=코드명,total_record=페이지 네비게이션,TREE=[Tree]---------,upperFld=구룹,codeFld=코드,titleFld=코드명,idFld=키필드" name="${type }" selected="${fieldType }" style="width: 70px;" attr=" title='${info.value.type }'"/>
 							</div>
 						</td>
 						<td>
 							<tag:select_array name="${link_type}" codes="linkLoad=Load,linkPopup=팝업,linkPage=새페이지,linkFnc=함수"  selected="${ui_field[link_type]}" />
-							<input  name="${link}" type="text" value="${ui_field[link] }" style="width: 100%;">
+							<input class="input_link" name="${link}" type="text" value="${ui_field[link] }" style="width: 100%;" title="<b>Load</b> : ui_id, {}, selector, <br><b>팝업</b> : ui_id, {}, <br><b>새페이지</b> : ui_id, {}, path, <br><b>함수</b> : function">
 						</td>
 						<td>
 							<c:set var="valids">${valid}[]</c:set>

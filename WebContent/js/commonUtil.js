@@ -42,6 +42,11 @@
 		} catch (e) {
 			// TODO: handle exception
 		}
+		//로딩 이미지
+		//var loading = $('<img alt="loading" src="../jquery/icon/loading.gif" />').appendTo(document.body).hide();
+	  //  $(window).ajaxStart(loading.show);
+	  //  $(window).ajaxStop(loading.hide);
+
 		//영문 숫자 입력 제한 처리
 		$(document).on('keypress', '[key_press=alpa]', function(event){
 			return alpa(event);
@@ -172,7 +177,7 @@
 		var mask = $('#mask');
 
 		if(mask.length<1){
-			$('body').append($('<div style="background: #cccccc; position:fixed;top: 0px;left: 0px;z-index: 9; text-align: center;padding-top: 200px;" id="mask"><span style="background: #ffffff;color:#0000ff;border:1px solid #ffffff;">처리중...</span></div>'));
+			$('body').append($('<div style="background: #cccccc; position:fixed;top: 0px;left: 0px;z-index: 9; text-align: center;padding-top: 200px;" id="mask"><img alt="loading" src="../jquery/icon/loading.gif" /></div>'));
 			mask = $('#mask');
 		}
 		mask.css({'width':maskWidth,'height':maskHeight});

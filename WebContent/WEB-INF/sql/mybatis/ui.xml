@@ -22,17 +22,18 @@
 			WHERE ui_id = #{ui_id}
 		</selectKey>
 		<if test="ui_count ==  0">
-			INSERT INTO sys_ui_tbl (ui_id, query_path, ui_design, ui_field)
+			INSERT INTO sys_ui_tbl (ui_id, ui_title, query_path, ui_design, ui_field, tpl_path)
 			VALUES(
-				#{ui_id}, #{queryPath}, #{ui_design}, #{ui_field}
+				#{ui_id}, #{ui_title}, #{queryPath}, #{ui_design}, #{ui_field}, #{tpl_path}
 			)
 		</if>
 		<if test="ui_count != 0">
 			UPDATE sys_ui_tbl
-			SET ui_design = #{ui_design},
+			SET 
+				ui_title = #{ui_title},
+				ui_design = #{ui_design},
 				ui_field = #{ui_field},
-				query_path = #{queryPath},
-				ui_id = #{ui_id}
+				tpl_path = #{tpl_path}
 			WHERE ui_id = #{ui_id}
 		</if>
 	</update>

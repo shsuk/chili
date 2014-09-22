@@ -11,7 +11,7 @@
 <%@ attribute name="type" type="java.lang.String" %>
 <%@ attribute name="valid" type="java.lang.String" %>
 <%@ attribute name="attr" type="java.lang.String" %>
-<sp:sp queryPath="attach" action="list" processorList="mybatis" exception="false">
+<sp:sp var="RESULT" queryPath="attach" action="list" processorList="mybatis" exception="false">
 	{
 		files_ref_id: '${value }'
 	}
@@ -32,7 +32,7 @@
 		<c:forEach var="row" items="${files }">
 			<div style="display: ${type=='files_img' ? 'inline' : '' };"><a href="../../dl.sh?file_id=${row.file_id}">
 				<c:if test="${type=='files_img' }">
-					<img src="../../dl.sh?file_id=${row.file_id}" height="100">
+					<img src="../dl.sh?file_id=${row.file_id}" height="100">
 				</c:if>
 				<c:if test="${type!='files_img' }">
 					${row.file_name }
@@ -42,14 +42,14 @@
 	</div>
 	<!-- 수정용 -->
 	<div style="clear:both; float: right; cursor: pointer; padding-right: 20px;" title="첨부항목 추가" onclick="addAttach('${name }')">
-		<img src="../../images/icon/add-icon.png">
+		<img src="../images/icon/add-icon.png">
 	</div>
 
 	<c:forEach var="row" items="${files }">
 		<div style="clear:both; margin: 2px;" class="${row.file_id}">
 			<div style="float: left; width: 90%;">${row.file_name }<input type="hidden" name="del_file_id" id="${row.file_id}" value=""></div>
 			<div style="float: right;   padding-right: 20px; cursor: pointer;" title="첨부파일 삭제"  onclick="delFile('${row.file_id}')">
-				<img src="../../images/icon/close-icon.png">
+				<img src="../images/icon/close.png">
 			</div>
 		</div>
 	</c:forEach>
@@ -61,6 +61,6 @@
 <div class="attachTpl_${name }" style="display: none; padding: 1px;">
 	<input type="file" name="${name }" style="width: 90%;" class="">
 	<div style="float: right; padding-right: 17px; cursor: pointer; margin: 2px;" title="첨부항목 삭제" onclick="$($(this).parent()).remove()">
-		<img src="../../images/icon/close-icon.png">
+		<img src="../images/icon/close.png">
 	</div>
 </div>

@@ -24,8 +24,18 @@
 <script type="text/javascript">
 	
 	$(function() {
+		$( document ).tooltip({
+			items: "[title]",
+			content: function() {
+				var element = $( this );
+				
+				if ( element.is( "[title]" ) ) {
+					return element.attr( "title" );
+				}
+			}
+		});
 		$( window ).resize(function(e,e1) {
-			$("#ui_set").css('height', (window.innerHeight-200) + 'px');		
+			$("#ui_set").css('height', (window.innerHeight-140) + 'px');		
 		}).resize();
 		$('#tab' ).tabs();
 		//콘트롤 설정시 마우스 이동에 대한 백그라운드 처리
@@ -53,6 +63,19 @@
 			var field_id = ts.attr('title');
 			$('.field_settion[field_id='+field_id+']').css({background:''});
 		});
+		//링크필드 처리
+		$(document).on('focusin', '.input_link', function(e){
+			var ctl = $(e.target);
+		
+			ctl.css({position: 'absolute', width:'300px'});
+		
+		});
+		$(document).on('focusout', '.input_link', function(e){
+			var ctl = $(e.target);
+		
+			ctl.css({position: '', width:''});
+		
+		});
 		//UI리스트 숨김
 		$('#main_form').click(function(e){
 			var nodes = $(e.target).parentsUntil('#ui_list_btn');
@@ -73,6 +96,7 @@
 			initDrDg();
 			var old_query_path = $('#old_query_path').val();
 			$("#queryPath").val(old_query_path).attr("selected", "selected");
+			$("#tpl_path").val($('#old_tpl_path').val());
 			$('#prg_bar').animate({width: '100%'}, 300);
 		});
 		
@@ -195,7 +219,7 @@
 	}
 	function runDefaultPage(){
 		var form = $('#new_form');
-		form.attr('action', '../_at_pg/_'+$('#ui_id').val()+'.sh');
+		form.attr('action', '../' + $('#tpl_path').val() + '/_' + $('#ui_id').val() + '.sh');
 		form.submit();
 		//runPage();
 		//$( "#tab" ).tabs( "option", "active", 1);	
@@ -241,17 +265,15 @@
 			<div class=" ui-widget-header ui-corner-all  m_3" style="float: left; cursor:pointer;  margin-left: 5px; padding: 3px;" onclick="saveUi()">저장</div>
 			<div class=" ui-widget-header ui-corner-all  m_3" style="float: left; cursor:pointer;  margin-left: 5px; padding: 3px;" onclick="runDefaultPage()" >실행</div>
 		</div>
-<!-- 		
-			<div class=" ui-widget-header ui-corner-all  m_3" style="float: left; cursor:pointer;  margin-left: 10px; padding: 3px;" onclick="makeData()">생성</div>
-		<div class=" ui-widget-header ui-corner-all  m_3" style="float: right; cursor:pointer;  margin-left: 10px; padding: 3px;" onclick="save()">임시저장</div>
-		<div class=" ui-widget-header ui-corner-all  m_3" style="float: right; cursor:pointer;  margin-left: 10px; padding: 3px;" onclick="openPage()" >미리보기</div>
-		<div class=" ui-widget-header ui-corner-all  m_3" style="float: right; cursor:pointer;  margin-left: 10px; padding: 3px;" onclick="loadQuery()">쿼리보기</div>	
- -->
+
  		<input type="hidden" id="ui_design" name="ui_design" value="">
  		<div id="form_data"></div>
 		<div style="clear: both;">
-			<div style=" float: left; border: 1px solid #c5dbec; width: 300px; height: 10px;"><div id="prg_bar" style="border: 1px solid #c5dbec; height: 8px;background: #c5dbec;"></div></div>
+			<div style=" float: left; border: 1px solid #c5dbec; width: 300px; height: 10px;">
+				<div id="prg_bar" style="border: 1px solid #c5dbec; height: 8px;background: #c5dbec;"></div>
+			</div>
 			<span  style="float: right;"> 
+				<span><b>템플릿 패스 : </b></span><input type="text" id="tpl_path" name="tpl_path" value="" style="width: 100px;"/>
 				<span><b>Col Count : </b></span><input type="text" name="col_count" value="${col_count }"  class="spinner" style="width: 20px;height: 14px;"/>
 				&nbsp;&nbsp;&nbsp;<span><b>Unit of width : </b><tag:check_array name="wUnit" codes="wUnit=%"  checked="${param['wUnit'] }" /></span>
 			</span>
@@ -270,11 +292,15 @@
 				</div>
 				<!-- 미리보기 -->
 				<div id="auto_generated_uI_main"></div>
-				<div id="tabs-3">					
+				<div id="tabs-3">
+					첨부파일 참조 번호 처리<br>
+					이미지 썸네일 처리<br>
+					리스트 기본필드 타입을 조회로 변경<br>
 					코드 및 각종 콘트롤 수정모드에서 값변경시 텍스트값 가져 오는 로직 구현<br>
 					코드 및 각종 콘트롤 구현<br>
 					타이틀 스타일 안됨<br>
 					페이징<br>
+					Tree<br>
 					볼륨처리<br>
 					이미지 미리보기 타입추가<br>
 					테이블 생성<br>
