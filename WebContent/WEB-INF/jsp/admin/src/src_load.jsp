@@ -86,13 +86,12 @@
 								${isList=='Y' ? '' : '☺' }<input class="field_label" type="text" name="${label}" style="width: 70px;" value="${(empty(ui_field[label]) || info.key==ui_field[label]) ? label_lang : ui_field[label] }">
 							</div>
 						</td>
-						<td title="구룹타입으로 지정한 경우 필드명에 최상위 아이디를 넣으세요."><!-- 필드타입 -->
+						<td title="Tree의 구룹타입으로 지정한 경우 필드명에 최상위 아이디를 넣으세요."><!-- 필드타입 -->
 							<c:set var="fieldType" value="${ui_field[type] }"/>
 							<c:if test="${!isInit}">
 								<c:set var="fieldType">
 									<c:choose>
-										<c:when test="${fn:endsWith(info.key, 'file_ref_id')}">file</c:when>
-										<c:when test="${fn:endsWith(info.key, 'files_ref_id')}">files</c:when>
+										<c:when test="${fn:endsWith(info.key, 'file_group_id')}">file</c:when>
 										<c:when test="${info.value.type == 'INTEGER' || info.value.type == 'BIGINT'}">number</c:when>
 										<c:when test="${info.value.type == 'TIMESTAMP'}">date</c:when>
 										<c:otherwise>text</c:otherwise>

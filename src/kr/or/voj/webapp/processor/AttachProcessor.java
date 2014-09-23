@@ -41,8 +41,9 @@ public class AttachProcessor implements ProcessorService{
 		Iterator<String> it = mRequest.getFileNames();
 		
 		while (it.hasNext()) {
-			int idx = -1;
-			String attachId = it.next();
+			String attachId = it.next();//파일콘트롤명
+			String attachGroupFieldName = StringUtils.substringBeforeLast(attachId, "_file");
+			String attachGroupId = mRequest.getParameter(attachGroupFieldName);
 			List<MultipartFile> files = mRequest.getFiles(attachId);
 			
 			for(MultipartFile file : files){
@@ -56,16 +57,24 @@ public class AttachProcessor implements ProcessorService{
 
 				InputStream is = file.getInputStream();
 				//파일을 저장소에 파일을 저장한다.
-				saveFile(result, attachId, idx, is, fileName, fileSize);
-
+				saveFile(result, attachId, attachGroupId, is, fileName, fileSize);
 			}
 		}
-
+		
+		List<Map<String,Object>> attchFileList = new ArrayList<Map<String,Object>>();
+		
+		for(String key : result.keySet()){
+			attchFileList.addAll(result.get(key));
+		}
+		
+		params.put("_atach_all", attchFileList);
 		params.put("_atach", result);
+		
+		ProcessorServiceFactory.executeQuery("attach", "insert", params);
 		return null;
 	}
 
-	private void saveFile(Map<String, List<Map<String, Object>>> result, String attachId, int idx, InputStream is, String fileName, long fileSize) throws Exception{
+	private void saveFile(Map<String, List<Map<String, Object>>> result, String attachId, String attachGroupId, InputStream is, String fileName, long fileSize) throws Exception{
 		
 		String ext = StringUtils.substringAfterLast(fileName, ".");
 		ext = ext!=null ? ext.toLowerCase() : "";
@@ -77,7 +86,6 @@ public class AttachProcessor implements ProcessorService{
 			attchFileList = new ArrayList<Map<String,Object>>();
 			result.put(attachId, attchFileList);
 		}
-		
 		
 		String fileId = UUID.randomUUID().toString();
 		Map<String, Object> fileMap = new HashMap<String, Object>();
@@ -105,25 +113,16 @@ public class AttachProcessor implements ProcessorService{
 		}
 		fileMap.put("fieldId", attachId);
 		fileMap.put("id", fileId);
+		fileMap.put("group_id", attachGroupId);
 		fileMap.put("name", fileName);
 		fileMap.put("path", filePath);
 		fileMap.put("ext", ext);
 		fileMap.put("size", fileSize);
 		
-		if(idx<0){
-			attchFileList.add(fileMap);
-		}else{
-			setList(attchFileList, idx, fileMap);
-		}
-	}
-
-	private void setList(List<Map<String, Object>> attchFileList, int idx, Map<String, Object> map) {
-
-		if(attchFileList.size()<idx) setList(attchFileList, idx-1, null);
 		
-		if(attchFileList.size()==idx) attchFileList.add(idx, map);
-		else attchFileList.set(idx, map);
+		attchFileList.add(fileMap);
+		
 	}
-	
+
 	
 }

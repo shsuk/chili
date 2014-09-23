@@ -10,12 +10,15 @@
 		changeMonth: true
 
 	};
-
+	//초기 로딩이나 ajx로딩 완료시 콘트롤 초기화
 	function ininControl(){
 		$('.datepicker').datepicker(option);
 		$('.spinner').spinner({ min: 1 });
 		
+		$('[key_press=]').removeAttr('key_press');
+		$('[valid=]').removeAttr('valid');
 	}
+	
 	$(function() {
 		try {
 			ininControl();

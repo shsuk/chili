@@ -1,6 +1,4 @@
 $(function() {
-	$('[key_press=]').removeAttr('key_press');
-	$('[valid=]').removeAttr('valid');
 	
 	
 	$(document).on('click', '.view_control', function(e){

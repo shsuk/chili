@@ -51,7 +51,7 @@ public class AutoController {
 	public ModelAndView mainPage(HttpServletRequest request, HttpServletResponse response, @PathVariable("mainPath") String mainPath, @PathVariable("page") String page) throws Exception {
 		mainPath = mainPath.replace('_', '/');
 		ModelAndView mv = new ModelAndView(mainPath + "/main");
-		mv.addObject("IMPORT_PAGE", mainPath + "/" + page.replace('_', '/'));
+		mv.addObject("IMPORT_PAGE", "../" + mainPath + "/" + page.replace('_', '/'));
 		return mv;
 	}
 	@RequestMapping(value = "{path}/{page}.sh")

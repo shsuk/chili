@@ -1,3 +1,4 @@
+<%@tag import="kr.or.voj.webapp.utils.XmlUtil"%>
 <%@ tag language="java" pageEncoding="UTF-8" body-content="scriptless"%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -44,6 +45,7 @@
 $(function(){
 
 	var treeData = ${sp:list2tree(rcd_value, upperFld, codeFld, titleFld, idFld, rootId) };
+	
     $("#tree_${key }").dynatree({
         onActivate: function(node) {
             ${link_value};

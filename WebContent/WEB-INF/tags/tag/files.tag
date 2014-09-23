@@ -13,7 +13,7 @@
 <%@ attribute name="attr" type="java.lang.String" %>
 <sp:sp var="RESULT" queryPath="attach" action="list" processorList="mybatis" exception="false">
 	{
-		files_ref_id: '${value }'
+		file_group_id: '${value }'
 	}
 </sp:sp>
 <script type="text/javascript">
@@ -22,10 +22,13 @@
 	});
 
 </script>
+
 <c:if test="${!empty(valid)}">
 	<c:set var="valid">valid="${valid }"</c:set>
 </c:if>
 <div>
+	<c:set var="value">${empty(value) ? sp:uuid() : value }</c:set>
+	<input type="hidden" name="${name }" value="${value }">
 	<!-- 이전파일 목록 -->
 	<!-- 조회용 -->
 	<div class="${className }" name="${name }" style="display: none;">
@@ -59,7 +62,7 @@
 </div>
 
 <div class="attachTpl_${name }" style="display: none; padding: 1px;">
-	<input type="file" name="${name }" style="width: 90%;" class="">
+	<input type="file" name="${name }_file" style="width: 90%;" class="">
 	<div style="float: right; padding-right: 17px; cursor: pointer; margin: 2px;" title="첨부항목 삭제" onclick="$($(this).parent()).remove()">
 		<img src="../images/icon/close.png">
 	</div>

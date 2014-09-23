@@ -13,7 +13,7 @@
 <%@ attribute name="attr" type="java.lang.String" %>
 <sp:sp var="RESULT" queryPath="attach" action="file" processorList="mybatis" exception="false">
 	{
-		file_ref_id: '${value }'
+		file_group_id: '${value }'
 	}
 </sp:sp>
 
@@ -21,6 +21,8 @@
 	<c:set var="valid">valid="${valid }"</c:set>
 </c:if>
 <div>
+	<c:set var="value">${empty(value) ? sp:uuid() : value }</c:set>
+	<input type="hidden" name="${name }" value="${value }">
 	<!-- 이전파일 목록 -->
 	<!-- 조회용 -->
 	<div class="${className }" name="${name }" style="display: none;">
@@ -28,8 +30,8 @@
 				<c:if test="${type=='file_img' }">
 					<img src="../dl.sh?file_id=${file.file_id}"  height="100">
 				</c:if>
-				<c:if test="${type!='files_img' }">
-					${row.file_name }
+				<c:if test="${type!='file_img' }">
+					${file.file_name }
 				</c:if>
 		</a></div>
 	</div>
@@ -40,6 +42,6 @@
 			<img src="../images/icon/close.png">
 		</div>
 	</div>
-	<input type="file" name="${name }" style="width: 90%;" onchange="delFile('${file.file_id}')" class="">
+	<input type="file" name="${name }_file" style="width: 90%;" onchange="delFile('${file.file_id}')" class="">
 	
 </div>

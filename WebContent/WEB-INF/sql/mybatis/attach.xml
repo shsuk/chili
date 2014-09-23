@@ -7,18 +7,40 @@
 <mapper namespace="attach">
 	<select id="list_1_files" useCache="true" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
 		SELECT *
-		FROM attach_tbl
-		WHERE ref_id = #{files_ref_id}
+		FROM sys_attach_tbl
+		WHERE file_group_id = #{file_group_id}
+		ORDER BY created
 	</select>
 	<select id="file_1_#file" useCache="true" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
 		SELECT *
-		FROM attach_tbl
-		WHERE ref_id = #{file_ref_id}
+		FROM sys_attach_tbl
+		WHERE file_group_id = #{file_group_id}
 	</select>
 	<select id="dowonload_1_#row" useCache="true" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
 		SELECT *
-		FROM attach_tbl
+		FROM sys_attach_tbl
 		WHERE file_id = #{file_id}
 	</select>
+   	<update id="insert_1" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap">
+		INSERT INTO sys_attach_tbl(
+			 file_id,file_name,file_ext,file_path,file_size,file_group_id
+		)
+		SELECT file_id,file_name,file_ext,file_path,file_size,file_group_id
+		FROM sys_attach_tbl
+		WHERE 1=2
+	  	<foreach item="loop"  collection="_atach_all" >
+	  		UNION ALL
+			SELECT #{loop.id},#{loop.name},#{loop.ext},#{loop.path},#{loop.size},#{loop.group_id}
+		</foreach>
 
+	</update>
+   	<update id="insert_2" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap">
+		UPDATE sys_attach_tbl
+		SET file_group_id = concat('del_', file_group_id)
+		WHERE 1=1
+			and file_id in
+			  	<foreach item="id"  collection="del_file_id_"  open="(" close=")" separator=",">
+						#{id}
+				</foreach>
+	</update>
 </mapper>
