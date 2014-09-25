@@ -191,4 +191,17 @@ public class Function {
 		List2Tree l2t = new  List2Tree(list, upperFld, codeFld, labelFld, idFld, rootId);
 		return l2t.getTree();
 	}
+	
+	public static String xml2Tree(String xml)throws Exception {
+		XmlUtil x = new XmlUtil();
+		
+		try {
+			return x.getXml2tree(xml);
+		} catch (Exception e) {
+			JSONObject obj = new JSONObject();
+			obj.put("title", e.toString());
+			return "[ " + obj.toString() + "]";
+		}
+	}
+
 }

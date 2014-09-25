@@ -253,19 +253,20 @@
 
 	<form id="main_form" action="aa" method="post">
 		<div id="defaultData"  style="float: left;padding:1px;">
-			<div id="ui_list_btn" class="border f_l p_1 m_3 ui-widget-header" >
+			<div id="ui_list_btn" class="border f_l p_1  ui-widget-header" >
 				<span onclick="viewUiList()" style="cursor: pointer;">UI ID</span> <input type="text" id="ui_id" name="ui_id" value="${param.ui_id }">
 				<div id="ui_list" style="position: absolute; z-index: 100;background: #ffffff;color: #444444;border: 1px solid #c5dbec;"></div>
 			</div>
-			<div class="border f_l p_1 m_3 ui-widget-header" >
+			<div class="border f_l p_1  ui-widget-header" >
 				쿼리경로 <tag:select_query_name name="queryPath" selected="${req.queryPath }"/>
 			</div>
-			<div class="border f_l p_1 m_3 ui-widget-header" >기본값 <input type="text" id="defaultValue" name="defaultValue" style="width: 200px;" value="rows:10,_start:1,notice_id:72"></div>
-			<div class=" ui-widget-header ui-corner-all  m_3" style="float: left; cursor:pointer;  margin-left: 5px; padding: 3px;" onclick="loadPage()">읽기</div>
-			<div class=" ui-widget-header ui-corner-all  m_3" style="float: left; cursor:pointer;  margin-left: 5px; padding: 3px;" onclick="saveUi()">저장</div>
-			<div class=" ui-widget-header ui-corner-all  m_3" style="float: left; cursor:pointer;  margin-left: 5px; padding: 3px;" onclick="runDefaultPage()" >실행</div>
+			<div class="border f_l p_1  ui-widget-header" >기본값 <input type="text" id="defaultValue" name="defaultValue" style="width: 200px;" value="rows:10,_start:1,notice_id:72"></div>
+			<div class=" ui-widget-header ui-corner-all btn_left" onclick="loadPage()">읽기</div>
+			<div class=" ui-widget-header ui-corner-all btn_left" onclick="saveUi()">저장</div>
+			<div class=" ui-widget-header ui-corner-all btn_left" onclick="runDefaultPage()" >실행</div>
 		</div>
-
+		<div style="float: right;padding:1px;"><a href="../_admin_mapper/mappingxml.sh">XML연동 매퍼</a></div>
+		
  		<input type="hidden" id="ui_design" name="ui_design" value="">
  		<div id="form_data"></div>
 		<div style="clear: both;">

@@ -116,4 +116,7 @@ table.tpl td {
     font-weight: bold;
     padding: 4px 10px 4px;
 }
+
+.btn_left{float: left; cursor:pointer;  margin-left: 5px; padding: 3px;}
+
 .over_tr{background: #a6c9e2;}

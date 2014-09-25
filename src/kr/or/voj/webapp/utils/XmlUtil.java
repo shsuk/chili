@@ -1,6 +1,7 @@
 package kr.or.voj.webapp.utils;
 
 import java.io.File;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.axis.utils.XMLUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.jxpath.Container;
 import org.apache.commons.jxpath.JXPathContext;
 import org.apache.commons.jxpath.XMLDocumentContainer;
@@ -28,78 +30,114 @@ import org.w3c.dom.NodeList;
 
 public class XmlUtil {
 
-	public String test() throws Exception{
-		String path = "D:/temp/dc1d4bd0-11ef-4b8c-b51a-d3fea736e4de.xml";
-		
+	private Map<String, Boolean> pathMap = new HashMap<String, Boolean>();
+	private String iconPath = "../../../images/icon/";
 
+	public String getXml2tree(String xml) throws Exception{
+		//String path = "D:/temp/test.xml";
 
 		Map<String, Object> json = new HashMap<String, Object>();
-		
+
+		InputStream is = IOUtils.toInputStream(xml);
+        DOMBuilder domBuilder = new DOMBuilder();
+
+			
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder;
         dBuilder = dbFactory.newDocumentBuilder();
-        Document doc = dBuilder.parse(new File(path));
-        DOMBuilder domBuilder = new DOMBuilder();
+        Document doc = dBuilder.parse(is);
+	
       
         Element el = domBuilder.build(doc).getRootElement();
-        json.put("id",el.getName());
-        json.put("title",el.getName());
+        String name = el.getName();
+        json.put("id",name);
+        json.put("title",name);
         json.put("type", "path");
-       
+        json.put("path", name);
+        json.put("hideCheckbox", true);
+        json.put("expand", true);
+     
 		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
-		chi(el.getChildren(), json, list);
+		addChildren(name, el.getChildren(), json, list);
 		
 		JSONArray ja = new JSONArray();
 		ja.add(json);
 		
 		return ja.toString();
 	}
-	private void chi(List<Element> list, Map<String, Object> json, List<Map<String,Object>> ja){
-		String imgUrl = "../../../jquery/dynatree/doc/skin-custom/";
+	private void addChildren(String path, List<Element> list, Map<String, Object> parentObj, List<Map<String,Object>> children){
 		
-		if(list==null){
+		if(list==null || list.size()<1){
+			parentObj.put("icon", iconPath+"node.png");
 			return;
 		}
 		
+		parentObj.put("isFolder", true);
 		
 		for(Element el : list){
-			Map<String, Object> jo = new HashMap<String, Object>();
-			//System.out.println(el.getName() + " = " + el.getTextTrim());
-	        jo.put("id",el.getName());
-	        String val = el.getTextTrim();
-	        if(StringUtils.isEmpty(val)){
-		        jo.put("title",el.getName());
-				jo.put("type", "path");
-	        }else{
-		        jo.put("title",el.getName() + " - " + el.getTextTrim());
-				jo.put("type", "node");
-	        }
+			String name = el.getName();
+			String newPath = path + "/" + name;
 			
-			List<Map<String,Object>> jaa = new ArrayList<Map<String,Object>>();
+			Map<String, Object> elObj = new HashMap<String, Object>();
+			//System.out.println(el.getName() + " = " + el.getTextTrim());
+			elObj.put("id",name);
+			elObj.put("path", newPath);
+
+	        String val = el.getTextTrim();
+	        
+	        if(StringUtils.isEmpty(val)){
+	        	elObj.put("title",name);
+	        	elObj.put("type", "path");
+	        	elObj.put("hideCheckbox", true);
+	        }else{
+	        	elObj.put("title",name + " - " + val);
+	        	elObj.put("type", "node");
+	        }
+	        
+	        elObj.put("value", val);
+	        
+			if(pathMap.containsKey(newPath)){
+				elObj.put("hideCheckbox", true);				
+			}else{
+				parentObj.put("expand", true);
+			}
+			
+			pathMap.put(newPath, true);
+			
+			List<Map<String,Object>> elChildren = new ArrayList<Map<String,Object>>();
 			List<Attribute> ats =  el.getAttributes();
 			if(ats!=null){
 				
 				for(Attribute at : ats){
-					Map<String, Object> joa = new HashMap<String, Object>();
+					Map<String, Object> attObj = new HashMap<String, Object>();
+					String atName = at.getName();
+					String attPath = newPath + "@" + atName;
+					attObj.put("id", atName);
+					attObj.put("title", atName + "-" + at.getValue());
+					attObj.put("value", at.getValue());
+					attObj.put("type", "attr");
+					attObj.put("icon", iconPath+"attr.png");
+					attObj.put("path", attPath);
 					
-					joa.put("id", at.getName());
-					joa.put("title", at.getName() + "-" + at.getValue());
-					joa.put("type", "attr");
-					joa.put("icon", imgUrl+"folder_docs.gif");
+					if(pathMap.containsKey(attPath)){
+						attObj.put("hideCheckbox", true);				
+					}else{
+						elObj.put("expand", true);
+					}
+					
+					pathMap.put(attPath, true);
 
-					jaa.add(joa);
+					elChildren.add(attObj);
 				}
-				jo.put("children", jaa);
+				elObj.put("children", elChildren);
 			}
 
-			ja.add(jo);
-			chi(el.getChildren(), jo, jaa);
+			children.add(elObj);
+			
+			addChildren(newPath, el.getChildren(), elObj, elChildren);
 		}
-		json.put("children", ja);
+		
+		parentObj.put("children", children);
 	}
 	
-	public static String main()throws Exception {
-		XmlUtil x = new XmlUtil();
-		return x.test();
-	}
 }
