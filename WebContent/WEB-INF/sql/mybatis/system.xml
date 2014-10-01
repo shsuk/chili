@@ -28,4 +28,54 @@
 		FROM sys_code_tbl
 		WHERE group_id = #{group_id} and code_value = #{code_value}
 	</select>
+   	<update id="codeUpdate_1" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap">
+ 		UPDATE sys_code_tbl
+		SET 
+			code_name = #{code_name},
+			reference_value = #{reference_value},
+			order_no = #{order_no},
+			mod_user = 'dd',
+			mod_dt = now()
+		WHERE rid = #{rid}
+   	</update>
+	<!-- 매퍼스케쥴 : 매퍼목록 -->
+	<select id="mapper_1_rows" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
+		SELECT *
+		FROM sys_mapper_tbl
+	</select>
+	<!-- 매퍼스케쥴 : 매퍼상세정보 -->
+	<select id="mapperTrigger_1_rows" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
+		SELECT *
+		FROM sys_mapper_trigger_tbl
+		WHERE mapper_id = #{mapper_id}
+	</select>
+	<!-- 매퍼스케쥴 : 실행 체크시간 업데이트 -->
+   	<update id="mapperCheck_1" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap">
+ 		UPDATE sys_mapper_tbl
+		SET 
+			check_date = now()
+		WHERE mapper_id = #{mapper_id}
+   	</update>
+   	<!-- 매퍼스케쥴 : 시작시간 업데이트 -->
+   	<update id="mapperStart_1" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap">
+ 		UPDATE sys_mapper_tbl
+		SET 
+			start_date = now()
+		WHERE mapper_id = #{mapper_id}
+   	</update>
+   	<!-- 매퍼스케쥴 : 종료시간 업데이트 -->
+   	<update id="mapperEnd_1" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap">
+ 		UPDATE sys_mapper_tbl
+		SET 
+			end_date = now()
+		WHERE mapper_id = #{mapper_id}
+   	</update>
+   	<!-- 매퍼스케쥴 : 오류발생시간 및 내역 업데이트 -->
+   	<update id="mapperError_1" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap">
+ 		UPDATE sys_mapper_tbl
+		SET 
+			message_date = now(),
+			process_message = #{process_message}
+		WHERE mapper_id = #{mapper_id}
+   	</update>
 </mapper>

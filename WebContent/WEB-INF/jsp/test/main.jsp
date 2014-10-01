@@ -16,7 +16,7 @@
 <link href="../jquery/jqGrid/css/ui.jqgrid.css"  rel="stylesheet" type="text/css" media="screen" />
 <link href="../jquery/jqGrid/plugins/ui.multiselect.css" rel="stylesheet" type="text/css" media="screen" />
 <link href="../css/contents.css" rel="stylesheet" type="text/css" />
-<link href='../jquery/dynatree/src/skin/ui.dynatree.css' rel='stylesheet' type='text/css' >
+<link href='../jquery/dynatree/skin/ui.dynatree.css' rel='stylesheet' type='text/css' >
 
 <script src="../jquery/js/jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="../jquery/js/jquery-ui-1.10.0.custom.min.js" type="text/javascript"></script>
@@ -24,7 +24,7 @@
 <script src="../jquery/jqGrid/js/jquery.jqGrid.min.js" type="text/javascript"></script>
 <script src="../js/commonUtil.js" type="text/javascript"></script>
 <script src="../js/autoPageUtils.js" type="text/javascript"></script>
-<script src='../jquery/js/jquery.dynatree.js' type="text/javascript"></script>
+<script src='../jquery/dynatree/jquery.dynatree.js' type="text/javascript"></script>
 <script src='../jquery/js/jquery.cookie.js' type="text/javascript"></script>
 <script type="text/javascript">
 

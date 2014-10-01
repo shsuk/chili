@@ -11,13 +11,17 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt"%>
 <%@ taglib prefix="sp" uri="/WEB-INF/tlds/sp.tld"%>
-<%@ taglib prefix="tag"  tagdir="/WEB-INF/tags/tag" %>
-<sp:sp var="ui_info" queryPath="ui" action="design" processorList="mybatis" exception="false"/>
-<c:set var="query_path" value="${req.action_type=='D' ? ui.delete_paath : (req.action_type=='I' ? ui.indert_paath : ui.update_path) }"/>
-<c:set scope="session" var="user_id" value="tester"/>
-<sp:sp var="RESULT" queryPath="${fn:substringBefore(query_path,'.') }" action="${fn:substringAfter(query_path,'.' ) }"  processorList="attach,mybatis" exception="false">
+<%@ taglib prefix="tag"  tagdir="/WEB-INF/tags/tag" %> 
+<sp:sp var="RESULT" queryPath="ui" action="save" processorList="" exception="false"/>
+<c:forEach var="data" items="${req }">
+	<c:if test="${ !fn:startsWith(data.key, 'ui_design') && sp:isType(data.value,'string') && !fn:endsWith(data.key,']') || fn:endsWith(data.key,'[]')}">
+		
+		<c:set var="paramData">${paramData }, "${data.key }" : "${fn:replace(fn:replace(data.value,"'","\\'"),'"',"\\'") }"</c:set>
+	</c:if>
+</c:forEach>
+<sp:sp var="RESULT" queryPath="ui" action="save" processorList="mybatis" exception="false">
 	{
-		${param.defaultValue }
+		ui_field: '${fn:substring(paramData, 1, fn:length(paramData))}'
 	}
 </sp:sp>
-${RESULT.JSON}
+${RESULT.JSON }

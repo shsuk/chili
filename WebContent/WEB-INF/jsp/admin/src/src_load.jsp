@@ -8,14 +8,15 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt"%>
 <%@ taglib prefix="sp" uri="/WEB-INF/tlds/sp.tld"%>
 <%@ taglib prefix="tag"  tagdir="/WEB-INF/tags/tag" %> 
-<%@ taglib prefix="src"  tagdir="/WEB-INF/tags/src" %> 
+<%@ taglib prefix="src"  tagdir="/WEB-INF/tags/src" %>
+
 <sp:sp var="RESULT" queryPath="ui" action="design" processorList="mybatis" exception="false"/>
+
 <c:set var="ui_design" value="${ui.UI_DESIGN }"/>
 <c:set var="ui_field" value="${sp:str2jsonObj(ui.UI_FIELD) }"/>
 <c:set var="query_path" value="${ui.query_path}"/>
 <c:set var="query_path" value="${empty(query_path) ? param.queryPath : query_path}"/>
 <input type="hidden" id="old_query_path" name="old_query_path" value="${query_path }">
-<input type="hidden" id="old_tpl_path" name="old_tpl_path" value="${empty(ui.tpl_path) ? '_at_pg' : ui.tpl_path }">
 
 <sp:sp var="RESULT" queryPath="${fn:substringBefore(query_path,'.') }" action="${fn:substringAfter(query_path,'.' ) }" processorList="mybatis" exception="false">
 	{
@@ -25,8 +26,27 @@
 
 <c:set var="isInit" value="${!empty(ui_field.col_count)}"/>
 <c:set var="col_count" value="${empty(ui_field.col_count) ? 4 : ui_field.col_count}"/>
-
-타이틀 : <input type="text" id="ui_title" name="ui_title" value="${ui.ui_title }">
+<table  class="lst">
+	<tr>
+		<th>타이틀</th><td><input type="text" id="ui_title" name="ui_title" value="${ui.ui_title }" style="width: 98%;"></td>
+		<th>등록궈리</th><td><tag:select_query_name name="indert_paath" selected="${ui.indert_paath }"/></td>
+		<th>사용버튼</th><td><tag:check_array name="use_btn" codes="S=저장,U=수정,D=삭제,C=취소,L=닫기"  checked="${ui.use_btn}" /></td>
+	</tr><tr>
+		<th>템플릿 패스</th><td><input type="text" id="tpl_path" name="tpl_path" value="${empty(ui.tpl_path) ? '_at_pg' : ui.tpl_path }" style="width: 98%;"/></td>
+		<th>수정궈리</th><td><tag:select_query_name name="update_path" selected="${ui.update_path }"/></td>
+		<th>등록버튼Link</th><td>
+			<tag:select_array name="add_type" codes="linkLoad=Load,linkPopup=팝업,linkPage=새페이지,linkFnc=함수"  selected="${ui.add_type}" />
+			<input name="add_param" type="text" value="${ui.add_param }" style="width: 200px;;" title="<b>Load</b> : ui_id, {}, selector, <br><b>팝업</b> : ui_id, {}, <br><b>새페이지</b> : ui_id, {}, path, <br><b>함수</b> : function">
+		</td>
+	</tr><tr>
+		<th>Unit of width</th><td><tag:check_array name="w_unit" codes="%=%"  checked="${ui_field['w_unit']}" /></td>
+		<th>삭제궈리</th><td><tag:select_query_name name="delete_paath" selected="${ui.delete_paath }"/></td>
+		<th>저장CallBack</th><td>
+			<tag:select_array name="calback_type" codes="linkLoad=Load,linkPopup=팝업,linkPage=새페이지,linkFnc=함수"  selected="${ui.calback_type}" />
+			<input name="calback_param" type="text" value="${ui.calback_param }" style="width: 200px;;" title="<b>Load</b> : ui_id, {}, selector, <br><b>팝업</b> : ui_id, {}, <br><b>새페이지</b> : ui_id, {}, path, <br><b>함수</b> : function">
+		</td>
+	</tr>
+</table>
 
 <table id="resizable_container" class="ui_design_form" style="clear: both;width:${col_count*100+800 }px; "><tr><td valign="top">
 
@@ -89,12 +109,26 @@
 						<td title="Tree의 그룹타입으로 지정한 경우 필드명에 최상위 아이디를 넣으세요."><!-- 필드타입 -->
 							<c:set var="fieldType" value="${ui_field[type] }"/>
 							<c:if test="${!isInit}">
+								<!-- 필드속성을 자동으로 초기화 한다. -->
 								<c:set var="fieldType">
 									<c:choose>
-										<c:when test="${fn:endsWith(info.key, 'file_group_id')}">file</c:when>
-										<c:when test="${info.value.type == 'INTEGER' || info.value.type == 'BIGINT'}">number</c:when>
-										<c:when test="${info.value.type == 'TIMESTAMP'}">date</c:when>
-										<c:otherwise>text</c:otherwise>
+										<c:when test="${isList=='Y'}">
+											<c:choose>
+												<c:when test="${fn:endsWith(info.key, 'file_group_id')}">file</c:when>
+												<c:when test="${info.value.type == 'INTEGER' || info.value.type == 'BIGINT'}">number_view</c:when>
+												<c:when test="${info.value.type == 'TIMESTAMP'}">date_view</c:when>
+												<c:otherwise>label</c:otherwise>
+											</c:choose>
+										</c:when>
+										<c:otherwise>
+											<c:choose>
+												<c:when test="${fn:endsWith(info.key, 'file_group_id')}">file</c:when>
+												<c:when test="${info.value.type == 'INTEGER' || info.value.type == 'BIGINT'}">number</c:when>
+												<c:when test="${info.value.type == 'TIMESTAMP'}">date</c:when>
+												<c:when test="${info.value.precision > 255}">textarea</c:when>
+												<c:otherwise>text</c:otherwise>
+											</c:choose>
+										</c:otherwise>
 									</c:choose>
 								</c:set>
 							</c:if>

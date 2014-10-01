@@ -96,7 +96,6 @@
 			initDrDg();
 			var old_query_path = $('#old_query_path').val();
 			$("#queryPath").val(old_query_path).attr("selected", "selected");
-			$("#tpl_path").val($('#old_tpl_path').val());
 			$('#prg_bar').animate({width: '100%'}, 300);
 		});
 		
@@ -261,9 +260,9 @@
 				쿼리경로 <tag:select_query_name name="queryPath" selected="${req.queryPath }"/>
 			</div>
 			<div class="border f_l p_1  ui-widget-header" >기본값 <input type="text" id="defaultValue" name="defaultValue" style="width: 200px;" value="rows:10,_start:1,notice_id:72"></div>
-			<div class=" ui-widget-header ui-corner-all btn_left" onclick="loadPage()">읽기</div>
-			<div class=" ui-widget-header ui-corner-all btn_left" onclick="saveUi()">저장</div>
-			<div class=" ui-widget-header ui-corner-all btn_left" onclick="runDefaultPage()" >실행</div>
+			<div class=" ui-widget-header ui-corner-all btn_left f_l" onclick="loadPage()">읽기</div>
+			<div class=" ui-widget-header ui-corner-all btn_left f_l" onclick="saveUi()">저장</div>
+			<div class=" ui-widget-header ui-corner-all btn_left f_l" onclick="runDefaultPage()" >실행</div>
 		</div>
 		<div style="float: right;padding:1px;"><a href="../_admin_mapper/mappingxml.sh">XML연동 매퍼</a></div>
 		
@@ -274,9 +273,7 @@
 				<div id="prg_bar" style="border: 1px solid #c5dbec; height: 8px;background: #c5dbec;"></div>
 			</div>
 			<span  style="float: right;"> 
-				<span><b>템플릿 패스 : </b></span><input type="text" id="tpl_path" name="tpl_path" value="" style="width: 100px;"/>
 				<span><b>Col Count : </b></span><input type="text" name="col_count" value="${col_count }"  class="spinner" style="width: 20px;height: 14px;"/>
-				&nbsp;&nbsp;&nbsp;<span><b>Unit of width : </b><tag:check_array name="wUnit" codes="wUnit=%"  checked="${param['wUnit'] }" /></span>
 			</span>
 			<span style=" clear:both;"></span>
 		</div>

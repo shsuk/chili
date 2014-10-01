@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+			http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.5.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean" destroy-method="destroy">
+	    <property name="triggers">
+	        <list>
+	            <ref bean="mapperJobTrigger" />
+	        </list>
+	    </property>
+	</bean>
+	<!-- Quartz - Cron Trigger Setting -->
+	<!-- 
+		1: Seconds (0–59), 2: Minutes (0–59), 3: Hours (0–23), 4: Day of month (1–31), 
+		5: Month (1–12 or JAN–DEC), 6: Day of week (1–7 or SUN–SAT), 7: Year (1970–2099), *:는 all, ?는 설정하지 않음
+		
+		0 0 0 * * ? 	매일 오전 12시에 실행
+		0 0 0 1 * ? 	매월 1일 오전 12시에 실행
+		0 0 0 ? ? 1 ? 	매주 일요일 오전 12시에 실행
+	
+	 -->
+	<!-- ************* 테스트 employee XML 연동 ************* -->
+	<bean id="mapperExecutor" class="kr.or.voj.quartz.job.MapperExecutor"/>
+
+	<bean id="mapperJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+	    <property name="description" value="Mapper를 이욯한 XML 연동" />
+	    <property name="jobDetail" ref="mapperJob" />
+	    <property name="cronExpression" value="0 * * * * ?" />
+	    <!--                                   s m h d m -->
+	</bean> 
+    <bean name="mapperJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="kr.or.voj.quartz.job.MapperJob"/>
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="mapperExecutor" value-ref="mapperExecutor"/>
+			</map>
+		</property>
+	</bean>
+
+
+</beans>

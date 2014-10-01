@@ -39,13 +39,20 @@ $(function() {
 		}
 	});
 	
-	var height_etc = $("header").get(0).clientHeight + $("footer").get(0).clientHeight+50;
+	var height_header = $("header").get(0).clientHeight;
+	var height_etc = height_header + $("footer").get(0).clientHeight + 130;
 	
 	$( window ).resize(function(e,e1) {
-		var height = (window.innerHeight-height_etc) + 'px';
-		$("#left_content").css('height', height);		
-		$("#center_content").css('height', height);		
+		var height = (window.innerHeight-($("#top_content").get(0).clientHeight + height_etc)) + 'px';
+		$("#center_content").css('height', height);	
 	}).resize();
+	
+	$( '#resizer' ).draggable({ containment: 'parent', stop: function( event, ui ) {
+		var h = event.pageY - (height_header + 50);
+		$("#top_content").css('height', h);
+		$(this).css('top' , 0);
+		$( window ).resize();
+	} });
 });
 
 </script> 
@@ -54,20 +61,28 @@ $(function() {
 	<header style="margin: 0 auto; padding:3px; width: 90%; min-width:1040px; border:1px solid #cccccc; ">
 		<img src="../images/log.png" height="100">
 	</header>
-	<div style="margin: 5px auto; padding:3px; width: 90%; min-width:1040px; border:1px solid #cccccc; ">
+	<div id="main_content" style="margin: 5px auto; padding:3px; width: 90%; min-width:1040px; border:1px solid #cccccc; ">
 		<table class="lst">
 			<tr>
-				<th style=" width: 250px; min-width:200px;" id="left_content_title"></th>
-				<th style=" width: 400px; min-width:200px;" id="center_content_title"></th>
+				<th style="" id="top_content_title"></th>
 			</tr>
 			<tr>
-				<td  valign="top" style=" width: 250px; min-width:200px;">
-					<div id="left_content" style=" height:500px; overflow-y: auto; ">
+				<td  valign="top" style="">
+					<div id="top_content" style=" height:400px; overflow-y: auto; ">
 							<src:auto_make_src isForm="true"/>
 					</div>
 				</td>
+				
+			</tr>
+		</table>
+		<p id="resizer" style="height:3px; margin:1px 0 1px 0; border:1px solid #cccccc;cursor: ns-resize; "></p>
+		<table class="lst">
+			<tr>
+				<th style="" id="center_content_title"></th>
+			</tr>
+			<tr>
 				<td valign="top">
-					<div id="center_content" style=" height:500px; overflow-y: auto; "></div>
+					<div id="center_content" style=" height:400px; overflow-y: auto; "></div>
 				</td>
 			</tr>
 		</table>

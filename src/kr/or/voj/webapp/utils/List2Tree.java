@@ -10,6 +10,7 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 
 public class List2Tree{
+	private String iconPath = "../../../images/icon/";
 	List<Map<String, Object>> list = null;
 	String upperFld = null;
 	String codeFld = null;
@@ -72,24 +73,28 @@ public class List2Tree{
 		
 	}
 	private void replaceNode(Map<String,Object> rec, String rootId, String uppId)throws Exception {
-		String imgUrl = "../../../jquery/dynatree/doc/skin-custom/";
 		Object folder = rec.get("isfolder");
 		String isfolder = folder==null ? "" : folder.toString();
 		String icon = (String)rec.get("icon");
 
 		if(rootId.equals(uppId)){//root노드
-			rec.put("icon", imgUrl+"folder_docs.gif");
+			//rec.put("icon", iconPath+"node.png");
 			rec.put("isFolder", true);
+		}else if(StringUtils.isEmpty(isfolder)){//자식노드 존재
+
 		}else if(!"0".equals(isfolder)){//자식노드 존재
 			rec.put("isFolder", true);
 			if(StringUtils.isNotEmpty(icon)){
-				rec.put("icon", imgUrl+icon);
+				rec.put("icon", iconPath+icon);
 			}else{
 				rec.put("icon", "");
 			}
 		}else{
 			if(StringUtils.isNotEmpty(icon)){
-				rec.put("icon", imgUrl+icon);
+				rec.put("icon", iconPath+icon);
+			}else{
+				rec.put("icon", iconPath+"node.png");
+				
 			}
 		}
 		

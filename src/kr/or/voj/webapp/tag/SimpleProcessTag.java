@@ -100,12 +100,12 @@ public class SimpleProcessTag extends BodyTagSupport {
 				pageContext.setAttribute(key, resultSet.get(key));;
 			}
 			
-			pageContext.setAttribute(var, resultSet);
 
 			jsonResult.putAll(resultSet);
 			jsonResult.put("success", true);
 		} catch (Exception e) {
 			jsonResult.put("success", false);
+
 			jsonResult.put("message", e.toString());
 			
 			Logger.getLogger(SimpleProcessTag.class).debug(e);
@@ -119,6 +119,8 @@ public class SimpleProcessTag extends BodyTagSupport {
 		}
 		resultSet.put("JSON", jsonResult);
 
+		pageContext.setAttribute(var, resultSet);
+		
 		action = null;
 		return SKIP_BODY;
 	}

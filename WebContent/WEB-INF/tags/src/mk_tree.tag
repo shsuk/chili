@@ -1,5 +1,6 @@
 <%@tag import="kr.or.voj.webapp.utils.XmlUtil"%>
 <%@ tag language="java" pageEncoding="UTF-8" body-content="scriptless"%>
+<%@ tag trimDirectiveWhitespaces="true" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt"%>

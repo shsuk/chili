@@ -22,9 +22,9 @@
 			WHERE ui_id = #{ui_id}
 		</selectKey>
 		<if test="ui_count ==  0">
-			INSERT INTO sys_ui_tbl (ui_id, ui_title, query_path, ui_design, ui_field, tpl_path)
+			INSERT INTO sys_ui_tbl (ui_id, ui_title, query_path, ui_design, ui_field, tpl_path, use_btn,indert_paath,update_path,delete_paath,add_type, add_param )
 			VALUES(
-				#{ui_id}, #{ui_title}, #{queryPath}, #{ui_design}, #{ui_field}, #{tpl_path}
+				#{ui_id}, #{ui_title}, #{queryPath}, #{ui_design}, #{ui_field}, #{tpl_path}, #{use_btn_all}, #{indert_paath}, #{update_path}, #{delete_paath}, #{add_type}, #{add_param}
 			)
 		</if>
 		<if test="ui_count != 0">
@@ -33,7 +33,13 @@
 				ui_title = #{ui_title},
 				ui_design = #{ui_design},
 				ui_field = #{ui_field},
-				tpl_path = #{tpl_path}
+				tpl_path = #{tpl_path},
+				use_btn = #{use_btn_all},
+				indert_paath = #{indert_paath},
+				update_path = #{update_path},
+				delete_paath = #{delete_paath},
+				add_type = #{add_type},
+				add_param = #{add_param}
 			WHERE ui_id = #{ui_id}
 		</if>
 	</update>

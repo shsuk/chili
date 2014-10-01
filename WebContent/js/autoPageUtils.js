@@ -39,11 +39,27 @@ $(function() {
 
 function edit(page_id){
 	var page = $(page_id);
+	$('[name=action_type]', page).val('U');
 	$('.view_control', page).hide();
 	$('.in_control', page).show();
-	$('#save_btn', page).show();
-	$('#edit_btn', page).hide();
+	$('.save_btn', page).show();
+	$('.edit_btn', page).hide();
+	$('.cancel_btn', page).show();
+	
 	page.attr('isEditMode', true);
+}
+function cancel(page_id){
+	var page = $(page_id);
+	$('.view_control', page).show();
+	$('.in_control', page).hide();
+	$('.save_btn', page).hide();
+	$('.edit_btn', page).show();
+	$('.cancel_btn', page).hide();
+	
+	page.attr('isEditMode', false);
+}
+function closePop(page_id){
+	$( "#dialog" ).dialog('close');	
 }
 //조회와 수정 모드 전환 처리를 위한 콘트롤을 생성 한다.
 function initAutoPage(page_id){
@@ -126,9 +142,9 @@ function delFile(file_id){
 	$('.'+file_id).hide();
 }
 
-function form_submit(page_id){	
+function form_submit(form_id){	
 	var url = '../at/action.sh';
-	var form = $('#body_form', $(page_id));
+	var form = $(form_id);
 	//폼 정합성 체크
 	if(!valid(form)){
 		return;
@@ -175,7 +191,8 @@ function attach_form_submit(url, form){
 	
 	xhr.onreadystatechange = function() { 
 	    if (xhr.readyState == 4 && xhr.status == 200) {
-	        //alert(xhr.responseText);
+	       alert(1);
+	       //alert(xhr.responseText);
 	    }
 	};
 	

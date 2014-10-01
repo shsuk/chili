@@ -22,6 +22,7 @@ a:visited {font-family: 'Malgun Gothic', sans-serif,"Dotum", "Gulim", "Arial";  
 input.text { margin-bottom:10px; width:95%; padding: .4em; }
 fieldset { padding:0; border:0; margin-top:25px; }
 img{border:0;}
+.ui-resizable-helper { border: 2px dotted #00F; }
 
 .d_ib{display: inline-block;}
 .f_r{ float: right; }
@@ -117,6 +118,7 @@ table.tpl td {
     padding: 4px 10px 4px;
 }
 
-.btn_left{float: left; cursor:pointer;  margin-left: 5px; padding: 3px;}
+.btn_left{float: left; cursor:pointer; padding: 3px 10px 3px 10px; margin-left: 10px;}
+.btn_right{float: right; cursor: pointer; padding: 3px 10px 3px 10px;margin-left: 10px;}
 
 .over_tr{background: #a6c9e2;}

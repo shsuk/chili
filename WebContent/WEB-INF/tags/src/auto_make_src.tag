@@ -88,17 +88,42 @@
 
 <div id="auto_generated_uI_${page_id}" type="page" style=" display: none;">
 	<c:if test="${isForm }">
-		<form id="body_form" action="" method="post" enctype="multipart/form-data">
+		<form id="form_${page_id}" action="" method="post" enctype="multipart/form-data">
 	</c:if>
 	${ui_design }
 	<div id="default_auto_generated_uI_${page_id}" style=" padding:3px; display: none;">
-		<input type="hidden" name="queryPath" value="${fn:substringBefore(ui_field.querypath,'.') }">
+		<input type="hidden" name="ui_id" value="${UI_ID }">
+		<input type="hidden" name="action_type" value="">
+		<!-- input type="hidden" name="queryPath" value="${fn:substringBefore(ui_field.querypath,'.') }"> -->
 		${html }	
 	</div>
 	<c:if test="${isForm }">
 		<div style="clear: both; height: 25px; margin-top: 10px;padding:3px; ">
-			<div id="save_btn" class=" ui-widget-header ui-corner-all" style="float: right; cursor: pointer; padding: 3px 10px;margin-left: 10px;display: none;" onclick="form_submit('#auto_generated_uI_${page_id}')">저장</div>
-			<div id="edit_btn" class=" ui-widget-header ui-corner-all" style="float: right; cursor: pointer; padding: 3px 10px;margin-left: 10px;" onclick="edit('#auto_generated_uI_${page_id}')">수정</div>
+			<c:if test="${!empty(ui.add_param) }">
+				<div class="add_btn ui-widget-header ui-corner-all btn_right" style="" onclick="${ui.add_type}(${ui.add_param})">등록</div>
+			</c:if>
+			<c:forEach var="btn" items="${fn:split(ui.use_btn,',') }">
+				<c:choose>
+					<c:when test="${btn=='L' }">
+						<div class="close_btn ui-widget-header ui-corner-all btn_right" style=" " onclick="closePop('#auto_generated_uI_${page_id}')">닫기</div>
+					</c:when>
+					<c:when test="${btn=='C' }">
+						<div class="cancel_btn ui-widget-header ui-corner-all btn_right" style=" display: none;" onclick="cancel('#auto_generated_uI_${page_id}')">취소</div>
+					</c:when>
+					<c:when test="${!empty(add_param) }">
+						<div class="add_btn ui-widget-header ui-corner-all btn_right" style="" onclick="${ui.add_type}(${ui.add_param})">등록</div>
+					</c:when>
+					<c:when test="${btn=='U' }">
+						<div class="edit_btn ui-widget-header ui-corner-all btn_right" style="" onclick="edit('#auto_generated_uI_${page_id}')">수정</div>
+					</c:when>
+					<c:when test="${btn=='D' }">
+						<div class="del_btn ui-widget-header ui-corner-all btn_right" style="" onclick="del('#auto_generated_uI_${page_id}')">삭제</div>
+					</c:when>
+					<c:when test="${btn=='S' }">
+						<div class="save_btn ui-widget-header ui-corner-all btn_right" style=" display: none;" onclick="form_submit('#form_${page_id}')">저장</div>
+					</c:when>
+				</c:choose>
+			</c:forEach>
 		</div>
 		</form>
 		<iframe name="submit_frame" style="width: 0px; height: 0px; display: none;"></iframe>

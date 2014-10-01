@@ -10,6 +10,7 @@
 jspContext.setAttribute("nss", ProcessorServiceFactory.getMyBatisNameSpace());
 %>
 <select id="${name }" name="${name }">
+	<option value="" >쿼리 선택</option>
 	<c:forEach var="ns" items="${nss}"> 
 		<option value="${ns }" ${selected == ns ? 'selected' : ''}>${ns}</option>
 	</c:forEach>
