@@ -62,15 +62,15 @@
 		</colgroup>
 		<c:forEach var="map" items="${RESULT }">
 			
-			<c:if test="${map.key!='success' }">
+			<c:if test="${map.key!='success' && map.key!='JSON' }">
 				<c:forEach var="temp" items="${map.value}">
 					<c:set var="isList" value="${empty(temp['value']) ? 'Y' : '' }"/>
 				</c:forEach>
 				<tr>
 					<td colspan="10" style="text-align: left; background: #D9E5FF;">
-						<span  style="float: left;"><b>레코드 아이디</b> : ${map.key}</span>
+						<div  style="display:inline;width: 50%; "><b>레코드 아이디</b> : ${map.key}</div>
 						<c:set var="use_set" value="use_${map.key}"/>
-						<span  style="float: right;"><tag:radio_array name="${use_set}" codes="unuse=미사용,use=사용,tree=Tree"  checked="${empty(ui_field[use_set]) ? 'use' : ui_field[use_set] }" /></span>
+						<div style="display:inline;width: 50%; text-align: right;"><tag:radio_array name="${use_set}" codes="unuse=미사용,use=사용,tree=Tree"  checked="${empty(ui_field[use_set]) ? 'use' : ui_field[use_set] }" /></div>
 					</td>
 				</tr>
 				<tr>

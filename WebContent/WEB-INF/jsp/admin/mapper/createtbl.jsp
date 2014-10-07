@@ -16,7 +16,7 @@ $(function(){
 var treeData = [];
 
 function loadTree(){
-	$('#tree_data').load('../admin_mapper/xml2tree.sh',{xml:$('#in_xml').val()},function(){
+	$('#tree_data').load('../admin-mapper/xml2tree.sh',{xml:$('#in_xml').val()},function(){
 		viewTree() ;
 	    $('#xml_data').hide();
 	});

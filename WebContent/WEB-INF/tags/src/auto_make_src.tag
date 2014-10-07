@@ -91,7 +91,7 @@
 		<form id="form_${page_id}" action="" method="post" enctype="multipart/form-data">
 	</c:if>
 	${ui_design }
-	<div id="default_auto_generated_uI_${page_id}" style=" padding:3px; display: none;">
+	<div id="default_auto_generated_uI_${page_id}" style=" display: none;">
 		<input type="hidden" name="ui_id" value="${UI_ID }">
 		<input type="hidden" name="action_type" value="">
 		<!-- input type="hidden" name="queryPath" value="${fn:substringBefore(ui_field.querypath,'.') }"> -->

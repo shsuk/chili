@@ -208,7 +208,7 @@ function attach_form_submit(url, form){
 }
 function linkLoad(ui_id, data, selector){
 
-	$(selector ? selector : '#auto_generated_uI_main').load('../unit/_'+ui_id+'.sh',data);
+	$(selector ? selector : '#auto_generated_uI_main').load('../unit/-'+ui_id+'.sh',data);
 }
 function linkPopup(ui_id, data){
 	data['ui_id'] = ui_id;
@@ -231,12 +231,12 @@ function linkPopup(ui_id, data){
 			}
 		});
 	}
-	dialog.load('../unit/_'+ui_id+'.sh',data);
+	dialog.load('../unit/-'+ui_id+'.sh',data);
 	dialog.dialog('open');
 }
 function linkPage(ui_id, data, path){
 
-	document.location.href = (path ? path + '/' : '') + '_'+ui_id+'.sh?' + $.param(data);
+	document.location.href = (path ? path + '/' : '') + '-'+ui_id+'.sh?' + $.param(data);
 }
 function linkFnc(obj){
 	;

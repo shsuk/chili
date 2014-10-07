@@ -44,7 +44,7 @@ function delTrgNode(id){
 	$(id).remove();
 }
 function loadTree(){
-	$('#tree_data').load('../admin_mapper/xml2tree.sh',{xml:$('#in_xml').val()},function(){
+	$('#tree_data').load('../admin-mapper/xml2tree.sh',{xml:$('#in_xml').val()},function(){
 		viewTree() ;
 	    $('#xml_data').hide();
 	});
@@ -133,7 +133,7 @@ function makeQuery(){
 }
 
 function loadTableInfo(tableName){
-	$('#table_info').load('../admin_mapper/collist.sh',{table_name:tableName}, function(){
+	$('#table_info').load('../admin-mapper/collist.sh',{table_name:tableName}, function(){
 	    $(".droppable").droppable({
 	        hoverClass: "ui-state-default",
 	        addClasses: true,
@@ -227,7 +227,7 @@ function loadTableInfo(tableName){
 		<td align="center" valign="top" style=" width: 170px;">
 			<div class="ui-state-default" style="height:23px;text-align: center; padding-top: 8px; ">테이블 선택</div>
 			<div style="height: 470px; overflow-y: auto;">
-				<c:import url="tablelist.jsp"/>
+				<c:import url="admin/mapper/tablelist.jsp" />
 			</div>
 		</td>
 	</tr>

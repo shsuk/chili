@@ -90,7 +90,9 @@
 
 		$('#prg_bar').animate({width: '0%'}, 1);
 
-		$('#ui_set').load('../admin_src/src_load.sh', data, function(){
+		$('#ui_set').load('../admin-src/src_load.sh', data, function(){
+			$('#ui_list').hide();
+			
 			$( window ).resize();
 			removeDupControl();
 			initDrDg();
@@ -136,7 +138,7 @@
 
 		$('#prg_bar').animate({width: '0%'}, 1);
 
-		$('#ui_set').load('../admin_src/src_save.sh', data, function(){
+		$('#ui_set').load('../admin-src/src_save.sh', data, function(){
 			loadPage();
 		});
 	}
@@ -218,13 +220,13 @@
 	}
 	function runDefaultPage(){
 		var form = $('#new_form');
-		form.attr('action', '../' + $('#tpl_path').val() + '/_' + $('#ui_id').val() + '.sh');
+		form.attr('action', '../' + $('#tpl_path').val() + '/-' + $('#ui_id').val() + '.sh');
 		form.submit();
 		//runPage();
 		//$( "#tab" ).tabs( "option", "active", 1);	
 	}
 	function viewUiList(){
-		$('#ui_list').load('../piece/_uilist.sh', function(){
+		$('#ui_list').load('../piece/-uilist.sh', function(){
 			$('#ui_list').show();
 		});
 	}
@@ -249,12 +251,12 @@
 </script> 
 </head>
 <body >
+	<div id="ui_list" style="position: absolute; z-index: 100; top:30px; background: #ffffff;color: #444444;border: 1px solid #c5dbec;"></div>
 
 	<form id="main_form" action="aa" method="post">
 		<div id="defaultData"  style="float: left;padding:1px;">
 			<div id="ui_list_btn" class="border f_l p_1  ui-widget-header" >
 				<span onclick="viewUiList()" style="cursor: pointer;">UI ID</span> <input type="text" id="ui_id" name="ui_id" value="${param.ui_id }">
-				<div id="ui_list" style="position: absolute; z-index: 100;background: #ffffff;color: #444444;border: 1px solid #c5dbec;"></div>
 			</div>
 			<div class="border f_l p_1  ui-widget-header" >
 				쿼리경로 <tag:select_query_name name="queryPath" selected="${req.queryPath }"/>
@@ -264,7 +266,7 @@
 			<div class=" ui-widget-header ui-corner-all btn_left f_l" onclick="saveUi()">저장</div>
 			<div class=" ui-widget-header ui-corner-all btn_left f_l" onclick="runDefaultPage()" >실행</div>
 		</div>
-		<div style="float: right;padding:1px;"><a href="../_admin_mapper/mappingxml.sh">XML연동 매퍼</a></div>
+		<div style="float: right;padding:1px;"><a href="../-at-menu/-menuList.sh">메뉴</a></div>
 		
  		<input type="hidden" id="ui_design" name="ui_design" value="">
  		<div id="form_data"></div>

@@ -26,38 +26,41 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 public class AutoController {
 	protected static final Logger LOGGER = Logger.getLogger(AutoController.class);
 
-	@RequestMapping(value = "_{mainPath}/_{uiId}.sh")
-	public ModelAndView autoMain(HttpServletRequest request, HttpServletResponse response, @PathVariable("mainPath") String mainPath, @PathVariable("uiId") String uiId) throws Exception {
-		mainPath = mainPath.replace('_', '/');
+	@RequestMapping(value = "-{tplPath}/-{uiId}.sh")
+	public ModelAndView autoMain(HttpServletRequest request, HttpServletResponse response, @PathVariable("tplPath") String tplPath, @PathVariable("uiId") String uiId) throws Exception {
+		tplPath = tplPath.replace('-', '/');
 
-		ModelAndView mv = new ModelAndView(mainPath + "/main");
+		ModelAndView mv = new ModelAndView("main");
+		mv.addObject("UI_TPL", tplPath);
 		mv.addObject("UI_ID", uiId);
 		return mv;
 	}
-	@RequestMapping(value = "piece/_{uiId}.sh")
+	@RequestMapping(value = "piece/-{uiId}.sh")
 	public ModelAndView autoPiece(HttpServletRequest request, HttpServletResponse response, @PathVariable("uiId") String uiId) throws Exception {
 		ModelAndView mv = new ModelAndView("at/piece");
 		mv.addObject("UI_ID", uiId);
 		return mv;
 	}
-	@RequestMapping(value = "unit/_{uiId}.sh")
+	@RequestMapping(value = "unit/-{uiId}.sh")
 	public ModelAndView autoUnit(HttpServletRequest request, HttpServletResponse response, @PathVariable("uiId") String uiId) throws Exception {
 		ModelAndView mv = new ModelAndView("at/unit");
 		mv.addObject("UI_ID", uiId);
 		return mv;
 	}
 
-	@RequestMapping(value = "_{mainPath}/{page}.sh")
-	public ModelAndView mainPage(HttpServletRequest request, HttpServletResponse response, @PathVariable("mainPath") String mainPath, @PathVariable("page") String page) throws Exception {
-		mainPath = mainPath.replace('_', '/');
-		ModelAndView mv = new ModelAndView(mainPath + "/main");
-		mv.addObject("IMPORT_PAGE", page.replace('_', '/'));
+	@RequestMapping(value = "-{tplPath}/{page}.sh")
+	public ModelAndView mainPage(HttpServletRequest request, HttpServletResponse response, @PathVariable("tplPath") String tplPath, @PathVariable("page") String page) throws Exception {
+		tplPath = tplPath.replace('-', '/');
+
+		ModelAndView mv = new ModelAndView("main");
+		mv.addObject("UI_TPL", tplPath);
+		mv.addObject("IMPORT_PAGE", tplPath + "/../" + page.replace('-', '/'));
 		return mv;
 	}
 	@RequestMapping(value = "{path}/{page}.sh")
 	public ModelAndView page(HttpServletRequest request, HttpServletResponse response, @PathVariable("path") String path, @PathVariable("page") String page) throws Exception {
-		path = path.replace('_', '/');
-		ModelAndView mv = new ModelAndView(path + "/" + page);
+		path = path.replace('-', '/') + "/"+ page.replace('-', '/');
+		ModelAndView mv = new ModelAndView(path);
 		return mv;
 	}
 
