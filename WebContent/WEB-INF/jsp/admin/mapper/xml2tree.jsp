@@ -9,11 +9,10 @@
 <%@ taglib prefix="tag"  tagdir="/WEB-INF/tags/tag" %>
 <script type="text/javascript">
 	//<c:catch var="errormsg" >
-		treeData = ${sp:xml2Tree(param.xml) };
+		treeData = ${sp:xml2Tree(param.xml, param.hideCheckbox ) };
 	//</c:catch>
 	//<c:if test = "${errormsg != null}">
 		[];
 		alert("${errormsg}");
 	//</c:if>
 </script> 
-	

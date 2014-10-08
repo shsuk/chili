@@ -101,7 +101,7 @@
 		<description>XML을 Tree구조로 변형한다.</description>
 		<name>xml2Tree</name>
 		<function-class>kr.or.voj.webapp.utils.Function</function-class>
-		<function-signature>java.lang.Object xml2Tree(java.lang.String)</function-signature>
+		<function-signature>java.lang.Object xml2Tree(java.lang.String, java.lang.String)</function-signature>
 	</function>
 
 

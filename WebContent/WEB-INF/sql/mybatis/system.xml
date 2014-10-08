@@ -49,6 +49,12 @@
 		FROM sys_mapper_trigger_tbl
 		WHERE mapper_id = #{mapper_id}
 	</select>
+	<!-- 매퍼스케쥴 : 매퍼정보 -->
+	<select id="mapperInfo_1_#row" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
+		SELECT mapper_id,source_path,sucess_path,error_path,mapper_adapter_class,transactional,`desc`
+		FROM sys_mapper_tbl
+		WHERE mapper_id = #{mapper_id}
+	</select>
 	<!-- 매퍼스케쥴 : 실행 체크시간 업데이트 -->
    	<update id="mapperCheck_1" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap">
  		UPDATE sys_mapper_tbl

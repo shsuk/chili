@@ -192,11 +192,11 @@ public class Function {
 		return l2t.getTree();
 	}
 	
-	public static String xml2Tree(String xml)throws Exception {
-		XmlUtil x = new XmlUtil();
+	public static String xml2Tree(String xml, String hideCheckbox)throws Exception {
+		XmlUtil x = new XmlUtil(); 
 		
 		try {
-			return x.getXml2tree(xml);
+			return x.getXml2tree(xml, StringUtils.isEmpty(hideCheckbox) ? true : "Y".equalsIgnoreCase(hideCheckbox)  );
 		} catch (Exception e) {
 			JSONObject obj = new JSONObject();
 			obj.put("title", e.toString());

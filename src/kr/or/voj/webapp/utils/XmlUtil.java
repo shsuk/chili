@@ -33,7 +33,7 @@ public class XmlUtil {
 	private Map<String, Boolean> pathMap = new HashMap<String, Boolean>();
 	private String iconPath = "../../../images/icon/";
 
-	public String getXml2tree(String xml) throws Exception{
+	public String getXml2tree(String xml, boolean hideCheckbox) throws Exception{
 		//String path = "D:/temp/test.xml";
 
 		Map<String, Object> json = new HashMap<String, Object>();
@@ -58,14 +58,14 @@ public class XmlUtil {
         json.put("expand", true);
      
 		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
-		addChildren(name, el.getChildren(), json, list);
+		addChildren(name, el.getChildren(), json, list, hideCheckbox);
 		
 		JSONArray ja = new JSONArray();
 		ja.add(json);
 		
 		return ja.toString();
 	}
-	private void addChildren(String path, List<Element> list, Map<String, Object> parentObj, List<Map<String,Object>> children){
+	private void addChildren(String path, List<Element> list, Map<String, Object> parentObj, List<Map<String,Object>> children, boolean hideCheckbox){
 		
 		if(list==null || list.size()<1){
 			parentObj.put("icon", iconPath+"node.png");
@@ -88,7 +88,7 @@ public class XmlUtil {
 	        if(StringUtils.isEmpty(val)){
 	        	elObj.put("title",name);
 	        	elObj.put("type", "path");
-	        	elObj.put("hideCheckbox", true);
+	        	elObj.put("hideCheckbox", hideCheckbox);
 	        }else{
 	        	elObj.put("title",name + " - " + val);
 	        	elObj.put("type", "node");
@@ -97,7 +97,7 @@ public class XmlUtil {
 	        elObj.put("value", val);
 	        
 			if(pathMap.containsKey(newPath)){
-				elObj.put("hideCheckbox", true);				
+				elObj.put("hideCheckbox", hideCheckbox);				
 			}else{
 				parentObj.put("expand", true);
 			}
@@ -120,7 +120,7 @@ public class XmlUtil {
 					attObj.put("path", attPath);
 					
 					if(pathMap.containsKey(attPath)){
-						attObj.put("hideCheckbox", true);				
+						attObj.put("hideCheckbox", hideCheckbox);				
 					}else{
 						elObj.put("expand", true);
 					}
@@ -134,7 +134,7 @@ public class XmlUtil {
 
 			children.add(elObj);
 			
-			addChildren(newPath, el.getChildren(), elObj, elChildren);
+			addChildren(newPath, el.getChildren(), elObj, elChildren, hideCheckbox);
 		}
 		
 		parentObj.put("children", children);

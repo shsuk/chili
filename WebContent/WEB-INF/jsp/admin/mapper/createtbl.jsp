@@ -98,7 +98,7 @@ function selectNode(tree){
 
 </script> 
 
-<div class="ui-state-default" style="height:23px;text-align: center; padding-top: 8px; ">XML연동 테이블 생성</div>
+<div class="ui-state-default" style="height:23px;text-align: center; padding-top: 8px; ">XML to DB 연동 - 테이블 생성</div>
 
 <table class="lst">
 	<tr>

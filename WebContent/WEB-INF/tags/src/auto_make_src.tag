@@ -6,7 +6,7 @@
 <%@ taglib prefix="sp" uri="/WEB-INF/tlds/sp.tld"%>
 <%@ taglib prefix="tag"  tagdir="/WEB-INF/tags/tag" %> 
 <%@ taglib prefix="src"  tagdir="/WEB-INF/tags/src" %> 
-<%@ attribute name="uiId" type="java.lang.Boolean" description="UI ID"%>
+<%@ attribute name="uiId" type="java.lang.String" description="UI ID"%>
 <%@ attribute name="isForm" required="true" type="java.lang.Boolean" description="form Tag 포함여부"%>
 <c:set scope="request" var="isForm" value="${isForm}"/>
 <sp:sp var="ui_info" queryPath="ui" action="design" processorList="mybatis" exception="false">{ui_id:'${empty(uiId) ? UI_ID : uiId}'}</sp:sp>

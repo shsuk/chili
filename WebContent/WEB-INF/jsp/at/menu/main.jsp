@@ -30,16 +30,22 @@
 	<src:auto_make_src isForm="false"/>
 	<table class="lst">
 		<tr>
-			<td><a target="ui" href="../admin-src/main.sh">UI 생성</a></td>
+			<th width="100">구분</th><th>프로그램</th>
 		</tr>
 		<tr>
-			<td><a target="mapper" href="../-admin-mapper-main/createtbl.sh">XML연동 테이블 생성</a><br></td>
+			<td>개발툴</td><td><a target="ui" href="../admin-src/main.sh">UI 생성</a></td>
 		</tr>
 		<tr>
-			<td><a target="mapper" href="../-admin-mapper-main/mappingxml.sh">XML연동 매퍼</a></td>
+			<td rowspan="3">XML to DB 연동</td><td><a target="mapper" href="../-admin-mapper-main/createtbl.sh">1. 테이블 생성</a><br></td>
 		</tr>
 		<tr>
-			<td><a target="mapper" href="../-at-menu-manual/.sh">메뉴얼</a></td>
+			<td><a target="mapper" href="../-admin-mapper-main/xml2db_mapping.sh">2. XPath에 필드 매핑</a></td>
+		</tr>
+		<tr>
+			<td><a target="mapper" href="../-admin-mapper-main/trigger_mapping.sh">3. XPath에 연동쿼리 매핑</a></td>
+		</tr>
+		<tr>
+			<td>기타</td><td><a target="mapper" href="../-at-menu-manual/.sh">메뉴얼</a></td>
 		</tr>
 	</table>
 </div>
