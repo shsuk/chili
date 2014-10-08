@@ -7,8 +7,8 @@
 <%@ taglib prefix="tag"  tagdir="/WEB-INF/tags/tag" %> 
 <%@ taglib prefix="src"  tagdir="/WEB-INF/tags/src" %> 
 <%@ attribute name="uiId" type="java.lang.String" description="UI ID"%>
-<%@ attribute name="isForm" required="true" type="java.lang.Boolean" description="form Tag 포함여부"%>
-<c:set scope="request" var="isForm" value="${isForm}"/>
+<%@ attribute name="type" required="true" type="java.lang.String" description="BF=버튼&폼, F=폼, NF=폼없음, T=톄이블, TRH=헤더포함TR단위, TR=TR단위"%>
+
 <sp:sp var="ui_info" queryPath="ui" action="design" processorList="mybatis" exception="false">{ui_id:'${empty(uiId) ? UI_ID : uiId}'}</sp:sp>
 <c:set var="page_id" value="${sp:uuid()}"/>
 <c:set scope="request" var="ui_design" value="${ui.UI_DESIGN }"/>
@@ -61,43 +61,7 @@
 		</c:set>
 	</c:if>
 </c:forEach>
-
-<%-- 페이지 출력 --%>
-<script type="text/javascript">
-	$(function() {
-		$['isEditMode'] = false;
-		initAutoPage('#auto_generated_uI_${page_id}');
-		//콘트롤 변경시 정합성 체크(미사용시 삭제)
-		checkValidOnChange('${page_id}');
-		if('${empty(ui_design)}' == 'true'){
-			sowDefaultUi("${page_id}");
-		}else{
-			showRelocationUi("#auto_generated_uI_${page_id}");
-		}
-		
-		var auto_generated_uI = $('#auto_generated_uI_${page_id}');
-		$('.tpl', auto_generated_uI).css({width:'100%'});
-		$('td', auto_generated_uI).css({width:''});
-		$('.th', auto_generated_uI).css({width:'150px'});
-		$('#'+$('#auto_generated_uI_${page_id}').parent().attr('id')+'_title').text('${ui_title}');
-	});
-	
-	${links}
-	
-</script> 
-
-<div id="auto_generated_uI_${page_id}" type="page" style=" display: none;">
-	<c:if test="${isForm }">
-		<form id="form_${page_id}" action="" method="post" enctype="multipart/form-data">
-	</c:if>
-	${ui_design }
-	<div id="default_auto_generated_uI_${page_id}" style=" display: none;">
-		<input type="hidden" name="ui_id" value="${UI_ID }">
-		<input type="hidden" name="action_type" value="">
-		<!-- input type="hidden" name="queryPath" value="${fn:substringBefore(ui_field.querypath,'.') }"> -->
-		${html }	
-	</div>
-	<c:if test="${isForm }">
+<c:set var="buton_Html">
 		<div style="clear: both; height: 25px; margin-top: 10px;padding:3px; ">
 			<c:if test="${!empty(ui.add_param) }">
 				<div class="add_btn ui-widget-header ui-corner-all btn_right" style="" onclick="${ui.add_type}(${ui.add_param})">등록</div>
@@ -125,8 +89,75 @@
 				</c:choose>
 			</c:forEach>
 		</div>
-		</form>
-		<iframe name="submit_frame" style="width: 0px; height: 0px; display: none;"></iframe>
-	</c:if>
-</div>
+</c:set>
+<%-- 페이지 출력 --%>
+<script type="text/javascript">
+	$(function() {
+		$['isEditMode'] = false;
+		initAutoPage('#auto_generated_uI_${page_id}');
+		//콘트롤 변경시 정합성 체크(미사용시 삭제)
+		checkValidOnChange('${page_id}');
+		if('${empty(ui_design)}' == 'true'){
+			sowDefaultUi("${page_id}");
+		}else{
+			showRelocationUi("#auto_generated_uI_${page_id}");
+		}
+		
+		var auto_generated_uI = $('#auto_generated_uI_${page_id}');
+		$('.tpl', auto_generated_uI).css({width:'100%'});
+		$('td', auto_generated_uI).css({width:''});
+		$('.th', auto_generated_uI).css({width:'150px'});
+		$('#'+$('#auto_generated_uI_${page_id}').parent().attr('id')+'_title').text('${ui_title}');
+	});
+
+	${links}
+	
+</script> 
+
+<c:choose>
+	<c:when test="${empty(type) || type=='F' || type=='BF' }">
+		<div id="auto_generated_uI_${page_id}" type="page" style=" display: none;">
+			<form id="form_${page_id}" action="" method="post" enctype="multipart/form-data">
+			
+			${ui_design }
+			<div id="default_auto_generated_uI_${page_id}" style=" display: none;">
+				<input type="hidden" name="ui_id" value="${UI_ID }">
+				<input type="hidden" name="action_type" value="">
+				${html }
+			</div>
+			
+			</form>
+			${type=='BF' ? buton_Html : '' }
+			<iframe name="submit_frame" style="width: 0px; height: 0px; display: none;"></iframe>
+			
+		</div>
+	</c:when>
+	<c:when test="${type=='NF' }">
+		<div id="auto_generated_uI_${page_id}" type="page" style=" display: none;">			
+			${ui_design }
+			<div id="default_auto_generated_uI_${page_id}" style=" display: none;">
+				${html }
+			</div>			
+		</div>
+	</c:when>
+	<c:when test="${type=='T' }">
+		<table id="auto_generated_uI_${page_id}" class="${isList ? 'lst' : 'vw' }" border="0" cellspacing="0" cellpadding="0"  style="margin-bottom: 10px;">
+			${title }
+			${src }
+		</table>
+	</c:when>
+	<c:when test="${type=='TRH' }">
+		<tbody id="auto_generated_uI_${page_id}">
+			${title }
+			${src }
+		</tbody>
+	</c:when>
+	<c:when test="${type=='TR' }">
+		<tbody id="auto_generated_uI_${page_id}">
+			${src }
+		</tbody>
+	</c:when>
+</c:choose>
+
+
 

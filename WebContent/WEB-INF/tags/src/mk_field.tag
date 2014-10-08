@@ -39,7 +39,7 @@
 
 		<c:when test="${type=='text'}">
 			<c:set var="isInputColtrol" value="${true}"/>
-			<input class="control" type="text" name="${name }"  value="${values[name]}" style="width: 90%;" maxlength="${maxlength }" valid="${valid }" key_press="${keyValid }"} >
+			<input class="control" type="text" name="${name }"  value="${values[name]}" style="width: 99%;" maxlength="${maxlength }" valid="${valid }" key_press="${keyValid }"} >
 		</c:when>
 		<c:when test="${type=='number'}">
 			<c:set var="isInputColtrol" value="${true}"/>
@@ -52,11 +52,11 @@
 		</c:when>
 		<c:when test="${type=='file' || type=='file_img'}">
 			<c:set var="isInputColtrol" value="${true}"/>
-			<tag:file className="control" name="${name }"  value="${values[name]}" type="${type }" style="width: 90%;"/>
+			<tag:file className="control" name="${name }"  value="${values[name]}" type="${type }" style="width: 99%;"/>
 		</c:when>
 		<c:when test="${type=='files' || type=='files_img'}">
 			<c:set var="isInputColtrol" value="${true}"/>
-			<tag:files className="control" name="${name }"  value="${values[name]}" type="${type }" style="width: 90%;"/>
+			<tag:files className="control" name="${name }"  value="${values[name]}" type="${type }" style="width: 99%;"/>
 		</c:when>
 		<c:when test="${type=='select'}">
 			<c:set var="isInputColtrol" value="${true}"/>
@@ -76,7 +76,7 @@
 		</c:when>
 		<c:otherwise>
 			<c:set var="isInputColtrol" value="${true}"/>
-			<input class="control" type="${type }" name="${name }" value="${values[name]}" style="width: 90%;" maxlength="${maxlength }" valid="${valid }" key_press="${keyValid }"} >
+			<input class="control" type="${type }" name="${name }" value="${values[name]}" style="width: 99%;" maxlength="${maxlength }" valid="${valid }" key_press="${keyValid }"} >
 		</c:otherwise>
 	</c:choose>
 </c:set>

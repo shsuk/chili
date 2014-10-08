@@ -27,6 +27,7 @@ $(function() {
 		var height = (window.innerHeight-height_etc) + 'px';
 		$("#left_content").css('height', height);		
 		$("#center_content").css('height', height);		
+		$("#right_content").css('height', height);		
 	}).resize();
 });
 
@@ -37,15 +38,19 @@ $(function() {
 		<tr>
 			<th style=" width: 250px; min-width:200px;" id="left_content_title"></th>
 			<th style=" width: 400px; min-width:200px;" id="center_content_title"></th>
+			<th id="right_content_title"></th>
 		</tr>
 		<tr>
 			<td  valign="top" style=" width: 250px; min-width:200px;">
 				<div id="left_content" style=" height:500px; overflow-y: auto; ">
-						<src:auto_make_src isForm="true"/>
+						<src:auto_make_src type="BF"/>
 				</div>
 			</td>
 			<td valign="top">
 				<div id="center_content" style=" height:500px; overflow-y: auto; "></div>
+			</td>
+			<td  valign="top" style=" width: 250px; min-width:200px;">
+				<div id="right_content" style=" height:500px; overflow-y: auto; "></div>
 			</td>
 		</tr>
 	</table>

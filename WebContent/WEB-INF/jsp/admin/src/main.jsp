@@ -293,6 +293,7 @@
 				<!-- 미리보기 -->
 				<div id="auto_generated_uI_main"></div>
 				<div id="tabs-3">
+					폼별 EDIT모드 처리<br><br>
 					첨부파일 참조 번호 처리<br>
 					이미지 썸네일 처리<br>
 					리스트 기본필드 타입을 조회로 변경<br>

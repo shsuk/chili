@@ -91,8 +91,7 @@ function selectNode(tree){
 </script> 
 
 <div class="ui-state-default" style="height:23px;text-align: center; padding-top: 8px; ">XML to DB 연동 - XPath에 연동쿼리 매핑</div>
-<src:auto_make_src uiId="mapper_info" isForm="true"/>
-<src:auto_make_src uiId="mapper_trigger" isForm="false"/>
+<src:auto_make_src uiId="mapper_info" type="BF"/>
 <table class="lst">
 	<tr>
 		<td  valign="top" style=" width: 250px; min-width:200px;">
@@ -138,18 +137,12 @@ function selectNode(tree){
 				<table class="lst">
 					<colgroup>
 						<col width="200"/>
-						<col width="200"/>
 						<col width="100"/>
+						<col width="100"/>
+						<col width="80"/>
 						<col width="*"/>
 					</colgroup>
-					<thead>
-						<tr>
-							<th>노드경로</th>
-							<th>쿼리</th>
-							<th>노드값삭제</th>
-							<th>설명</th>
-						</tr>
-					</thead>
+					<src:auto_make_src uiId="mapper_trigger" type="TRH"/>
 					<tbody id="field_list" >
 					</tbody>
 				
@@ -161,7 +154,7 @@ function selectNode(tree){
 <table id="tpl_trigger" style="display:none;">
 	<tr>
     	<td><input type="text" name="xpath" value="" style="width:99%;"></td>
-    	<td><tag:select_query_name name="trigger_query"/></td>
+    	<td colspan="2"><tag:select_query_name name="trigger_query"/></td>
     	<td><input type="text" name="delete_value" value="" style="width:99%;"></td>
     	<td><input type="text" name="trigger_desc" value="" style="width:99%;"></td>
     </tr>

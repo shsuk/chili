@@ -65,7 +65,7 @@ $(function() {
 		<tr>
 			<td  valign="top" style="">
 				<div id="top_content" style=" height:400px; overflow-y: auto; ">
-						<src:auto_make_src isForm="true"/>
+						<src:auto_make_src type="BF"/>
 				</div>
 			</td>
 			

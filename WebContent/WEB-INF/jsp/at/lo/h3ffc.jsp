@@ -55,7 +55,7 @@ $(function() {
 			<td id="left_content_td" valign="top" style=" width: 250px; min-width:200px;">
 				<div id="left_content_title"></div>
 				<div id="left_content" style=" height:500px; overflow-y: auto; ">
-						<src:auto_make_src isForm="true"/>
+						<src:auto_make_src  type="BF"/>
 				</div>
 			</td>
 			<td style="padding: 0px;">

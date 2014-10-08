@@ -7,4 +7,4 @@
 <%@ taglib prefix="tag"  tagdir="/WEB-INF/tags/tag" %> 
 <%@ taglib prefix="src"  tagdir="/WEB-INF/tags/src" %> 
 
-<src:auto_make_src isForm="true"/>
+<src:auto_make_src type="BF"/>

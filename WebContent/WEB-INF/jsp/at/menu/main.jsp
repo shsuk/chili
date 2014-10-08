@@ -27,7 +27,7 @@
 </script> 
 
 <div id="auto_generated_uI_main" style="margin: 5px auto; padding:3px; width: 90%; min-width:1000px; border:1px solid #cccccc; ">
-	<src:auto_make_src isForm="false"/>
+	<src:auto_make_src type="BF"/>
 	<table class="lst">
 		<tr>
 			<th width="100">구분</th><th>프로그램</th>
