@@ -9,7 +9,7 @@
 <%@ attribute name="rcd_key" required="true" type="java.lang.String" description="리스트 레코드(key value set))"%>
 <%@ attribute name="rcd_value" required="true" type="java.util.List" description="리스트 레코드(key value set))"%>
 <c:set var="isStar" value="${false }"/>
-<c:forEach var="info" items="${rcd_value[0] }" >
+<c:forEach var="info" items="${__META__[rcd_key]}" >
 	<c:set var="width">${info.key}_width</c:set>
 	<c:if test="${ui_field[type]!='hidden' }">
 		<c:set var="tot_width">${ui_field[width]=='*' ? tot_width : tot_width+ui_field[width]}</c:set>
@@ -17,6 +17,13 @@
 	<c:if test="${ui_field[width]=='*' }">
 		<c:set var="isStar" value="${true }"/>
 	</c:if>
+</c:forEach>
+<c:forEach var="info" items="${__META__[rcd_key]}" >
+	<c:set var="key">${info.key}</c:set>
+	<c:set var="label">${key}_label</c:set>
+	<c:set var="type">${key}_type</c:set>
+	<c:set var="width">${key}_width</c:set>
+	<c:set scope="request" var="title">${title }<th style="${ui_field[type]=='hidden' ? 'display: none;' : ''}" label="${key}" width="${ui_field[width]=='*' ? '*' : ui_field[width]*tot_width }${ui_field[width]=='*' ? '' : w_unit}">${ui_field[label] }</th></c:set>
 </c:forEach>
 
 <c:set var="w_unit">${ui_field['w_unit']}</c:set>
@@ -37,9 +44,6 @@
 			<c:set var="keyValid">${key}_key_valid</c:set>
 			<c:set var="width">${key}_width</c:set>
 			<c:set var="maxlength">${key}_maxlength</c:set>
-			<c:if test="${status.index==0 }">
-				<c:set scope="request" var="title">${title }<th style="${ui_field[type]=='hidden' ? 'display: none;' : ''}" label="${key}" width="${ui_field[width]=='*' ? '*' : ui_field[width]*tot_width }${ui_field[width]=='*' ? '' : w_unit}">${ui_field[label] }</th></c:set>
-			</c:if>
 
 			<c:choose>
 				<c:when test="${type!='total_record'}">
