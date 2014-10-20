@@ -208,7 +208,7 @@ function attach_form_submit(url, form){
 }
 function linkLoad(ui_id, data, selector){
 
-	$(selector ? selector : '#auto_generated_uI_main').load('../unit/-'+ui_id+'.sh',data);
+	$(selector ? selector : '#auto_generated_uI_main').load('../piece/-'+ui_id+'-bf.sh',data);
 }
 function linkPopup(ui_id, data){
 	data['ui_id'] = ui_id;
@@ -231,7 +231,7 @@ function linkPopup(ui_id, data){
 			}
 		});
 	}
-	dialog.load('../unit/-'+ui_id+'.sh',data);
+	dialog.load('../piece/-'+ui_id+'-bf.sh',data);
 	dialog.dialog('open');
 }
 function linkPage(ui_id, data, path){

@@ -226,7 +226,7 @@
 		//$( "#tab" ).tabs( "option", "active", 1);	
 	}
 	function viewUiList(){
-		$('#ui_list').load('../piece/-uilist.sh', function(){
+		$('#ui_list').load('../piece/-uilist-.sh', function(){
 			$('#ui_list').show();
 		});
 	}
