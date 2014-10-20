@@ -91,7 +91,7 @@ function selectNode(tree){
 </script> 
 
 <div class="ui-state-default" style="height:23px;text-align: center; padding-top: 8px; ">XML to DB 연동 - XPath에 연동쿼리 매핑</div>
-<src:auto_make_src uiId="mapper_info" type="BF"/>
+<src:auto_make_src uiId="mapper_info" type="bf"/>
 <table class="lst">
 	<tr>
 		<td  valign="top" style=" width: 250px; min-width:200px;">
@@ -142,7 +142,7 @@ function selectNode(tree){
 						<col width="80"/>
 						<col width="*"/>
 					</colgroup>
-					<src:auto_make_src uiId="mapper_trigger" type="TRH"/>
+					<src:auto_make_src uiId="mapper_trigger" type="trh"/>
 					<tbody id="field_list" >
 					</tbody>
 				

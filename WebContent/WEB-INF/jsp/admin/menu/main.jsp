@@ -27,7 +27,7 @@
 </script> 
 
 <div id="auto_generated_uI_main" style="margin: 5px auto; padding:3px; width: 90%; min-width:1000px; border:1px solid #cccccc; ">
-	<src:auto_make_src type="BF"/>
+	<src:auto_make_src type="bf"/>
 	<table class="lst">
 		<tr>
 			<th width="100">구분</th><th>프로그램</th>
@@ -45,7 +45,7 @@
 			<td><a target="mapper" href="../-admin-mapper-main/trigger_mapping.sh">3. XPath에 연동쿼리 매핑</a></td>
 		</tr>
 		<tr>
-			<td>기타</td><td><a target="mapper" href="../-at-menu-manual/.sh">메뉴얼</a></td>
+			<td>기타</td><td><a target="mapper" href="../-admin-menu-manual/.sh">메뉴얼</a></td>
 		</tr>
 	</table>
 </div>

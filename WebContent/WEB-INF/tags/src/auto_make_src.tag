@@ -7,7 +7,7 @@
 <%@ taglib prefix="tag"  tagdir="/WEB-INF/tags/tag" %> 
 <%@ taglib prefix="src"  tagdir="/WEB-INF/tags/src" %> 
 <%@ attribute name="uiId" type="java.lang.String" description="UI ID"%>
-<%@ attribute name="type" required="true" type="java.lang.String" description="BF=버튼&폼, F=폼, NF=폼없음, T=톄이블, TRH=헤더포함TR단위, TR=TR단위"%>
+<%@ attribute name="type" required="true" type="java.lang.String" description="bf=버튼&폼, f=폼, nf=폼없음, t=테이블, trh=헤더포함tr단위, tr=tr단위"%>
 
 <sp:sp var="ui_info" queryPath="ui" action="design" processorList="mybatis" exception="false">{ui_id:'${empty(uiId) ? UI_ID : uiId}'}</sp:sp>
 <c:set var="page_id" value="${sp:uuid()}"/>
@@ -91,6 +91,7 @@
 		</div>
 </c:set>
 <%-- 페이지 출력 --%>
+<c:set var="script">
 <script type="text/javascript">
 	$(function() {
 		$['isEditMode'] = false;
@@ -113,9 +114,10 @@
 	${links}
 	
 </script> 
-
+</c:set>
 <c:choose>
-	<c:when test="${empty(type) || type=='F' || type=='BF' }">
+	<c:when test="${empty(type) || type=='f' || type=='bf' }">
+		${script }
 		<div id="auto_generated_uI_${page_id}" type="page" style=" display: none;">
 			<form id="form_${page_id}" action="" method="post" enctype="multipart/form-data">
 			
@@ -127,12 +129,13 @@
 			</div>
 			
 			</form>
-			${type=='BF' ? buton_Html : '' }
+			${type=='bf' ? buton_Html : '' }
 			<iframe name="submit_frame" style="width: 0px; height: 0px; display: none;"></iframe>
 			
 		</div>
 	</c:when>
-	<c:when test="${type=='NF' }">
+	<c:when test="${type=='nf' }">
+		${script }
 		<div id="auto_generated_uI_${page_id}" type="page" style=" display: none;">			
 			${ui_design }
 			<div id="default_auto_generated_uI_${page_id}" style=" display: none;">
@@ -140,21 +143,24 @@
 			</div>			
 		</div>
 	</c:when>
-	<c:when test="${type=='T' }">
+	<c:when test="${type=='t' }">
+		${script }
 		<table id="auto_generated_uI_${page_id}" class="${isList ? 'lst' : 'vw' }" border="0" cellspacing="0" cellpadding="0"  style="margin-bottom: 10px;">
 			${title }
 			${src }
 		</table>
 	</c:when>
-	<c:when test="${type=='TRH' }">
+	<c:when test="${type=='trh' }">
 		<tbody id="auto_generated_uI_${page_id}">
 			${title }
 			${src }
+			${script }
 		</tbody>
 	</c:when>
-	<c:when test="${type=='TR' }">
+	<c:when test="${type=='tr' }">
 		<tbody id="auto_generated_uI_${page_id}">
 			${src }
+			${script }
 		</tbody>
 	</c:when>
 </c:choose>

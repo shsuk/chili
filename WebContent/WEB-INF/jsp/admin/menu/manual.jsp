@@ -11,6 +11,11 @@
 	$(function() {
 		$('#header_title').text('매뉴얼');
 	});
+	
+	function loadPiece(id, url){
+		$('.test_area').empty();
+		$(id).load(url);
+	}
 </script> 
 
 
@@ -22,7 +27,7 @@
 			<td>전체 레이아웃이 있는 자동 생성된 페이지</td>
 		</tr>
 		<tr>
-			<th align="left">2. piece/-{uiId}.sh</th>
+			<th align="left">2. piece/-{uiId}-{pieceType}.sh</th>
 			<td>자동 생성된 페이지</td>
 		</tr>
 		<tr>
@@ -40,7 +45,7 @@
 	</table>
 	
 	<b>인자 설명</b>
-	<table class="vw"  ">
+	<table class="vw"  sh>
 		<tr>
 			<th align="left">Template Path</th>
 			<td>
@@ -56,6 +61,12 @@
 			</td>
 		</tr>
 		<tr>
+			<th align="left">pieceType</th>
+			<td>
+				bf=버튼&폼, f=폼, nf=폼없음, t=테이블, trh=헤더포함tr단위, tr=tr단위
+			</td>
+		</tr>
+		<tr>
 			<th align="left">page</th>
 			<td>
 				1) URL패턴 4의 경우는 TemplatePath 에 템플릣 페이지를 제외한 경로와 조합되어 패스가 구성된다.<br>
@@ -64,4 +75,19 @@
 		</tr>
 	</table>
 	<br>
+	<b>Piece 테스트</b><br>
+	<a href="#" onclick="loadPiece('#test_div', '../piece/-noti_list-bf.sh')">http://shsuk.i-on.net:81/piece/-noti_list-bf.sh</a><br>
+	<a href="#" onclick="loadPiece('#test_div', '../piece/-noti_list-f.sh')">http://shsuk.i-on.net:81/piece/-noti_list-f.sh</a><br>
+	<br>
+	<a href="#" onclick="loadPiece('#test_div', '../piece/-mapper_list-t.sh')">http://shsuk.i-on.net:81/piece/-mapper_list-t.sh</a><br>
+	<a href="#" onclick="loadPiece('#test_table', '../piece/-mapper_list-trh.sh')">http://shsuk.i-on.net:81/piece/-mapper_list-trh.sh</a><br>
+	<a href="#" onclick="loadPiece('#test_table', '../piece/-mapper_list-tr.sh')">http://shsuk.i-on.net:81/piece/-mapper_list-tr.sh</a><br>
+	<br>
+	<br>	
+	<div class="lst test_area"  id="test_div">
+		Piece 테스트 영역
+	</div>
+	<table class="lst test_area"  id="test_table">
+		<tr><td>Piece 테스트 영역</td></tr>
+	</table>
 </div>
