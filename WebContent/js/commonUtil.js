@@ -17,6 +17,18 @@
 		
 		$('[key_press=]').removeAttr('key_press');
 		$('[valid=]').removeAttr('valid');
+		
+		var btns = $( ".button" );
+		for(var i=0; i<btns.length;i++){
+			var btn = $(btns[i]);
+			btn.button({
+				icons: {
+					primary: btn.attr('icons_primary')
+				}
+			});
+		}
+		//콘트롤 초기화
+		initControl();
 	}
 	
 	$(function() {
@@ -26,6 +38,8 @@
 			// TODO: handle exception
 		}
 		
+		//콘트롤값 변경시 정합성 체크(미사용시 삭제)
+		checkValidOnChange();
 		
 		try {
 			
@@ -45,6 +59,49 @@
 		} catch (e) {
 			// TODO: handle exception
 		}
+		
+		$['append'] = function (selector, url, data, callback){
+			var temp_div = $('#temp_div');
+			if(temp_div.length==0){
+				temp_div = $('<div id="temp_div" style="disply:none;"></div>');
+				$('body').append(temp_div);
+			}
+			
+			temp_div.load(url, data, function(){
+				if(callback){
+					callback();
+				}
+				$(selector).append(temp_div.children());
+			});
+		};
+		$['before'] = function (selector, url, data, callback){
+			var temp_div = $('#temp_div');
+			if(temp_div.length==0){
+				temp_div = $('<div id="temp_div" style="disply:none;"></div>');
+				$('body').append(temp_div);
+			}
+			
+			temp_div.load(url, data, function(){
+				if(callback){
+					callback();
+				}
+				$(selector).before(temp_div.children());
+			});
+		};
+		$['prepend'] = function (selector, url, data, callback){
+			var temp_div = $('#temp_div');
+			if(temp_div.length==0){
+				temp_div = $('<div id="temp_div" style="disply:none;"></div>');
+				$('body').append(temp_div);
+			}
+			
+			temp_div.load(url, data, function(){
+				if(callback){
+					callback();
+				}
+				$(selector).prepend(temp_div.children());
+			});
+		};
 		//로딩 이미지
 		//var loading = $('<img alt="loading" src="../jquery/icon/loading.gif" />').appendTo(document.body).hide();
 	  //  $(window).ajaxStart(loading.show);
@@ -110,8 +167,8 @@
 	}
 
 	function checkValidOnChange(){
-		$('[valid]').change(function(e){
-			validItem(e.target);
+		$(document).on('change', '[valid]', function(e){
+			validItem(e.target);;
 		});
 	}
 	

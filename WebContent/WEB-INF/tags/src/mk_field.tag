@@ -38,44 +38,44 @@
 		</c:when>
 
 		<c:when test="${type=='text'}">
-			<c:set var="isInputColtrol" value="${true}"/>
+			<c:set var="idEditable" value="${true}"/>
 			<input class="control" type="text" name="${name }"  value="${values[name]}" style="width: 99%;" maxlength="${maxlength }" valid="${valid }" key_press="${keyValid }"} >
 		</c:when>
 		<c:when test="${type=='number'}">
-			<c:set var="isInputColtrol" value="${true}"/>
+			<c:set var="idEditable" value="${true}"/>
 			<input class="control spinner" type="text" name="${name }" value="${values[name]}" style="min-width: 30px;" maxlength="${maxlength }" valid="${valid }" key_press="${keyValid }"} >
 		</c:when>
 		<c:when test="${type=='date'}">
-			<c:set var="isInputColtrol" value="${true}"/>
+			<c:set var="idEditable" value="${true}"/>
 			<c:set var="name_fmt">${name }@yyyy-MM-dd</c:set>
 			<input class="control datepicker" type="text" name="${name }" value="${values[name_fmt]}" style="min-width: 100px;" valid="${valid }" key_press="${keyValid }"} >
 		</c:when>
 		<c:when test="${type=='file' || type=='file_img'}">
-			<c:set var="isInputColtrol" value="${true}"/>
+			<c:set var="idEditable" value="${true}"/>
 			<tag:file className="control" name="${name }"  value="${values[name]}" type="${type }" style="width: 99%;"/>
 		</c:when>
 		<c:when test="${type=='files' || type=='files_img'}">
-			<c:set var="isInputColtrol" value="${true}"/>
+			<c:set var="idEditable" value="${true}"/>
 			<tag:files className="control" name="${name }"  value="${values[name]}" type="${type }" style="width: 99%;"/>
 		</c:when>
 		<c:when test="${type=='select'}">
-			<c:set var="isInputColtrol" value="${true}"/>
+			<c:set var="idEditable" value="${true}"/>
 			<tag:select name="${name }" groupId="${name }" selected="${values[name]}" className="control" valid="${valid }" />
 		</c:when>
 		<c:when test="${type=='textarea'}">
-			<c:set var="isInputColtrol" value="${true}"/>
+			<c:set var="idEditable" value="${true}"/>
 			<textarea class="control" name="${name }" style="width: 98%;height: 150px;" maxlength="${maxlength }" valid="${valid }" key_press="${keyValid }"} >${values[name]}</textarea>
 		</c:when>
 		<c:when test="${type=='check'}">
-			<c:set var="isInputColtrol" value="${true}"/>
+			<c:set var="idEditable" value="${true}"/>
 			&lt;tag:check name="${name }" groupId="${name }" checked="${values[name]}" valid="${valid }"/>
 		</c:when>
 		<c:when test="${type=='radio'}">
-			<c:set var="isInputColtrol" value="${true}"/>
+			<c:set var="idEditable" value="${true}"/>
 			<tag:radio name="${name }" groupId="${name }" checked="${values[name]}" className="control" valid="${valid }"/>
 		</c:when>
 		<c:otherwise>
-			<c:set var="isInputColtrol" value="${true}"/>
+			<c:set var="idEditable" value="${true}"/>
 			<input class="control" type="${type }" name="${name }" value="${values[name]}" style="width: 99%;" maxlength="${maxlength }" valid="${valid }" key_press="${keyValid }"} >
 		</c:otherwise>
 	</c:choose>
@@ -87,5 +87,5 @@
 </c:if>
 
 <span class="field ${link_class}" ${link_value }>
-	<span ${isInputColtrol ? 'class="in_control"' : '' } type="${type}">${ctl }</span>
+	<span ${idEditable ? 'class="editable"' : '' } type="${type}">${ctl }</span>
 </span>

@@ -17,12 +17,12 @@
 
 <table class="lst">
 	<colgroup>
-		<col width="150">
-		<col width="100">
 		<col width="120">
+		<col width="80">
+		<col width="60">
 		<col width="30">
 		<col width="*">
-		<col width="200">
+		<col width="100">
 	</colgroup>
 	<thead>
 		<tr>
@@ -37,11 +37,11 @@
 	<tbody id="field_list" >
 		<c:forEach var="row" items="${list }">
 			<tr class="droppable fld_${row.column_name }">
-				<td><input type="text" class="col_name" readonly="readonly" name="col_name" value="${row.column_name }"></td>
+				<td><input type="text" class="col_name" readonly="readonly" name="col_name" value="${row.column_name }" style="width: 99%;"></td>
 				<td>${row.type_name }</td>
 				<td>${row.column_size }, ${row.decimal_digits }</td>
-				<td><input type="checkbox" name="key_fld" value="${row.column_name }"></td>
-				<td><textarea class="xml_path" name="xml_path" style="height: 30px;width: 99%;"></textarea></td>
+				<td><input type="checkbox" class="key_fld" name="key_fld" value="${row.column_name }"></td>
+				<td><input class="xml_path" name="xml_path" style="width: 99%;"></textarea></td>
 				<td class="node_value"></td>
 			</tr>
 		</c:forEach>

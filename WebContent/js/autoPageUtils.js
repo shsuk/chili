@@ -1,23 +1,15 @@
 $(function() {
-	
-	
+	//수정모드에서 필드클릭시 에디트모드로 전환
 	$(document).on('click', '.view_control', function(e){
 		var trg = $(e.currentTarget);
-		var parents = trg.parents();
-		for(var i=0; i<parents.length; i++){
-			if($(parents[i]).attr('type')=='page'){
-				if($(parents[i]).attr('isEditMode')=='true'){
-					break;
-				}else{
-					return;
-				}
-			}
-		}
-				
-		trg.hide();
-		$('.in_control',trg.parent()).show().focus();
+
+		if(trg.attr('isEditMode')=='true'){
+			trg.hide();
+			$('.editable',trg.parent()).show().focus();
+		}	
 	});
-	$(document).on('change', '.in_control', function(e){
+	//수정모드에서 콘트롤 값 변경시 에디트모드->조회모드로 전환
+	$(document).on('change', '.editable', function(e){
 		var trg = $(e.currentTarget);
 		var type = trg.attr('type');
 		if(type=='file' || type=='files'){
@@ -40,60 +32,70 @@ $(function() {
 function edit(page_id){
 	var page = $(page_id);
 	$('[name=action_type]', page).val('U');
-	$('.view_control', page).hide();
-	$('.in_control', page).show();
+	
+	var view_controls = $('.view_control', page);
+	view_controls.hide();
+	view_controls.attr('isEditMode','true');
+	
+	$('.editable', page).show();
+	//버튼제어
 	$('.save_btn', page).show();
 	$('.edit_btn', page).hide();
 	$('.cancel_btn', page).show();
-	
-	page.attr('isEditMode', true);
 }
 function cancel(page_id){
 	var page = $(page_id);
-	$('.view_control', page).show();
-	$('.in_control', page).hide();
+	var view_controls = $('.view_control', page);
+	view_controls.show();
+	view_controls.attr('isEditMode','false');
+
+	$('.editable', page).hide();
+	//버튼제어
 	$('.save_btn', page).hide();
 	$('.edit_btn', page).show();
 	$('.cancel_btn', page).hide();
-	
-	page.attr('isEditMode', false);
 }
 function closePop(page_id){
 	$( "#dialog" ).dialog('close');	
 }
-//조회와 수정 모드 전환 처리를 위한 콘트롤을 생성 한다.
-function initAutoPage(page_id){
-	$(page_id).attr('isEditMode', false);
-	
-	var fields = $('.field', $(page_id));
+//콘트롤을 초기화 한다.
+function initControl(){	
+	var fields = $('.field');
 	
 	for(var i=0; i< fields.length; i++){
 		var fld = $(fields[i]);
-		var ctl = $('.in_control', fld);
-		
-		if(ctl.length>0){
-			//var width = ctl.outerWidth() + 'px';
-			var val;
-			var width ='95%';
-			//var height = ctl.outerHeight() + 'px';
-			var view = $('<span class="view_control"></span>');
-			var obj = $('.control', fld);
-			if(obj.length>0 && obj.get(0).nodeName =='SELECT'){
-				val = $('option:selected',obj).text();
-			}else if(obj.length>0 && obj.get(0).nodeName =='RADIO'){
-				val = $('label[for='+$('input:checked',ctl).attr('id')+']').text();
-			}else{
-				val = obj.val();
-			}
-			if(val && val!=''){
-				view.text(val);	
-			}else{
-				view.html($('.control', fld).html());
-			}
-			view.css({width: width, disply:'inline', overflow:'hidden', 'margin-right':'8px'});
-			ctl.hide();
-			fld.append(view);
+		//이미 초기화 된 경우
+		if(fld.attr('init')){
+			continue;
 		}
+		
+		var ctl = $('.editable', fld);
+		
+		if(ctl.length<1){
+			continue;
+		}
+		
+		fld.attr('init', true);
+		
+		var val;
+		var width ='95%';
+		var view = $('<span class="view_control"></span>');
+		var obj = $('.control', fld);
+		if(obj.length>0 && obj.get(0).nodeName =='SELECT'){
+			val = $('option:selected',obj).text();
+		}else if(obj.length>0 && obj.get(0).nodeName =='RADIO'){
+			val = $('label[for='+$('input:checked',ctl).attr('id')+']').text();
+		}else{
+			val = obj.val();
+		}
+		if(val && val!=''){
+			view.text(val);	
+		}else{
+			view.html($('.control', fld).html());
+		}
+		view.css({width: width, disply:'inline', overflow:'hidden', 'margin-right':'8px'});
+		ctl.hide();
+		fld.append(view);
 	}
 	
 }

@@ -16,6 +16,18 @@
 		$('.test_area').empty();
 		$(id).load(url);
 	}
+	function appendPiece(id, url){
+		
+		$.append($('table', id), url);
+	}
+	function beforePiece(id, url){
+		
+		$.before($('table', id), url);
+	}
+	function prependPiece(id, url){
+		
+		$.prepend($('table', id), url);
+	}
 </script> 
 
 
@@ -76,12 +88,16 @@
 	</table>
 	<br>
 	<b>Piece 테스트</b><br>
-	<a href="#" onclick="loadPiece('#test_div', '../piece/-noti_list-bf.sh')">http://shsuk.i-on.net:81/piece/-noti_list-bf.sh</a><br>
-	<a href="#" onclick="loadPiece('#test_div', '../piece/-noti_list-f.sh')">http://shsuk.i-on.net:81/piece/-noti_list-f.sh</a><br>
+	<a href="#" onclick="loadPiece('#test_div', '../piece/-noti_list-bf.sh')">piece/-noti_list-bf.sh</a><br>
+	<a href="#" onclick="loadPiece('#test_div', '../piece/-noti_list-f.sh')">piece/-noti_list-f.sh</a><br>
 	<br>
-	<a href="#" onclick="loadPiece('#test_div', '../piece/-mapper_list-t.sh')">http://shsuk.i-on.net:81/piece/-mapper_list-t.sh</a><br>
-	<a href="#" onclick="loadPiece('#test_table', '../piece/-mapper_list-trh.sh')">http://shsuk.i-on.net:81/piece/-mapper_list-trh.sh</a><br>
-	<a href="#" onclick="loadPiece('#test_table', '../piece/-mapper_list-tr.sh')">http://shsuk.i-on.net:81/piece/-mapper_list-tr.sh</a><br>
+	<a href="#" onclick="loadPiece('#test_div', '../piece/-mapper_list-t.sh')">piece/-mapper_list-t.sh</a><br>
+	<a href="#" onclick="loadPiece('#test_table', '../piece/-mapper_list-trh.sh')">piece/-mapper_list-trh.sh</a><br>
+	<a href="#" onclick="loadPiece('#test_table', '../piece/-mapper_list-tr.sh')">piece/-mapper_list-tr.sh</a><br><br>
+
+	<a href="#" onclick="appendPiece('#test_div', '../piece/-mapper_list-tr.sh')">$.append(selector, url, data, callback) : piece/-mapper_list-tr.sh</a><br>
+	<a href="#" onclick="beforePiece('#test_div', '../piece/-mapper_list-tr.sh')">$.before(selector, url, data, callback) : piece/-mapper_list-tr.sh</a><br>
+	<a href="#" onclick="prependPiece('#test_div', '../piece/-mapper_list-tr.sh')">$.prepend(selector, url, data, callback) : piece/-mapper_list-tr.sh</a><br>
 	<br>
 	<br>	
 	<div class="lst test_area"  id="test_div">

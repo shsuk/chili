@@ -9,7 +9,8 @@
 <%@ taglib prefix="tag"  tagdir="/WEB-INF/tags/tag" %>
 <script type="text/javascript">
 $(function(){
-    $("#trg_path_list").droppable({
+/* 
+	$("#trg_path_list").droppable({
         hoverClass: "ui-state-default",
         addClasses: true,
 //        tolerance: "pointer",
@@ -21,10 +22,14 @@ $(function(){
         	addTrgNode(path);
         }
      });
+    
+ */ 
 
+   	//load Sample
+    loadTree();
 });
 var treeData = [];
-
+/* 
 function addTrgNode(path){
 	var idPath = path.split('/').join('__').split('@').join('_a_');
 	var target = $('#trg_path_list');
@@ -40,9 +45,12 @@ function addTrgNode(path){
 	obj = $('<div id="_'+ idPath + '" class="trg_node" value="' +path + '">' +path + '<img src="../images/icon/close.png" onclick="delTrgNode(\'#_'+ idPath + '\')"></div>');
 	target.append(obj);
 }
+ */
+/*  
 function delTrgNode(id){
 	$(id).remove();
 }
+ */ 
 function loadTree(){
 	$('#tree_data').load('../admin-mapper/xml2tree.sh',{xml:$('#in_xml').val()},function(){
 		viewTree() ;
@@ -60,9 +68,9 @@ function viewTree(){
     	onActivate: function(node) {
    	      $("#echoActive").text(node.data.title + "(" + node.data.key + ")");
    	    },
-   	 	onDblClick: function(node){
-   	 		addTrgNode(node.data.path);
-   	 	},
+   	 	//onDblClick: function(node){
+   	 	//	addTrgNode(node.data.path);
+   	 	//},
    	    onDeactivate: function(node) {
    	      $("#echoActive").text("-");
    	    },
@@ -88,6 +96,7 @@ function makeQuery(){
 	$('.table_name').text($('[name=table_name]', form).val());
 	var fields = $('.col_name', form);
 	var xpaths = $('.xml_path', form);
+	var keyFlds = $('.key_fld', form);
 	var col_name = "";
 	var col_value = "";
 	var set_col_name = '';
@@ -103,12 +112,19 @@ function makeQuery(){
 			val = 'concat(' + val + ')';
 		}
 
-		var comma = (i==(fields.length-1)) ? '' : ',';
+		var comma = ',';
 
 		col_value += '<li>' + val + comma + '</li>';
 		col_name += '<li>' + $(fields[i]).val() + comma + '</li>';
-		set_col_name += '<li>' + $(fields[i]).val() + '=' + val + comma + '</li>';
+		
+		if(!$(keyFlds[i]).prop('checked')){
+			set_col_name += '<li>' + $(fields[i]).val() + '=' + val + comma + '</li>';
+		}
 	}
+	//마지막 콤마 지우기
+	col_name = col_name.substring(0, col_name.length-6) + '</li>';
+	col_value = col_value.substring(0, col_value.length-6) + '</li>';
+	set_col_name = set_col_name.substring(0, set_col_name.length-6) + '</li>';
 	
 	$('#col_name').html(col_name);
 	$('#col_value').html(col_value);
@@ -161,17 +177,23 @@ function loadTableInfo(tableName){
     }
 </style>
 
-<div class="ui-state-default" style="height:23px;text-align: center; padding-top: 8px; ">XML to DB 연동 - XPath에 필드 매핑</div>
+<div class="ui-state-default" style="text-align: center; padding: 4px; ">
+	XML to DB 연동 - 연동 궈리 작성
+	<a class="button" icons_primary="ui-icon-carat-1-w" href="createtbl.sh">이전</a>
+	<a class="button" icons_primary="ui-icon-carat-1-e" href="trigger_mapping.sh">다음</a>
+	<div class="button" icons_primary="ui-icon-shuffle" style="float: right;" onclick="makeQuery()" >쿼리 생성</div>
+</div>
+
 
 <table class="lst">
 	<tr>
 		<td  valign="top" style=" width: 250px;">
-			<div class="ui-state-default" style="height:23px;text-align: center; padding-top: 8px; ">
-				<span class="link" onclick="$('#xml_data').show()" >XML 열기</span>
-				<div id="xml_data" style="position: absolute; width: 805px; height: 500px;z-index: 100;background: #cccccc;">
+			<div class="ui-state-default" style="text-align: center; padding: 4px; ">
+				<span class="button" icons_primary="ui-icon-folder-open" onclick="$('#xml_data').show()" >XML 열기</span>
+				<div id="xml_data" style="display: none;position: absolute; width: 805px; height: 500px;z-index: 100;background: #cccccc;">
 					<div id="tree_data" style="display: none;"></div>
 					<textarea id="in_xml" style="width: 800px; max-width:800px; min-width:800px; height: 450px;margin-bottom:10px; "><?xml version="1.0" encoding="UTF-8"?>
-						<Employees>
+						<Sample>
 						    <Employee id="1" num="333">
 						        <age>29</age>
 						        <name>Pankaj</name>
@@ -190,17 +212,20 @@ function loadTableInfo(tableName){
 						        <gender>Male</gender>
 						        <role>Manager</role>
 						    </Employee>
-						</Employees>
+						</Sample>
 					</textarea>
-					<div class=" ui-widget-header ui-corner-all p_3 link " style="display:inline;width: 100px; margin-right : 10px;" onclick="$('#xml_data').hide()" >닫기</div><div class=" ui-widget-header ui-corner-all p_3 link" style="display:inline; width: 100px;" onclick="loadTree()" >적용</div>
+					<div class="button" style="float: right; margin-right: 10px;" onclick="$('#xml_data').hide()" >닫기</div>
+					<div class="button" style="float: right; margin-right: 10px;" onclick="loadTree()" >적용</div>
 				</div>
 			</div>
 			
-			<div id="left_content" style=" height:400px; width: 250px; overflow: auto; ">
+			<div id="left_content" style=" height:500px; width: 250px; overflow: auto; ">
 				<div id="tree_"></div>
 			</div>
+<!-- 			
 			<div class="ui-state-default" style="height:20px;text-align: center; padding-top: 4px; ">쿼리 생행 트리거 노드</div>
 			<div id="trg_path_list" style=" height:70px; width:99%; overflow-y: auto;min-width: 250px; ">이곳에 트리의 노드를 끌어 놓거나 더블클릭하여 트리거링 할 노드를 추가하세요.<br>노드의 텍스트가 긴 경우 중앙이 이곳에 위치해야 끌어 놓을 수 있습니다.</div>
+ -->		
 		</td>
 		<td valign="top">
 			<div id="center_content" style=" height:500px; overflow-y: auto; ">
@@ -213,15 +238,15 @@ function loadTableInfo(tableName){
 					<thead>
 						<tr>
 							<th>테이블명</th>
-							<td colspan="5">
-								<input style="float: left;margin-right: 10px;" type="text" name="table_name"> 테이블 선택후 아래 필드에 체크박스가 있는 트리의 노드를 끌어 매핑하세요.
-								<div class=" ui-widget-header ui-corner-all  m_3" style="float: right; cursor:pointer;  margin-left: 5px; padding: 3px;" onclick="makeQuery()" >쿼리 생성</div>
+							<td colspan="5" valign="middle">
+								<input style="float: left;margin-right: 10px;" type="text" name="table_name"> 
 							</td>
 						</tr>
 					</thead>
 				</table>
 				<div id="table_info">
 				</div>
+				○ 테이블 선택후 체크박스가 있는 트리의 노드를 끌어 필드에 매핑하세요.
      		 </div>
 		</td>
 		<td align="center" valign="top" style=" width: 170px;">

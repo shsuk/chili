@@ -94,10 +94,6 @@
 <c:set var="script">
 <script type="text/javascript">
 	$(function() {
-		$['isEditMode'] = false;
-		initAutoPage('#auto_generated_uI_${page_id}');
-		//콘트롤 변경시 정합성 체크(미사용시 삭제)
-		checkValidOnChange('${page_id}');
 		if('${empty(ui_design)}' == 'true'){
 			sowDefaultUi("${page_id}");
 		}else{
@@ -135,33 +131,34 @@
 		</div>
 	</c:when>
 	<c:when test="${type=='nf' }">
-		${script }
 		<div id="auto_generated_uI_${page_id}" type="page" style=" display: none;">			
 			${ui_design }
 			<div id="default_auto_generated_uI_${page_id}" style=" display: none;">
 				${html }
 			</div>			
 		</div>
+		${script }
 	</c:when>
 	<c:when test="${type=='t' }">
-		${script }
 		<table id="auto_generated_uI_${page_id}" class="${isList ? 'lst' : 'vw' }" border="0" cellspacing="0" cellpadding="0"  style="margin-bottom: 10px;">
-			${title }
-			${src }
+			<thead>
+				${title }
+			</thead>
+			<tbody>
+				${src }
+			</tbody>
 		</table>
 	</c:when>
 	<c:when test="${type=='trh' }">
-		<tbody id="auto_generated_uI_${page_id}">
+		<thead>
 			${title }
+		</thead>
+		<tbody>
 			${src }
-			${script }
 		</tbody>
 	</c:when>
 	<c:when test="${type=='tr' }">
-		<tbody id="auto_generated_uI_${page_id}">
-			${src }
-			${script }
-		</tbody>
+		${src }
 	</c:when>
 </c:choose>
 

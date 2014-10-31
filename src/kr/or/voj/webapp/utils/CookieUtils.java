@@ -36,13 +36,19 @@ public class CookieUtils {
 	}
 
 	public static void setCookie(HttpServletResponse response, String name, String value, int maxAge) {
+		setCookie(response, name, value, maxAge, null);
+	}
+	public static void setCookie(HttpServletResponse response, String name, String value, int maxAge, String domain) {
 		Cookie cookie = null;
 
 		String cookieName = URLEncoder.encode(name);
 		String cookieValue = URLEncoder.encode(value);
 
 		cookie = new Cookie(cookieName, cookieValue);
-		//cookie.setDomain("*.echo.*");
+		
+		if(StringUtils.isNotEmpty(domain)){
+			cookie.setDomain(domain);
+		}
 		cookie.setPath("/");
 		if (maxAge > 0) {
 			cookie.setMaxAge(maxAge);

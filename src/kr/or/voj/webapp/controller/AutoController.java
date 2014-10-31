@@ -3,7 +3,6 @@ package kr.or.voj.webapp.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,7 +28,8 @@ public class AutoController {
 		tplPath = tplPath.replace('-', '/');
 		//response.setHeader("Cache-Control", "no-store");
 		//response.setHeader("Pragma", "no-cache");
-		response.setHeader("X-Frame-Option", "DENY");
+		
+		//response.setHeader("X-Frame-Option", "DENY");
 		ModelAndView mv = new ModelAndView("main");
 		mv.addObject("UI_TPL", tplPath);
 		mv.addObject("UI_ID", uiId);

@@ -31,6 +31,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
+import org.springframework.security.util.FieldUtils;
 import org.springframework.util.LinkedCaseInsensitiveMap;
 
 /**
@@ -210,6 +211,12 @@ public class ProcessorServiceFactory  implements ApplicationContextAware {
 		dataSourceName = StringUtils.isEmpty(dataSourceName) ? defaultDataSourceName : dataSourceName;
 		
 		return daoSupportorMap.get(dataSourceName);
+	}
+	public static String getDbType(String dataSourceName) throws Exception{
+		
+		String url = (String)FieldUtils.getFieldValue(getDaoSupportor(dataSourceName).getDataSource(), "url");
+		
+		return StringUtils.split(url, ':')[1];
 	}
 	
 	public static Map<String, Object> executeMainTransaction(List<String> processorList, CaseInsensitiveMap params, String queryPath, String action, String loopId, ServletRequest request, ServletResponse response) throws Exception{
