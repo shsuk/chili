@@ -11,6 +11,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko" lang="ko">
 <head>
 <title>Chili 프로젝트</title>
+<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
 <link href="../jquery/development-bundle/themes/redmond/jquery.ui.all.css"  rel="stylesheet" type="text/css" media="screen" />
 <link href="../jquery/jqGrid/css/ui.jqgrid.css"  rel="stylesheet" type="text/css" media="screen" />
 <link href="../jquery/jqGrid/plugins/ui.multiselect.css" rel="stylesheet" type="text/css" media="screen" />
@@ -31,7 +32,7 @@ $(function() {
 </head>
 <body >
 	<header style="margin: 0 auto; padding:3px; width: 90%; min-width:1040px; border:1px solid #cccccc; ">
-		<img src="../images/log2.png" height="100"><span style="font-size: 30px; margin-left:30px;">Chili프로젝트 <span id="header_title" style="font-size: 30px;"></span></span>
+		<img src="../images/log3.jpg" height="100"><span style="font-size: 30px; margin-left:30px;">Chili프로젝트 <span id="header_title" style="font-size: 30px;"></span></span>
 	</header>
 	<c:import url="${UI_TPL }.jsp"/>
 	<footer style="margin: 0 auto; padding:3px; width: 90%; min-width:1040px; border:1px solid #cccccc; ">

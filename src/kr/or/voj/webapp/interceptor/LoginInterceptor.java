@@ -16,6 +16,9 @@ public class LoginInterceptor extends HandlerInterceptorAdapter
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception  {
 		boolean hasAccess = true;
 		
+		response.setHeader("Cache-Control", "no-store");
+		response.setHeader("Pragma", "no-cache");
+		response.setHeader("X-Frame-Option", "DENY");
 		return hasAccess;
 	}
 

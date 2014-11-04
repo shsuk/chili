@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import kr.or.voj.webapp.processor.ProcessorServiceFactory;
 import kr.or.voj.webapp.utils.CookieUtils;
@@ -26,10 +27,7 @@ public class AutoController {
 	@RequestMapping(value = "-{tplPath}/-{uiId}.sh")
 	public ModelAndView autoMain(HttpServletRequest request, HttpServletResponse response, @PathVariable("tplPath") String tplPath, @PathVariable("uiId") String uiId) throws Exception {
 		tplPath = tplPath.replace('-', '/');
-		//response.setHeader("Cache-Control", "no-store");
-		//response.setHeader("Pragma", "no-cache");
-		
-		//response.setHeader("X-Frame-Option", "DENY");
+
 		ModelAndView mv = new ModelAndView("main");
 		mv.addObject("UI_TPL", tplPath);
 		mv.addObject("UI_ID", uiId);

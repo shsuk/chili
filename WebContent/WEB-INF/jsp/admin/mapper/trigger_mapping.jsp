@@ -13,6 +13,8 @@ $(function(){
 
    	//load Sample
     loadTree();
+   	//수정모드
+    edit();
 });
 
 var treeData = [];
@@ -96,63 +98,70 @@ function selectNode(tree){
 	<a class="button" icons_primary="ui-icon-carat-1-w" href="xml2db_mapping.sh">이전</a>
 </div>
 XML에 대한 연동정보를 설정합니다.
-<src:auto_make_src uiId="mapper_info" type="bf"/>
-<table class="lst">
-	<tr>
-		<td  valign="top" style=" width: 250px; min-width:200px;">
-			<div class="ui-state-default" style="text-align: center; padding: 4px; ">
-				<span class="button" icons_primary="ui-icon-folder-open" onclick="$('#xml_data').show()" >XML 열기</span>
-				<div id="xml_data" style="display: none;position: absolute; width: 800px; height: 500px;z-index: 100;background: #cccccc;">
-					<div id="tree_data" style="display: none;"></div>
-					<textarea id="in_xml" style="width: 800px; max-width:800px; min-width:800px; height: 450px;margin-bottom:10px; "><?xml version="1.0" encoding="UTF-8"?>
-						<Sample>
-						    <Employee id="1" num="333">
-						        <age>29</age>
-						        <name>Pankaj</name>
-						        <gender>Male</gender>
-						        <role>Java Developer</role>
-						    </Employee>
-						    <Employee id="2">
-						        <age>35</age>
-						        <name>Lisa</name>
-						        <gender>Female</gender>
-						        <role>CEO</role>
-						    </Employee>
-						    <Employee img="3">
-						        <age>40</age>
-						        <name>Tom</name>
-						        <gender>Male</gender>
-						        <role>Manager</role>
-						    </Employee>
-						</Sample>
-					</textarea>
-					<div class="button" style="float: right; margin-right: 10px;" onclick="$('#xml_data').hide()" >닫기</div>
-					<div class="button" style="float: right; margin-right: 10px;" onclick="loadTree()" >적용</div>
+<form method="post">
+	<input type="hidden" name="ui_id" value="mapper_info">
+	<input type="hidden" name="action_type" value="U">
+	<src:auto_make_src uiId="mapper_info" type="nf"/>
+	<table class="lst">
+		<tr>
+			<td  valign="top" style=" width: 250px; min-width:200px;">
+				<div class="ui-state-default" style="text-align: center; padding: 4px; ">
+					<span class="button" icons_primary="ui-icon-folder-open" onclick="$('#xml_data').show()" >XML 열기</span>
+					<div id="xml_data" style="display: none;position: absolute; width: 800px; height: 500px;z-index: 100;background: #cccccc;">
+						<div id="tree_data" style="display: none;"></div>
+						<textarea id="in_xml" style="width: 800px; max-width:800px; min-width:800px; height: 450px;margin-bottom:10px; "><?xml version="1.0" encoding="UTF-8"?>
+							<Sample>
+							    <Employee id="1" num="333">
+							        <age>29</age>
+							        <name>Pankaj</name>
+							        <gender>Male</gender>
+							        <role>Java Developer</role>
+							    </Employee>
+							    <Employee id="2">
+							        <age>35</age>
+							        <name>Lisa</name>
+							        <gender>Female</gender>
+							        <role>CEO</role>
+							    </Employee>
+							    <Employee img="3">
+							        <age>40</age>
+							        <name>Tom</name>
+							        <gender>Male</gender>
+							        <role>Manager</role>
+							    </Employee>
+							</Sample>
+						</textarea>
+						<div class="button" style="float: right; margin-right: 10px;" onclick="$('#xml_data').hide()" >닫기</div>
+						<div class="button" style="float: right; margin-right: 10px;" onclick="loadTree()" >적용</div>
+					</div>
 				</div>
-			</div>
-			
-			<div id="left_content" style=" height:500px; width: 250px; overflow: auto; ">
-				<div id="tree_"></div>
-			</div>
-		</td>
-		<td valign="top">
-			<div id="center_content" style=" height:500px; overflow-y: auto; ">
-				<table  id="field_list" class="lst">
-					<colgroup>
-						<col width="200"/>
-						<col width="100"/>
-						<col width="100"/>
-						<col width="80"/>
-						<col width="*"/>
-					</colgroup>
-					<src:auto_make_src uiId="mapper_trigger" type="trh"/>
-				</table>
-				○ 이벤트를 발생시킬 노드를 선택하고 해당 궈리를 설정하세요.<br>
-				○ 설정한 이벤트 노드를 만나면 연결된 쿼리가 실행됩니다.
-			</div>
-		</td>
-	</tr>
-</table>
+				
+				<div id="left_content" style=" height:500px; width: 250px; overflow: auto; ">
+					<div id="tree_"></div>
+				</div>
+			</td>
+			<td valign="top">
+				<div id="center_content" style=" height:500px; overflow-y: auto; ">
+					<table  id="field_list" class="lst">
+						<colgroup>
+							<col width="200"/>
+							<col width="100"/>
+							<col width="100"/>
+							<col width="80"/>
+							<col width="*"/>
+						</colgroup>
+						<src:auto_make_src uiId="mapper_trigger" type="trh"/>
+					</table>
+					<div class="ui-widget-header ui-corner-all btn_right" style="margin-top: 5px; " onclick="form_submit()">저장</div>
+					○ XML열기를 클릭하고 처리할 XML을 입력하세요.<br>
+					○ 이벤트를 발생시킬 노드를 선택하고 해당 궈리를 설정하세요.<br>
+					○ 설정한 이벤트 노드를 만나면 연결된 쿼리가 실행됩니다.
+				</div>
+			</td>
+		</tr>
+	</table>
+</form>
+<%//트리거 입력 tr 템플릿 %>
 <table id="tpl_trigger" style="display:none;">
 	<tr class="node">
     	<td><input type="text" name="xpath" value="" style="width:99%;"></td>

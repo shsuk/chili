@@ -8,8 +8,9 @@
 <%@ taglib prefix="src"  tagdir="/WEB-INF/tags/src" %> 
 <%@ attribute name="uiId" type="java.lang.String" description="UI ID"%>
 <%@ attribute name="type" required="true" type="java.lang.String" description="bf=버튼&폼, f=폼, nf=폼없음, t=테이블, trh=헤더포함tr단위, tr=tr단위"%>
+<c:set var="UI_ID" value="${empty(uiId) ? UI_ID : uiId}"/>
 
-<sp:sp var="ui_info" queryPath="ui" action="design" processorList="mybatis" exception="false">{ui_id:'${empty(uiId) ? UI_ID : uiId}'}</sp:sp>
+<sp:sp var="ui_info" queryPath="ui" action="design" processorList="mybatis" exception="false">{ui_id:'${UI_ID}'}</sp:sp>
 <c:set var="page_id" value="${sp:uuid()}"/>
 <c:set scope="request" var="ui_design" value="${ui.UI_DESIGN }"/>
 <c:set scope="request" var="ui_field" value="${sp:str2jsonObj(ui.UI_FIELD) }"/>

@@ -30,7 +30,7 @@ $(function() {
 });
 
 function edit(page_id){
-	var page = $(page_id);
+	var page = $(page_id ? page_id : 'form');
 	$('[name=action_type]', page).val('U');
 	
 	var view_controls = $('.view_control', page);
@@ -146,7 +146,7 @@ function delFile(file_id){
 
 function form_submit(form_id){	
 	var url = '../at/action.sh';
-	var form = $(form_id);
+	var form = form_id ? $(form_id) : $('form');
 	//폼 정합성 체크
 	if(!valid(form)){
 		return;
@@ -164,7 +164,8 @@ function form_submit(form_id){
 		var data = $.parseJSON(response);
 		
 		if(data.success){
-			document.location.href='list.jsp';
+			alert("저장 콜백 미구현");
+			//document.location.href='list.jsp';
 		}else{
 			alert("처리하는 중 오류가 발생하였습니다. \n문제가 지속되면 관리자에게 문의 하세요.\n" + data.message);					
 		}
@@ -237,8 +238,12 @@ function linkPopup(ui_id, data){
 	dialog.dialog('open');
 }
 function linkPage(ui_id, data, path){
-
-	document.location.href = (path ? path + '/' : '') + '-'+ui_id+'.sh?' + $.param(data);
+	
+	if(ui_id==''){
+		document.location.href = path + '?' + $.param(data);
+	}else{
+		document.location.href = (path ? path + '/' : '') + '-'+ui_id+'.sh?' + $.param(data);
+	}
 }
 function linkFnc(obj){
 	;

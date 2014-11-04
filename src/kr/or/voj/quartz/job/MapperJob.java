@@ -41,7 +41,7 @@ public class MapperJob extends QuartzJobBean {
 	}
 	@Override
 	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
-		String namespace = "system";
+		String namespace = "mapper";
 		String actionId = "mapper";
 		
 		if(isRun) {
@@ -88,7 +88,7 @@ public class MapperJob extends QuartzJobBean {
 	 			if(!isRun){
 					logger.info("Mapper [" + mapperId + "] : Start");
 					
-					writeDbLog("system", "mapperStart", param, null);
+					writeDbLog("mapper", "mapperStart", param, null);
 					
 					isRun = true;
 	 			}
@@ -99,16 +99,16 @@ public class MapperJob extends QuartzJobBean {
 				try{
 					f.renameTo(new File(xmInfo.getSucessPath(), dateFormater.format(new Date()) + f.getName()));
 				} catch (Exception e2) {
-					writeDbLog("system", "mapperError", param, e2);
+					writeDbLog("mapper", "mapperError", param, e2);
 					logger.error("Mapper [" + mapperId + "] : Error = 처리 후 파일 이동 중 오류 발생", e2);
 				}
 			} catch (Exception e) {
-				writeDbLog("system", "mapperError", param, e);
+				writeDbLog("mapper", "mapperError", param, e);
 				logger.error("Mapper [Error] : " + mapperId, e);
 				try {
 					f.renameTo(new File(xmInfo.getErrorPath(), dateFormater.format(new Date()) + f.getName()));
 				} catch (Exception e2) {
-					writeDbLog("system", "mapperError", param, e);
+					writeDbLog("mapper", "mapperError", param, e);
 					logger.error("Mapper [" + mapperId + "] : Error", e2);
 				}
 			}

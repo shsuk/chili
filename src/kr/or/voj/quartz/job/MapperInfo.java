@@ -54,7 +54,7 @@ public class MapperInfo {
 		triggerList= new ArrayList<MapperTriggerInfo>();
 		CaseInsensitiveMap param = new CaseInsensitiveMap();
 		param.put("mapper_id", mapperId);
-		Map<String, List<Map<String, Object>>> rtn = (Map<String, List<Map<String, Object>>>)ProcessorServiceFactory.executeQuery("system", "mapperTrigger", param);
+		Map<String, List<Map<String, Object>>> rtn = (Map<String, List<Map<String, Object>>>)ProcessorServiceFactory.executeQuery("mapper", "mapperTrigger", param);
 		
 		for(Map<String, Object> rw : rtn.get("rows")){
 			MapperTriggerInfo xmlMapperTriggerInfo = new MapperTriggerInfo(rw);
