@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import kr.or.voj.webapp.processor.MyBatisProcessor;
 import kr.or.voj.webapp.processor.ProcessorServiceFactory;
 import net.sf.json.JSONArray;
 
@@ -41,8 +42,6 @@ public class MapperJob extends QuartzJobBean {
 	}
 	@Override
 	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
-		String namespace = "mapper";
-		String actionId = "mapper";
 		
 		if(isRun) {
 			return;
@@ -51,7 +50,7 @@ public class MapperJob extends QuartzJobBean {
 		
 		try {
 			@SuppressWarnings("unchecked")
-			Map<String, List<Map<String, Object>>> rtn = (Map<String, List<Map<String, Object>>>)ProcessorServiceFactory.executeQuery(namespace, actionId, new CaseInsensitiveMap());
+			Map<String, List<Map<String, Object>>> rtn = (Map<String, List<Map<String, Object>>>)ProcessorServiceFactory.executeQuery(MyBatisProcessor.PATH_MAPPER, "mapper", new CaseInsensitiveMap());
 			
 			for(Map<String, Object> row : rtn.get("rows")){
 				MapperInfo xmlMapperInfo = new MapperInfo(row);
@@ -77,7 +76,7 @@ public class MapperJob extends QuartzJobBean {
 		CaseInsensitiveMap param = new CaseInsensitiveMap();
 		param.put("mapper_id", mapperId);
 		
-		writeDbLog("system", "mapperCheck", param, null);
+		writeDbLog(MyBatisProcessor.PATH_MAPPER, "mapperCheck", param, null);
 		
 		
 		for(File f : list){
@@ -88,7 +87,7 @@ public class MapperJob extends QuartzJobBean {
 	 			if(!isRun){
 					logger.info("Mapper [" + mapperId + "] : Start");
 					
-					writeDbLog("mapper", "mapperStart", param, null);
+					writeDbLog(MyBatisProcessor.PATH_MAPPER, "mapperStart", param, null);
 					
 					isRun = true;
 	 			}
@@ -99,16 +98,16 @@ public class MapperJob extends QuartzJobBean {
 				try{
 					f.renameTo(new File(xmInfo.getSucessPath(), dateFormater.format(new Date()) + f.getName()));
 				} catch (Exception e2) {
-					writeDbLog("mapper", "mapperError", param, e2);
+					writeDbLog(MyBatisProcessor.PATH_MAPPER, "mapperError", param, e2);
 					logger.error("Mapper [" + mapperId + "] : Error = 처리 후 파일 이동 중 오류 발생", e2);
 				}
 			} catch (Exception e) {
-				writeDbLog("mapper", "mapperError", param, e);
+				writeDbLog(MyBatisProcessor.PATH_MAPPER, "mapperError", param, e);
 				logger.error("Mapper [Error] : " + mapperId, e);
 				try {
 					f.renameTo(new File(xmInfo.getErrorPath(), dateFormater.format(new Date()) + f.getName()));
 				} catch (Exception e2) {
-					writeDbLog("mapper", "mapperError", param, e);
+					writeDbLog(MyBatisProcessor.PATH_MAPPER, "mapperError", param, e);
 					logger.error("Mapper [" + mapperId + "] : Error", e2);
 				}
 			}
@@ -116,7 +115,7 @@ public class MapperJob extends QuartzJobBean {
 		
 		if(isRun){
 			logger.info("Mapper [" + mapperId + "] : End ");
-			writeDbLog("system", "mapperEnd", param, null);
+			writeDbLog(MyBatisProcessor.PATH_MAPPER, "mapperEnd", param, null);
 		}
 	}
 	

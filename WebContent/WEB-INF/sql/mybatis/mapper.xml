@@ -51,8 +51,14 @@
 			process_message = #{process_message}
 		WHERE mapper_id = #{mapper_id}
 	</update>
-	<!-- 매퍼 기본정보 수정 -->
-	<update id="mapperUpdate" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap">
+	<!-- 매퍼수정 : 매퍼상세정보 -->
+	<select id="mapperTriggerEdit_1_rows" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
+		SELECT mapper_id,trigger_xpath,qyery_path,query_action,delete_value,trigger_desc,trigger_id
+		FROM sys_mapper_trigger_tbl
+		WHERE mapper_id = #{mapper_id}
+	</select>
+	<!-- 매퍼수정 : 기본정보 수정 -->
+	<update id="mapperUpdate_1" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap">
 		UPDATE sys_mapper_tbl
 		SET
 			source_path = #{source_path},
@@ -62,5 +68,27 @@
 			transactional = #{transactional},
 			`desc` = #{desc}
 		WHERE mapper_id = #{mapper_id}
+	</update>
+	<!-- 매퍼수정 : 트리거정보 수정 -->
+	<update id="mapperUpdate_2" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap">
+		DELETE FROM sys_mapper_trigger_tbl 
+		WHERE 1=2 
+			<if test="del_trigger_id_!=null">
+				or trigger_id in
+				  	<foreach item="id"  collection="del_trigger_id_"  open="(" close=")" separator=",">
+							#{id}
+					</foreach>
+			</if>
+	</update>
+	<!-- 매퍼수정 : 트리거정보 수정 -->
+	<update id="mapperUpdate_3" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap">
+		INSERT INTO sys_mapper_trigger_tbl (mapper_id, trigger_xpath, qyery_path, query_action, delete_value, trigger_desc)
+		SELECT  mapper_id, trigger_xpath, qyery_path, query_action, delete_value, trigger_desc
+		FROM sys_mapper_trigger_tbl
+		WHERE 1=2
+	  	<foreach item="loop"  collection="loop_" >
+	  		UNION ALL
+			SELECT #{mapper_id}, #{loop.xpath}, substring_index(#{loop.trigger_query},'.',1), substring_index(#{loop.trigger_query},'.',-1), #{loop.delete_value}, #{loop.trigger_desc}
+		</foreach>
 	</update>
 </mapper>

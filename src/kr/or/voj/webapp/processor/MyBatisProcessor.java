@@ -31,9 +31,10 @@ import org.springframework.util.LinkedCaseInsensitiveMap;
 
 @Service
 public class MyBatisProcessor implements ProcessorService{
-	Map<String, List<MappedStatementInfo>> mappedStatementInfoMap = null;
-
-	SqlSession sqlSession;
+	public static String PATH_SYSTEM = "system";
+	public static String PATH_MAPPER = "mapper";
+	private Map<String, List<MappedStatementInfo>> mappedStatementInfoMap = null;
+	private SqlSession sqlSession;
 	
 	@Override
 	public Object execute(ProcessorParam processorParam) throws Exception {

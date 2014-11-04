@@ -37,8 +37,7 @@
    	<update id="insert_2" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap">
 		UPDATE sys_attach_tbl
 		SET file_group_id = concat('del_', file_group_id)
-		WHERE 1=1
-			and file_id in
+		WHERE  file_id in
 			  	<foreach item="id"  collection="del_file_id_"  open="(" close=")" separator=",">
 						#{id}
 				</foreach>

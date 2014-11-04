@@ -15,7 +15,7 @@
 <sp:sp var="ui_info" queryPath="ui" action="design" processorList="mybatis" exception="false"/>
 <c:set var="query_path" value="${req.action_type=='D' ? ui.delete_paath : (req.action_type=='I' ? ui.indert_paath : ui.update_path) }"/>
 <c:set scope="session" var="user_id" value="tester"/>
-<sp:sp var="RESULT" queryPath="${fn:substringBefore(query_path,'.') }" action="${fn:substringAfter(query_path,'.' ) }"  processorList="attach,mybatis" exception="false">
+<sp:sp var="RESULT" queryPath="${fn:substringBefore(query_path,'.') }" action="${fn:substringAfter(query_path,'.' ) }" loopId="${req.loop_field_name }" processorList="attach,mybatis" exception="false">
 	{
 		${param.defaultValue }
 	}

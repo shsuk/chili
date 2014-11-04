@@ -143,6 +143,11 @@ function delFile(file_id){
 	$('#'+file_id).val(file_id);
 	$('.'+file_id).hide();
 }
+function delField(id_field){
+	$('#'+id_field).val(id_field);
+	$('.'+id_field).parentsUntil('tr').parent().hide();
+
+}
 
 function form_submit(form_id){	
 	var url = '../at/action.sh';

@@ -74,6 +74,14 @@
 			<c:set var="idEditable" value="${true}"/>
 			<tag:radio name="${name }" groupId="${name }" checked="${values[name]}" className="control" valid="${valid }"/>
 		</c:when>
+		<c:when test="${type=='del'}">
+			<div style="clear:both; margin: 2px; text-align: center; " class="${values[name]}">
+				<input type="hidden" name="del_${name }" id="${values[name]}" value="0">
+				<div style="cursor: pointer;" title="삭제"  onclick="delField('${values[name]}')">
+					<img src="../images/icon/close.png">
+				</div>
+			</div>
+		</c:when>
 		<c:otherwise>
 			<c:set var="idEditable" value="${true}"/>
 			<input class="control" type="${type }" name="${name }" value="${values[name]}" style="width: 99%;" maxlength="${maxlength }" valid="${valid }" key_press="${keyValid }"} >

@@ -47,7 +47,7 @@ function viewTree(){
         onCreate: function(node, nodeSpan) {
         	selectNode(node.tree);
         },
-        persist: true,
+        persist: false,
         children: treeData
     });
     
@@ -59,7 +59,7 @@ function selectNode(tree){
     var selNodes = tree.getSelectedNodes();
     var nameMap = {};
     var list = $("tbody", $("#field_list"));
-    $('tr.node', list).hide();
+    $('tr.node', list).attr('remove','Y');
     
     for(var i=0; i<selNodes.length; i++){
     	var node = selNodes[i];
@@ -78,6 +78,7 @@ function selectNode(tree){
     	var fld = $("#"+pathName, list);
     	if(fld.length>0){
     		fld.show();
+    		fld.attr('remove','N');
     	}else{
     		fld = $('tr',$('#tpl_trigger')).clone();
     		fld.attr('id',pathName);
@@ -87,6 +88,9 @@ function selectNode(tree){
         	list.append(fld);
     	}
     }
+    
+    $("[remove=Y]", $("#field_list")).remove();
+
     ininControl();
    // $( "#field_list" ).disableSelection();    	
 }
@@ -101,6 +105,7 @@ XML에 대한 연동정보를 설정합니다.
 <form method="post">
 	<input type="hidden" name="ui_id" value="mapper_info">
 	<input type="hidden" name="action_type" value="U">
+	<input type="hidden" name="loop_field_name" value="xpath">
 	<src:auto_make_src uiId="mapper_info" type="nf"/>
 	<table class="lst">
 		<tr>
@@ -149,8 +154,9 @@ XML에 대한 연동정보를 설정합니다.
 							<col width="100"/>
 							<col width="80"/>
 							<col width="*"/>
+							<col width="40"/>
 						</colgroup>
-						<src:auto_make_src uiId="mapper_trigger" type="trh"/>
+						<src:auto_make_src uiId="mapperTrigEdit" type="trh"/>
 					</table>
 					<div class="ui-widget-header ui-corner-all btn_right" style="margin-top: 5px; " onclick="form_submit()">저장</div>
 					○ XML열기를 클릭하고 처리할 XML을 입력하세요.<br>
@@ -168,5 +174,6 @@ XML에 대한 연동정보를 설정합니다.
     	<td colspan="2"><tag:select_query_name name="trigger_query"/></td>
     	<td><input type="text" name="delete_value" value="" style="width:99%;"></td>
     	<td><input type="text" name="trigger_desc" value="" style="width:99%;"></td>
+    	<td></td>
     </tr>
 </table>
