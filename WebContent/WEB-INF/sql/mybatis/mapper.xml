@@ -7,8 +7,8 @@
 <mapper namespace="mapper">
 	<!-- 매퍼스케쥴 : 매퍼목록 -->
 	<select id="mapper_1_rows" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
-		SELECT *
-		FROM sys_mapper_tbl
+		SELECT t1.*, 'edit' edit
+		FROM sys_mapper_tbl t1
 	</select>
 	<!-- 매퍼스케쥴 : 매퍼상세정보 -->
 	<select id="mapperTrigger_1_rows" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">

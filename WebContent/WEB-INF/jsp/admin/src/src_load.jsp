@@ -11,7 +11,34 @@
 <%@ taglib prefix="src"  tagdir="/WEB-INF/tags/src" %>
 
 <sp:sp var="RESULT" queryPath="ui" action="design" processorList="mybatis" exception="false"/>
-
+<c:set var="colType">
+	text=문자열,
+	textarea=문장,
+	date=날짜,
+	number=숫자,
+	select=셀렉트박스,
+	check=체크박스,
+	radio=라디오박스,
+	hidden=Hidden,
+	file=첨부파일,
+	files=첨부파일들,
+	file_img=이미지파일,
+	files_img=이미지파일들,
+	button=버튼,
+	del=삭제버튼,
+	=[View]---------,
+	label=라벨,
+	date_view=날짜,
+	datetime_view=날짜시간,
+	number_view=숫자,
+	code=코드명,
+	total_record=페이지 네비게이션,
+	TREE=[Tree]---------,
+	upperFld=그룹,
+	codeFld=코드,
+	titleFld=코드명,
+	idFld=키필드
+</c:set>
 <c:set var="ui_design" value="${ui.UI_DESIGN }"/>
 <c:set var="ui_field" value="${sp:str2jsonObj(ui.UI_FIELD) }"/>
 <c:set var="query_path" value="${ui.query_path}"/>
@@ -136,7 +163,7 @@
 							<c:set var="tmpFieldType">$(info.key)</c:set>
 							
 							<div class="field${isList } drg${isList }" type="field"  title="${info.key }" style="border${isList }: 1px solid #c5dbec; height: 20px;cursor${isList }: move;  display: inline;" >
-								${isList=='Y' ? '' : '☺' }<tag:select_array codes="text=문자열,textarea=문장,date=날짜,number=숫자,select=셀렉트박스,check=체크박스,radio=라디오박스,hidden=Hidden,file=첨부파일,files=첨부파일들,file_img=이미지파일,files_img=이미지파일들,del=삭제버튼,=[View]---------,label=라벨,date_view=날짜,datetime_view=날짜시간,number_view=숫자,code=코드명,total_record=페이지 네비게이션,TREE=[Tree]---------,upperFld=그룹,codeFld=코드,titleFld=코드명,idFld=키필드" name="${type }" selected="${fieldType }" style="width: 70px;" attr=" title='${info.value.type }'"/>
+								${isList=='Y' ? '' : '☺' }<tag:select_array codes="${colType }" name="${type }" selected="${fieldType }" style="width: 70px;" attr=" title='${info.value.type }'"/>
 							</div>
 						</td>
 						<td>

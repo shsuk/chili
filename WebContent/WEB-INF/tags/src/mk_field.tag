@@ -13,6 +13,7 @@
 <%@ attribute name="link_type" type="java.lang.String" description="link타입"%>
 <%@ attribute name="valid" type="java.lang.String" description="필드 정합성 체크 정보"%>
 <%@ attribute name="keyValid" type="java.lang.String" description="필드 정합성 체크 정보"%>
+<%@ attribute name="label" type="java.lang.String" description="필드명"%>
 
 <%@ attribute name="values" type="java.util.Map" description="필드값"%>
 
@@ -73,6 +74,9 @@
 		<c:when test="${type=='radio'}">
 			<c:set var="idEditable" value="${true}"/>
 			<tag:radio name="${name }" groupId="${name }" checked="${values[name]}" className="control" valid="${valid }"/>
+		</c:when>
+		<c:when test="${type=='button'}">
+			<span class="button">${label }</span>
 		</c:when>
 		<c:when test="${type=='del'}">
 			<div style="clear:both; margin: 2px; text-align: center; " class="${values[name]}">

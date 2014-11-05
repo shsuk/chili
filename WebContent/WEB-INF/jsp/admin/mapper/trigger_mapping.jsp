@@ -100,6 +100,7 @@ function selectNode(tree){
 <div class="ui-state-default" style="text-align: center; padding: 4px; ">
 	XML to DB 연동 - 연동 설정
 	<a class="button" icons_primary="ui-icon-carat-1-w" href="xml2db_mapping.sh">이전</a>
+	<div class="button" icons_primary="ui-icon-disk" style="float: right;" onclick="form_submit()" >저장</div>
 </div>
 XML에 대한 연동정보를 설정합니다.
 <form method="post">
@@ -158,7 +159,6 @@ XML에 대한 연동정보를 설정합니다.
 						</colgroup>
 						<src:auto_make_src uiId="mapperTrigEdit" type="trh"/>
 					</table>
-					<div class="ui-widget-header ui-corner-all btn_right" style="margin-top: 5px; " onclick="form_submit()">저장</div>
 					○ XML열기를 클릭하고 처리할 XML을 입력하세요.<br>
 					○ 이벤트를 발생시킬 노드를 선택하고 해당 궈리를 설정하세요.<br>
 					○ 설정한 이벤트 노드를 만나면 연결된 쿼리가 실행됩니다.
