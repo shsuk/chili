@@ -17,8 +17,10 @@ import java.util.Map;
 
 
 
+
 import javax.servlet.ServletRequest;
 
+import kr.or.voj.webapp.controller.AutoController;
 import kr.or.voj.webapp.utils.RSMeta;
 
 import org.apache.commons.collections.map.CaseInsensitiveMap;
@@ -26,11 +28,13 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedCaseInsensitiveMap;
 
 @Service
 public class MyBatisProcessor implements ProcessorService{
+	protected static final Logger LOGGER = Logger.getLogger(MyBatisProcessor.class);
 	public static String PATH_SYSTEM = "system";
 	public static String PATH_MAPPER = "mapper";
 	private Map<String, List<MappedStatementInfo>> mappedStatementInfoMap = null;
@@ -44,7 +48,7 @@ public class MyBatisProcessor implements ProcessorService{
 		ServletRequest request = processorParam.getRequest();
 		Map<String, Object> resultSet = new LinkedCaseInsensitiveMap<Object>();
 		Map<String, Map<String, RSMeta>> resultMeta = new HashMap<String, Map<String,RSMeta>>();
-
+		LOGGER.info("MyBatisProcessor");
 		List<MappedStatementInfo> msList = getList(path, action);
 		
 		for(MappedStatementInfo msi : msList){

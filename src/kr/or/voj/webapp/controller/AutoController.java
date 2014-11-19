@@ -27,9 +27,9 @@ public class AutoController {
 	@RequestMapping(value = "-{tplPath}/-{uiId}.sh")
 	public ModelAndView autoMain(HttpServletRequest request, HttpServletResponse response, @PathVariable("tplPath") String tplPath, @PathVariable("uiId") String uiId) throws Exception {
 		tplPath = tplPath.replace('-', '/');
-
+		LOGGER.info("AutoController");
 		ModelAndView mv = new ModelAndView("main");
-		mv.addObject("UI_TPL", tplPath);
+		mv.addObject("UI_TPL", tplPath + ".jsp");
 		mv.addObject("UI_ID", uiId);
 		return mv;
 	}
@@ -46,8 +46,8 @@ public class AutoController {
 		tplPath = tplPath.replace('-', '/');
 
 		ModelAndView mv = new ModelAndView("main");
-		mv.addObject("UI_TPL", tplPath);
-		mv.addObject("IMPORT_PAGE", tplPath + "/../" + page.replace('-', '/'));
+		mv.addObject("UI_TPL", tplPath + ".jsp");
+		mv.addObject("IMPORT_PAGE", tplPath + "/../" + page.replace('-', '/') + ".jsp");
 		return mv;
 	}
 	@RequestMapping(value = "{path}/{page}.sh")

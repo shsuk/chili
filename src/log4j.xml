@@ -30,8 +30,14 @@
     </appender>
 
     <!-- error.log -->
-    <appender name="error" class="org.apache.log4j.FileAppender">
-        <param name="File" value="logs/jackrabbit.log"/>
+    <appender name="log1" class="org.apache.log4j.FileAppender">
+        <param name="File" value="/logs/log1.log"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{dd.MM.yyyy HH:mm:ss} *%-5p* %c{1}: %m (%F, line %L)%n"/>
+        </layout>
+    </appender>
+    <appender name="log2" class="org.apache.log4j.FileAppender">
+        <param name="File" value="/logs/log2.log"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d{dd.MM.yyyy HH:mm:ss} *%-5p* %c{1}: %m (%F, line %L)%n"/>
         </layout>
@@ -40,17 +46,34 @@
     <!-- ====================================================================== -->
     <!-- L O G G E R S                                                          -->
     <!-- ====================================================================== -->
-<!-- 
+
  	<logger name="java.sql">
         <level value="debug"/>
         <appender-ref ref="console"/>
     </logger>
- -->
-     
+	<logger name="kr.or.voj.webapp.controller" additivity="false">
+		<level value="info" />
+		<appender-ref ref="log1" />
+	</logger>
+	<logger name="kr.or.voj.webapp.processor" additivity="false">
+		<level value="info" />
+		<appender-ref ref="log2" />
+	</logger>
+
+	<root>
+		<priority value="debug" />
+			<appender-ref ref="log1" />
+			<appender-ref ref="log2" />
+			<appender-ref ref="console" />
+		<priority value="info" />
+			<appender-ref ref="log1" />
+			<appender-ref ref="log2" />
+	</root>
+<!--      
     <root>
     	<level value="info" />
         <appender-ref ref="console"/>
-        <!-- <appender-ref ref="error"/> -->
+        <appender-ref ref="error"/>
     </root>
-
+ -->
 </log4j:configuration>

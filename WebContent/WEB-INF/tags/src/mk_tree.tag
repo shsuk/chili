@@ -54,6 +54,8 @@ $(function(){
         persist: true,
         children: treeData
     });
+    
+    $('.dynatree-container').css('overflow', 'visible');
 });
 	
 </script> 

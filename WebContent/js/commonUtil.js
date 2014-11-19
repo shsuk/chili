@@ -10,30 +10,10 @@
 		changeMonth: true
 
 	};
-	//초기 로딩이나 ajx로딩 완료시 콘트롤 초기화
-	function ininControl(){
-		$('.datepicker').datepicker(option);
-		$('.spinner').spinner({ min: 1 });
-		
-		$('[key_press=]').removeAttr('key_press');
-		$('[valid=]').removeAttr('valid');
-		
-		var btns = $( ".button" );
-		for(var i=0; i<btns.length;i++){
-			var btn = $(btns[i]);
-			btn.button({
-				icons: {
-					primary: btn.attr('icons_primary')
-				}
-			});
-		}
-		//콘트롤 초기화
-		initControl();
-	}
 	
 	$(function() {
 		try {
-			ininControl();
+			initDefControl();
 		} catch (e) {
 			// TODO: handle exception
 		}
@@ -42,7 +22,7 @@
 		checkValidOnChange();
 		
 		try {
-			
+			//캐시를 무시하기 위해 더미 파라메터 추가
 			$.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
 				mask();
 				if(options.url.indexOf('?')>0){
@@ -54,12 +34,44 @@
 
 			$( document ).ajaxComplete(function() {
 				mask_off();
-				ininControl();
+				initDefControl();
 			});
 		} catch (e) {
 			// TODO: handle exception
 		}
-		
+		//UI구성을 위한 jquery함수 추가
+		appendQueryFun();
+
+		//영문 숫자 입력 제한 처리
+		$(document).on('keypress', '[key_press=alpa]', function(event){
+			return alpa(event);
+		});
+		$(document).on('keypress', '[key_press=numeric]', function(event){
+			return numeric(event);
+		});
+		$(document).on('keypress', '[key_press=alpa_numeric]', function(event){
+			return alpa_numeric(event);
+		});
+		$(document).on('change', '[key_press]', function(event){
+			var str = $(event.target).val();
+			
+			for (var i = 0; i < str.length; i++) {
+				var code = str.charCodeAt(i);
+				
+				code = parseInt(code);
+
+				if (code > 255 || code < 0){
+					$(event.target).val('');
+					alert('한글은 입력할 수 없습니다.');
+					return;
+				}
+			}
+		});
+	});
+
+	//UI구성을 위한 jquery함수 추가
+	function appendQueryFun(){
+		//임시 레이어를 생성하여 페이지를 로드한 후 원하는 위치에 삽입한다.
 		$['append'] = function (selector, url, data, callback){
 			var temp_div = $('#temp_div');
 			if(temp_div.length==0){
@@ -102,38 +114,71 @@
 				$(selector).prepend(temp_div.children());
 			});
 		};
-		//로딩 이미지
-		//var loading = $('<img alt="loading" src="../jquery/icon/loading.gif" />').appendTo(document.body).hide();
-	  //  $(window).ajaxStart(loading.show);
-	  //  $(window).ajaxStop(loading.hide);
-
-		//영문 숫자 입력 제한 처리
-		$(document).on('keypress', '[key_press=alpa]', function(event){
-			return alpa(event);
-		});
-		$(document).on('keypress', '[key_press=numeric]', function(event){
-			return numeric(event);
-		});
-		$(document).on('keypress', '[key_press=alpa_numeric]', function(event){
-			return alpa_numeric(event);
-		});
-		$(document).on('change', '[key_press]', function(event){
-			var str = $(event.target).val();
-			
-			for (var i = 0; i < str.length; i++) {
-				var code = str.charCodeAt(i);
-				
-				code = parseInt(code);
-
-				if (code > 255 || code < 0){
-					$(event.target).val('');
-					alert('한글은 입력할 수 없습니다.');
-					return;
+		
+	}
+	//초기 로딩이나 ajx로딩 완료시 콘트롤 초기화
+	function initDefControl(){
+		$('.datepicker').datepicker(option);
+		$('.spinner').spinner({ min: 1 });
+		
+		$('[key_press=]').removeAttr('key_press');
+		$('[valid=]').removeAttr('valid');
+		
+		var btns = $( ".button" );
+		for(var i=0; i<btns.length;i++){
+			var btn = $(btns[i]);
+			btn.button({
+				icons: {
+					primary: btn.attr('icons_primary')
 				}
+			});
+		}
+		
+		
+		//수직분할
+		$( ".hsplit" ).resizable({
+			handles: "e",
+			containment: ".split_containment",
+			create: function( event, ui ) {
+				$('.ui-resizable-e',$(this)).css({right: '0px', background: '#eeeeee', 'z-index':100});
+			},
+			stop: function(){
+				$( window ).resize();
 			}
 		});
-	});
-	
+
+		//수평분할
+		$( ".vsplit" ).resizable({
+			handles: "s",
+			containment: ".split_containment",
+			create: function( event, ui ) {
+				$('.ui-resizable-s',$(this)).css({bottom: '0px', background: '#eeeeee'});
+			},
+			stop: function(){
+				$( window ).resize();
+			}
+		});
+		//콘트롤 초기화
+		initControl();
+		//포틀릿 초기화
+		initPortlet();
+	}
+
+	function initPortlet(){
+		$(".portlet-column").sortable({
+			connectWith : ".portlet-column",
+			handle : ".portlet-header",
+			cancel : ".portlet-toggle",
+			placeholder : "portlet-placeholder ui-corner-all"
+		});
+		$(".portlet").addClass("ui-widget ui-widget-content ui-helper-clearfix ui-corner-all").find(".portlet-header").addClass("ui-widget-header ui-corner-all").prepend("<span class='ui-icon ui-icon-minusthick portlet-toggle'></span>");
+		$(".portlet-toggle").click(function() {
+			var icon = $(this);
+			icon.toggleClass("ui-icon-minusthick ui-icon-plusthick");
+			icon.closest(".portlet").find(".portlet-content").toggle();
+		});
+
+	}	
 	function getVal(name, obj) {
 		if (obj) {
 			var $row = $('.' + $(obj).attr('row_index'));

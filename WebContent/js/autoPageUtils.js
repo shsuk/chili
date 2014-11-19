@@ -214,6 +214,11 @@ function attach_form_submit(url, form){
 	xhr.send(fd);
 	
 }
+//타이들을 설정한다.
+function setTitle(selector,title){
+	$('#'+$(selector).parent().attr('id')+'_title').text(title);
+
+}
 function linkLoad(ui_id, data, selector){
 
 	$(selector ? selector : '#auto_generated_uI_main').load('../piece/-'+ui_id+'-bf.sh',data);

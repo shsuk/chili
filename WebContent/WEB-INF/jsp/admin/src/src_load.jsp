@@ -52,7 +52,7 @@
 </sp:sp>
 
 <c:set var="isInit" value="${!empty(ui_field.col_count)}"/>
-<c:set var="col_count" value="${empty(ui_field.col_count) ? 4 : ui_field.col_count}"/>
+<c:set var="col_count" value="${empty(ui_design) ? (empty(req.col_count) ? 4 : req.col_count) : ui_field.col_count}"/>
 <table  class="lst">
 	<tr>
 		<th>타이틀</th><td><input type="text" id="ui_title" name="ui_title" value="${ui.ui_title }" style="width: 98%;"></td>

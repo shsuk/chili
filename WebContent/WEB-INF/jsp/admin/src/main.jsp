@@ -25,6 +25,7 @@
 	
 	$(function() {
 		$( document ).tooltip({
+			track: true,
 			items: "[title]",
 			content: function() {
 				var element = $( this );
@@ -35,9 +36,10 @@
 			}
 		});
 		$( window ).resize(function(e,e1) {
-			$("#ui_set").css('height', (window.innerHeight-140) + 'px');		
+			$("#ui_set").css('height', (window.innerHeight-60) + 'px');		
 		}).resize();
-		$('#tab' ).tabs();
+		
+		$('#prg_bar').progressbar();
 		//콘트롤 설정시 마우스 이동에 대한 백그라운드 처리
 		$(document).on('mouseenter', '.field_settion', function(){
 			var ts = $(this);
@@ -84,11 +86,15 @@
 			}
 		});
 	});
-
+	
+	function progressValue(val) {
+		 $('#prg_bar').progressbar('value', val);
+	}
+	
 	function loadPage(){
 		var data = $('#main_form').serializeArray();
 
-		$('#prg_bar').animate({width: '0%'}, 1);
+		progressValue(false);
 
 		$('#ui_set').load('../admin-src/src_load.sh', data, function(){
 			$('#ui_list').hide();
@@ -98,10 +104,9 @@
 			initDrDg();
 			var old_query_path = $('#old_query_path').val();
 			$("#queryPath").val(old_query_path).attr("selected", "selected");
-			$('#prg_bar').animate({width: '100%'}, 300);
+			progressValue(100);
 		});
 		
-		$( "#tab" ).tabs( "option", "active", 0);	
 	}
 	function changePage(ui_id){
 		$('#ui_id').val(ui_id);
@@ -254,6 +259,7 @@
 	<div id="ui_list" style="position: absolute; z-index: 100; top:30px; background: #ffffff;color: #444444;border: 1px solid #c5dbec;"></div>
 
 	<form id="main_form" action="aa" method="post">
+ 		<input type="hidden" id="ui_design" name="ui_design" value="">
 		<div id="defaultData"  style="float: left;padding:1px;">
 			<div id="ui_list_btn" class="border f_l p_1  ui-widget-header" >
 				<span onclick="viewUiList()" style="cursor: pointer;">UI ID</span> <input type="text" id="ui_id" name="ui_id" value="${param.ui_id }">
@@ -266,53 +272,21 @@
 			<div class=" ui-widget-header ui-corner-all btn_left f_l" onclick="saveUi()">저장</div>
 			<div class=" ui-widget-header ui-corner-all btn_left f_l" onclick="runDefaultPage()" >실행</div>
 		</div>
-		<div style="float: right;padding:1px;"><a href="../-at-menu/-menuList.sh">메뉴</a></div>
 		
- 		<input type="hidden" id="ui_design" name="ui_design" value="">
  		<div id="form_data"></div>
-		<div style="clear: both;">
-			<div style=" float: left; border: 1px solid #c5dbec; width: 300px; height: 10px;">
-				<div id="prg_bar" style="border: 1px solid #c5dbec; height: 8px;background: #c5dbec;"></div>
+			<div style=" float: right; border: 1px solid #c5dbec; width: 300px;padding: 5px;margin: 0px 0px 8px 4px;">
+				<div id="prg_bar" style="height: 8px;"></div>
 			</div>
 			<span  style="float: right;"> 
 				<span><b>Col Count : </b></span><input type="text" name="col_count" value="${col_count }"  class="spinner" style="width: 20px;height: 14px;"/>
 			</span>
 			<span style=" clear:both;"></span>
-		</div>
-		<div id="source" style="clear: both;">
-			<div id="tab">
-				<ul>
-					<li><a href="#tabs-1">UI설정</a></li>
-					<li><a href="#auto_generated_uI_main">미리보기</a></li>
-					<li><a href="#tabs-3">할일</a></li>
-				</ul>
-				<!-- UI설정 -->
-				<div id="tabs-1">					
-					<div id="ui_set" style="overflow:auto;"></div>
-				</div>
-				<!-- 미리보기 -->
-				<div id="auto_generated_uI_main"></div>
-				<div id="tabs-3">
-					폼별 EDIT모드 처리<br><br>
-					첨부파일 참조 번호 처리<br>
-					이미지 썸네일 처리<br>
-					리스트 기본필드 타입을 조회로 변경<br>
-					코드 및 각종 콘트롤 수정모드에서 값변경시 텍스트값 가져 오는 로직 구현<br>
-					코드 및 각종 콘트롤 구현<br>
-					타이틀 스타일 안됨<br>
-					페이징<br>
-					Tree<br>
-					볼륨처리<br>
-					이미지 미리보기 타입추가<br>
-					테이블 생성<br>
-					맵퍼<br><br>
-					unit과 piece에 대한 form처리
+		<div id="source" style="clear: both;border: 1px solid #c5dbec;padding: 5px;">
 					
-				</div>
-			</div>
+			<div id="ui_set" style="overflow:auto;"></div>
+				
 		</div>
 	</form>
-	<div id="query" title="쿼리보기"></div>
 	<form id="new_form" action="" method="post" target="_new"></form>
 </body>
 </htm>

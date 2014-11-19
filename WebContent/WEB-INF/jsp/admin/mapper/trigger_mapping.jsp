@@ -91,7 +91,7 @@ function selectNode(tree){
     
     $("[remove=Y]", $("#field_list")).remove();
 
-    ininControl();
+    initDefControl();
    // $( "#field_list" ).disableSelection();    	
 }
 

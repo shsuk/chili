@@ -104,7 +104,7 @@ function selectNode(tree){
     	}
     }
     
-    ininControl();
+    initDefControl();
   	
 }
 

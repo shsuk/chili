@@ -105,7 +105,7 @@
 		$('.tpl', auto_generated_uI).css({width:'100%'});
 		$('td', auto_generated_uI).css({width:''});
 		$('.th', auto_generated_uI).css({width:'150px'});
-		$('#'+$('#auto_generated_uI_${page_id}').parent().attr('id')+'_title').text('${ui_title}');
+		setTitle('#auto_generated_uI_${page_id}','${ui_title}');
 	});
 
 	${links}

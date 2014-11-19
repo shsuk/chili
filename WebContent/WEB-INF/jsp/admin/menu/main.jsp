@@ -40,12 +40,13 @@
 					<li>
 						XML to DB 연동
 						<ul>
-							<li><a target="mapper" href="../-admin-mapper-main/createtbl.sh">1. 테이블 생성</a></li>
-							<li><a target="mapper" href="../-admin-mapper-main/xml2db_mapping.sh">2. XPath에 필드 매핑</a></li>
-							<li><a target="mapper" href="../-admin-mapper-main/trigger_mapping.sh">3. XPath에 연동쿼리 매핑</a></li>
+							<li><a target="new" href="../-admin-mapper-main/createtbl.sh">1. 테이블 생성</a></li>
+							<li><a target="new" href="../-admin-mapper-main/xml2db_mapping.sh">2. XPath에 필드 매핑</a></li>
+							<li><a target="new" href="../-admin-mapper-main/trigger_mapping.sh">3. XPath에 연동쿼리 매핑</a></li>
 						</ul>
 					</li>
-					<li><a target="mapper" href="../-admin-menu-manual/.sh">메뉴얼</a></li>
+					<li><a target="new" href="../-at-portlet-ly/sample1.sh">포틀릿 예제</a></li>
+					<li><a target="new" href="../-admin-menu-manual/.sh">메뉴얼</a></li>
 				</ul>
 			</td>
 			<td>
