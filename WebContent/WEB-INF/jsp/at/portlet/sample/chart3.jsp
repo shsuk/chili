@@ -19,32 +19,32 @@
 		point, // Data point variable declaration
 		i;
 
-		for (i = 1; i < 5; i++) {
+		for (i = 0; i < 5; i++) {
 
 			if (horizontal) {
-				point = [ Math.ceil(Math.random() * 10), i ];
+				point = [ Math.ceil(Math.random() * 10), i+03 ];
 			} else {
-				point = [ i, Math.ceil(Math.random() * 10) ];
+				point = [ i+0.3, Math.ceil(Math.random() * 10) ];
 			}
 
 			d1.push(point);
 
 			if (horizontal) {
-				point = [ Math.ceil(Math.random() * 10), i + 0.4 ];
+				point = [ Math.ceil(Math.random() * 10), i + 0.5 ];
 			} else {
-				point = [ i+0.4, Math.ceil(Math.random() * 10) ];
+				point = [ i+0.5, Math.ceil(Math.random() * 10) ];
 			}
 
 			d2.push(point);
 		};
 
 		// Draw the graph
-		Flotr.draw($("#${id}").get(0), [ {data:d1,label:'a1'}, {data:d2,label:'a2'} ], {
+		Flotr.draw($("#${id}").get(0), [ {data:d1,label:'a1'}, {data:d2,label:'a2'}],{ //[ {data:d1,label:'a1'}, {data:d2,label:'a2'} ], {
 			bars : {
 				show : true,
 				horizontal : horizontal,
-				shadowSize : 0,
-				barWidth : 0.4
+				//shadowSize : 0.1,
+				barWidth : 0.2
 			},
 			legend: {
 	            position: 'ne',
@@ -58,10 +58,10 @@
 				relative : true
 			},
 			xaxis : {
-				noTicks: 4,
+				noTicks:4,
 	            // Display 7 ticks.
 	            tickFormatter: function(n) {
-	                return '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ' + Math.ceil(n) + '월';
+	                return  Math.ceil(n) + '월';
 	            }
 			},
 			yaxis : {

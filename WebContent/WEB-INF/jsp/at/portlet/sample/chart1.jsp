@@ -9,7 +9,7 @@
 <c:set var="id" value="id${sp:uuid() }"/>
 <script type="text/javascript">
 	$(function() {
-		var d1 = [ [ 0, 4 ] ], d2 = [ [ 0, 3 ] ], d3 = [ [ 0, 1.03 ] ], d4 = [ [ 0, 3.5 ] ], graph;
+		var d1 = [ [ 1, 4 ] ], d2 = [ [ 1, 3 ] ], d3 = [ [ 1, 1.03 ] ], d4 = [ [ 1, 3.5 ] ], graph;
 
 		graph = Flotr.draw($("#${id}").get(0), [ {
 			data : d1,
@@ -51,7 +51,7 @@
 			}
 		});
 
-		setTitle('#${id }', '그래프 테스트');
+		setTitle('#${id }', 'Pie 그래프 테스트');
 
 	});
 </script>

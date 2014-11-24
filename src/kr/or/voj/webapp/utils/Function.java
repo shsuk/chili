@@ -1,11 +1,15 @@
 package kr.or.voj.webapp.utils;
 
 import java.io.File;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.ClassUtils;
@@ -203,5 +207,136 @@ public class Function {
 			return "[ " + obj.toString() + "]";
 		}
 	}
+	
+	private static String list2chartiy(List<Map<String, Object>> list, String yFld, String labelFld){
 
+		JSONObject result = new JSONObject();
+		String type = "";
+		JSONArray jaList = new JSONArray();
+		
+		for(int i=0; i<list.size(); i++){
+			Map<String, Object> row = list.get(i);
+			
+			JSONObject item = new JSONObject();
+
+			item.put("data", "[[" + i + "," + row.get(yFld) + "]]");
+			item.put("label", row.get(labelFld));
+			jaList.add(item);
+		}
+		
+		result.put("data", jaList);
+		result.put("type", type);
+		return result.toString();
+	}
+	
+	private static String list2chartxy(List<Map<String, Object>> list, String xFld, String yFld){
+		long dum = 3600000*9;//그래프의 x축선이 9시에 그려지는 문제로 9시간을 더해 줌
+		String type = "";
+		
+		JSONObject result = new JSONObject();
+		JSONArray jaList = new JSONArray();
+		JSONObject item = new JSONObject();
+		Object x = null;
+		JSONArray data = new JSONArray();
+		
+		for(int i=0; i<list.size(); i++){
+			Map<String, Object> row = list.get(i);
+
+			x = row.get(xFld);
+			
+			if (x instanceof Timestamp) {
+				type = "time";
+				Timestamp t = (Timestamp) x;
+				x = t.getTime() + dum;
+			}else if(x instanceof Date){
+				type = "time";
+				Date t = (Date) x;
+				x = t.getTime() + dum;
+			}
+			data.add("[" + x + "," + row.get(yFld) + "]");
+		}
+		
+		item.put("data", data);
+		jaList.add(item);
+		
+		result.put("data", jaList);
+		result.put("type", type);
+		return result.toString();
+	}
+	private static String list2chartxy(List<Map<String, Object>> list, String xFld, String yFld, String labelFld){
+		long dum = 360000*115;//그래프의 x축선이 9시에 그려지는 문제로 9시간을 더해 줌
+		String type = "";
+		Map<String, Map<String, Object>> itemMap = new HashMap<String, Map<String,Object>>();
+		int itemCount = 0;
+		
+		JSONObject result = new JSONObject();
+		List<Map<String, Object>> dataList = new ArrayList<Map<String,Object>>();
+
+		for(int i=0; i<list.size(); i++){
+			Map<String, Object> row = list.get(i);
+			String label = (String)row.get(labelFld);
+			
+			Map<String, Object> item = itemMap.get(label);
+			
+			if(item==null){
+				item = new HashMap<String, Object>();
+				item.put("data",new ArrayList<Object>());
+				item.put("label",label);
+				item.put("idx",itemCount);
+				
+				dataList.add(item);
+				itemMap.put(label, item);
+				
+				itemCount++;
+			}
+		}
+		
+		long width = 3600000*20/itemCount;
+		
+		for(int i=0; i<list.size(); i++){
+			List<Object> data;
+			Object x = null;
+			Map<String, Object> row = list.get(i);
+			String label = (String)row.get(labelFld);
+			
+			
+			Map<String, Object> item = itemMap.get(label);
+			int idx = (Integer)item.get("idx");
+			data = (List)item.get("data");
+
+			x = row.get(xFld);
+			
+			if (x instanceof Timestamp) {
+				type = "time";
+				Timestamp t = (Timestamp) x;
+				x = t.getTime() + dum + idx*width;
+			}else if(x instanceof Date){
+				type = "time";
+				Date t = (Date) x;
+				x = t.getTime() + dum + idx*width;
+			}
+			
+			data.add("[" + x + "," + row.get(yFld) + "]");
+		}
+
+		result.put("data", dataList);
+		result.put("itemCount", itemCount);
+		result.put("type", type);
+		
+		return result.toString();
+	}
+	public static String list2chart(List<Map<String, Object>> list, String xFld, String yFld, String labelFld){
+		boolean hasX = StringUtils.isNotEmpty(xFld);
+		boolean hasL = StringUtils.isNotEmpty(labelFld);
+
+		if(hasX){
+			if(hasL){
+				return list2chartxy(list, xFld, yFld, labelFld);
+			}else{
+				return list2chartxy(list, xFld, yFld);
+			}
+		}else{
+			return list2chartiy(list, yFld, labelFld);
+		}
+	}
 }

@@ -16,5 +16,25 @@
 		LIMIT 1,5
 	]]>
 	</select>
+	<!-- 코드등록 통계 -->
+	<select id="CodeDateCount_1_rows" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
+	<![CDATA[
+		SELECT REG_DT, count(*)
+		FROM sys_code_tbl t1
+		WHERE REG_DT <> 'root' and use_yn = 'Y' and REG_DT between '2013-10-01' and '2013-10-30'
+		GROUP BY REG_DT
+		ORDER BY REG_DT
+	]]>
+	</select>
+	<!-- 프로그램 등록 통계 -->
+	<select id="pgmCount_1_rows" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
+	<![CDATA[
+		SELECT tpl_path, REG_DT, count(*)
+		FROM sys_ui_tbl t1
+		WHERE tpl_path <> '' and tpl_path is not null
+		GROUP BY tpl_path, REG_DT
+		ORDER BY tpl_path, REG_DT
+	]]>
+	</select>
 
 </mapper>

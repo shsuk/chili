@@ -11,6 +11,17 @@
 <%@ taglib prefix="src"  tagdir="/WEB-INF/tags/src" %>
 
 <sp:sp var="RESULT" queryPath="ui" action="design" processorList="mybatis" exception="false"/>
+<c:set var="use_set_code">
+	unuse=미사용,
+	use=기본,
+	tree=Tree,
+	chart_bar_iy=막대-(i.y),
+	chart_bar_ixy=막대-(i.x.y),
+	chart_bar_xy=막대-(x.y),
+	chart_pie_iy=Pie-(i.y),
+	chart_line_xy=Line-(x.y),
+	chart_line_ixy=Line-(i.x.y)
+</c:set>
 <c:set var="colType">
 	text=문자열,
 	textarea=문장,
@@ -37,7 +48,11 @@
 	upperFld=그룹,
 	codeFld=코드,
 	titleFld=코드명,
-	idFld=키필드
+	idFld=키필드,
+	chart=[Chart]---------,
+	xFld=X값,
+	yFld=Y값,
+	lblFld=라벨
 </c:set>
 <c:set var="ui_design" value="${ui.UI_DESIGN }"/>
 <c:set var="ui_field" value="${sp:str2jsonObj(ui.UI_FIELD) }"/>
@@ -97,7 +112,7 @@
 					<td colspan="10" style="text-align: left; background: #D9E5FF;">
 						<div  style="display:inline;width: 50%; "><b>레코드 아이디</b> : ${map.key}</div>
 						<c:set var="use_set" value="use_${map.key}"/>
-						<div style="display:inline;width: 50%; text-align: right;"><tag:radio_array name="${use_set}" codes="unuse=미사용,use=사용,tree=Tree"  checked="${empty(ui_field[use_set]) ? 'use' : ui_field[use_set] }" /></div>
+						<div style=""><tag:radio_array name="${use_set}" codes="${use_set_code }"  checked="${empty(ui_field[use_set]) ? 'use' : ui_field[use_set] }" /></div>
 					</td>
 				</tr>
 				<tr>

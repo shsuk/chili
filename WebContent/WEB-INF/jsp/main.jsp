@@ -12,7 +12,7 @@
 <head>
 <title>Chili 프로젝트</title>
 <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
-<link href="../jquery/development-bundle/themes/redmond/jquery.ui.all.css"  rel="stylesheet" type="text/css" media="screen" />
+<link href="../jquery/development-bundle/themes/smoothness/jquery.ui.all.css"  rel="stylesheet" type="text/css" media="screen" />
 <link href="../jquery/jqGrid/css/ui.jqgrid.css"  rel="stylesheet" type="text/css" media="screen" />
 <link href="../jquery/jqGrid/plugins/ui.multiselect.css" rel="stylesheet" type="text/css" media="screen" />
 <link href='../jquery/dynatree/skin/ui.dynatree.css' rel='stylesheet' type='text/css' >

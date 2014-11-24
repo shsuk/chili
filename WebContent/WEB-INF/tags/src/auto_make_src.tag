@@ -8,6 +8,7 @@
 <%@ taglib prefix="src"  tagdir="/WEB-INF/tags/src" %> 
 <%@ attribute name="uiId" type="java.lang.String" description="UI ID"%>
 <%@ attribute name="type" required="true" type="java.lang.String" description="bf=버튼&폼, f=폼, nf=폼없음, t=테이블, trh=헤더포함tr단위, tr=tr단위"%>
+<%@ attribute name="ui_type" required="false" type="java.lang.String" description="uiType을 동적으로 설정한다."%>
 <c:set var="UI_ID" value="${empty(uiId) ? UI_ID : uiId}"/>
 
 <sp:sp var="ui_info" queryPath="ui" action="design" processorList="mybatis" exception="false">{ui_id:'${UI_ID}'}</sp:sp>
@@ -24,14 +25,37 @@
 	<c:if test="${map.key!='success' && map.key!='JSON'}">
 		<c:set scope="request" var="title" value=""/>
 		<c:set var="isList" value="${sp:isType(map.value,'list') }"/>
+		<c:set var="uiType" value="${empty(ui_type) ? ui_field[use_set] : ui_type }"/>
 		<c:set var="src">
 			<c:choose>
-				<c:when test="${ui_field[use_set]=='unuse'}">
+				<c:when test="${uiType=='unuse'}">
 					<src:mk_view rcd_key="${map.key }" rcd_value="${map.value }"/>
 				</c:when>
-				<c:when test="${ui_field[use_set]=='tree'}"><%//TREE인 경우 %>
+				<c:when test="${uiType=='tree'}"><%//TREE인 경우 %>
+					<c:set var="type">etc</c:set>
 					<c:set var="ui_title"><tag:el source="${ui.ui_title}" param="${map.value[0]}"/></c:set>
 					<src:mk_tree rcd_key="${map.key }" rcd_value="${map.value }"/>
+				</c:when>
+				<c:when test="${fn:startsWith(uiType,'chart_')}"><%//그래프인 경우 %>
+					<c:set var="type">etc</c:set>
+					<c:set var="ui_title"><tag:el source="${ui.ui_title}" param="${map.value[0]}"/></c:set>
+					<c:choose>
+						<c:when test="${uiType=='chart_bar_iy'}">
+							<src:mk_chart_bar_iy rcd_value="${map.value }" />
+						</c:when>
+						<c:when test="${uiType=='chart_bar_ixy'}">
+							<src:mk_chart_bar_ixy rcd_value="${map.value }" />
+						</c:when>
+						<c:when test="${uiType=='chart_bar_xy'}">
+							<src:mk_chart_bar_xy rcd_value="${map.value }" />
+						</c:when>
+						<c:when test="${uiType=='chart_pie_iy'}">
+							<src:mk_chart_pie_iy rcd_value="${map.value }" />
+						</c:when>
+						<c:when test="${uiType=='chart_line_ixy'}">
+							<src:mk_chart_line_ixy rcd_value="${map.value }" />
+						</c:when>
+					</c:choose>
 				</c:when>
 				<c:when test="${isList}"><%//리스트인 경우 %>
 					<c:set var="ui_title"><tag:el source="${ui.ui_title}" param="${map.value[0]}"/></c:set>
@@ -47,10 +71,10 @@
 		<c:set var="html">
 			${html }
 
-			<c:if test="${ui_field[use_set]=='tree'}"><%//TREE인 경우 %>
+			<c:if test="${uiType=='tree'}"><%//TREE인 경우 %>
 				${src }
 			</c:if>
-			<c:if test="${ui_field[use_set]=='use'}"><%//TREE가 아닌 경우 %>
+			<c:if test="${uiType=='use'}"><%//TREE가 아닌 경우 %>
 				<table class="${isList ? 'lst' : 'vw' }" border="0" cellspacing="0" cellpadding="0"  style="margin-bottom: 10px;">
 					${title }
 					${src }
@@ -105,14 +129,20 @@
 		$('.tpl', auto_generated_uI).css({width:'100%'});
 		$('td', auto_generated_uI).css({width:''});
 		$('.th', auto_generated_uI).css({width:'150px'});
+		
 		setTitle('#auto_generated_uI_${page_id}','${ui_title}');
 	});
 
 	${links}
-	
 </script> 
 </c:set>
 <c:choose>
+	<c:when test="${type == 'etc'}"><%//그래프가 안그려지는 문제로 예외처리함%>
+		<div id="auto_generated_uI_${page_id}"  style="height: 100%; width: 100%;">			
+			${src }
+		</div>
+		${script }
+	</c:when>
 	<c:when test="${empty(type) || type=='f' || type=='bf' }">
 		${script }
 		<div id="auto_generated_uI_${page_id}" type="page" style=" display: none;">

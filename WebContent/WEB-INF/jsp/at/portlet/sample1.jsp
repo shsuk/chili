@@ -8,16 +8,20 @@
 <%@ taglib prefix="tag" tagdir="/WEB-INF/tags/tag"%>
 <%@ taglib prefix="src" tagdir="/WEB-INF/tags/src"%>
 <tag:portlet width="33%">
-	<tag:portletItem height="250px"><src:auto_make_src uiId="group_list" type="bf"/></tag:portletItem>
-	<tag:portletItem height="250px"><src:auto_make_src uiId="code_tree" type="bf"/></tag:portletItem>
+	<tag:portletItem height="250px"><src:auto_make_src uiId="code_tree" type="nf"/></tag:portletItem>
+	<tag:portletItem height="250px"><src:auto_make_src uiId="group_list" type="nf"/></tag:portletItem>
 </tag:portlet>
 <tag:portlet width="34%">
-	<tag:portletItem height="250px"><c:import url="at/portlet/sample/chart1.jsp"/></tag:portletItem>
+	<tag:portletItem height="250px"><src:auto_make_src uiId="stsGroupCode" type="nf"/></tag:portletItem>
+	<tag:portletItem height="250px"><src:auto_make_src uiId="stsGroupCodePie" type="nf"/></tag:portletItem>
 </tag:portlet>
 <tag:portlet width="33%">
-	<tag:portletItem height="250px"><c:import url="at/portlet/sample/chart2.jsp"/></tag:portletItem>
+	<tag:portletItem height="250px"><c:import url="at/portlet/sample/chart1.jsp"/></tag:portletItem>
 	<tag:portletItem height="250px"><c:import url="at/portlet/sample/chart3.jsp"/></tag:portletItem>
 </tag:portlet>
 <tag:portlet width="100%">
+	<tag:portletItem height="250px"><src:auto_make_src uiId="stsPgmCountDate" ui_type="chart_line_ixy" type="nf"/></tag:portletItem>
+	<tag:portletItem height="250px"><src:auto_make_src uiId="stsPgmCountDate" type="nf"/></tag:portletItem>
+	<tag:portletItem height="250px"><src:auto_make_src uiId="stsCodeDate" type="nf"/></tag:portletItem>
 	<tag:portletItem height="250px"><c:import url="at/portlet/sample/chart2.jsp"/></tag:portletItem>
 </tag:portlet>
