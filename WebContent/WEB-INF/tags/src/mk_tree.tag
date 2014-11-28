@@ -8,7 +8,6 @@
 <%@ taglib prefix="sp" uri="/WEB-INF/tlds/sp.tld"%>
 <%@ taglib prefix="tag"  tagdir="/WEB-INF/tags/tag" %> 
 <%@ taglib prefix="src"  tagdir="/WEB-INF/tags/src" %> 
-<%@ attribute name="rcd_key" required="true" type="java.lang.String" description="리스트 레코드(key value set))"%>
 <%@ attribute name="rcd_value" required="true" type="java.util.List" description="리스트 레코드(key value set))"%>
 
 <c:forEach var="info" items="${rcd_value[0] }" >

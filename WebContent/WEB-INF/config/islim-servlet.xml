@@ -68,6 +68,7 @@
 	</bean>
 
 	<bean id="loginInterceptor" class=" kr.or.voj.webapp.interceptor.LoginInterceptor" />
+	<bean id="controllerInterceptor" class=" kr.or.voj.webapp.interceptor.ControllerInterceptor" />
 	
 	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" >
 		<property name="alwaysUseFullPath" value="true"/>
@@ -75,6 +76,7 @@
 		<property name="interceptors">
 			<list>
 				<ref bean="loginInterceptor" />
+				<ref bean="controllerInterceptor" />
 			</list>
 		</property>
 	</bean>

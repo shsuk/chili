@@ -107,7 +107,7 @@
 		<description>List를 Chart구조로 변형한다.(list, labelFld, xFld, yFld)</description>
 		<name>list2chart</name>
 		<function-class>kr.or.voj.webapp.utils.Function</function-class>
-		<function-signature>java.lang.Object list2chart(java.util.List, java.lang.String, java.lang.String, java.lang.String)</function-signature>
+		<function-signature>java.lang.Object list2chart(java.util.List, java.lang.String, java.lang.String, java.lang.String, java.lang.String)</function-signature>
 	</function>
 
 

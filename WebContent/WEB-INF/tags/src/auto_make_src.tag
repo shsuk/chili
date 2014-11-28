@@ -1,3 +1,5 @@
+<%@tag import="org.apache.poi.util.SystemOutLogger"%>
+<%@tag import="java.util.Map"%>
 <%@ tag language="java" pageEncoding="UTF-8" body-content="scriptless"%>
 <%@ tag trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -8,7 +10,7 @@
 <%@ taglib prefix="src"  tagdir="/WEB-INF/tags/src" %> 
 <%@ attribute name="uiId" type="java.lang.String" description="UI ID"%>
 <%@ attribute name="type" required="true" type="java.lang.String" description="bf=버튼&폼, f=폼, nf=폼없음, t=테이블, trh=헤더포함tr단위, tr=tr단위"%>
-<%@ attribute name="ui_type" required="false" type="java.lang.String" description="uiType을 동적으로 설정한다."%>
+<%@ attribute name="ui_type" required="false" type="java.lang.String" description="uiType을 동적으로 설정한다. 값이 body이면 body에 있는 태그가 처리한다.unuse,use,tree,chart_.."%>
 <c:set var="UI_ID" value="${empty(uiId) ? UI_ID : uiId}"/>
 
 <sp:sp var="ui_info" queryPath="ui" action="design" processorList="mybatis" exception="false">{ui_id:'${UI_ID}'}</sp:sp>
@@ -34,28 +36,7 @@
 				<c:when test="${uiType=='tree'}"><%//TREE인 경우 %>
 					<c:set var="type">etc</c:set>
 					<c:set var="ui_title"><tag:el source="${ui.ui_title}" param="${map.value[0]}"/></c:set>
-					<src:mk_tree rcd_key="${map.key }" rcd_value="${map.value }"/>
-				</c:when>
-				<c:when test="${fn:startsWith(uiType,'chart_')}"><%//그래프인 경우 %>
-					<c:set var="type">etc</c:set>
-					<c:set var="ui_title"><tag:el source="${ui.ui_title}" param="${map.value[0]}"/></c:set>
-					<c:choose>
-						<c:when test="${uiType=='chart_bar_iy'}">
-							<src:mk_chart_bar_iy rcd_value="${map.value }" />
-						</c:when>
-						<c:when test="${uiType=='chart_bar_ixy'}">
-							<src:mk_chart_bar_ixy rcd_value="${map.value }" />
-						</c:when>
-						<c:when test="${uiType=='chart_bar_xy'}">
-							<src:mk_chart_bar_xy rcd_value="${map.value }" />
-						</c:when>
-						<c:when test="${uiType=='chart_pie_iy'}">
-							<src:mk_chart_pie_iy rcd_value="${map.value }" />
-						</c:when>
-						<c:when test="${uiType=='chart_line_ixy'}">
-							<src:mk_chart_line_ixy rcd_value="${map.value }" />
-						</c:when>
-					</c:choose>
+					<src:mk_tree rcd_value="${map.value }"/>
 				</c:when>
 				<c:when test="${isList}"><%//리스트인 경우 %>
 					<c:set var="ui_title"><tag:el source="${ui.ui_title}" param="${map.value[0]}"/></c:set>
@@ -66,7 +47,40 @@
 					<src:mk_view rcd_key="${map.key }" rcd_value="${map.value }"/>
 				</c:otherwise>
 			</c:choose>
+			
 		</c:set>
+
+		<c:if test="${fn:startsWith(uiType,'chart_') || uiType=='body'}"><%//그래프인 경우 %>
+			<c:set var="graph">
+				<c:set var="type">etc</c:set>
+				<c:set var="ui_title"><tag:el source="${ui.ui_title}" param="${map.value[0]}"/></c:set>
+				<c:choose>
+					<c:when test="${uiType=='chart_bar_iy'}">
+						<src:mk_chart_bar_iy rcd_value="${map.value }" />
+					</c:when>
+					<c:when test="${uiType=='chart_bar_ixy'}">
+						<src:mk_chart_bar_ixy rcd_value="${map.value }" />
+					</c:when>
+					<c:when test="${uiType=='chart_bar_xy'}">
+						<src:mk_chart_bar_xy rcd_value="${map.value }" />
+					</c:when>
+					<c:when test="${uiType=='chart_pie_iy'}">
+						<src:mk_chart_pie_iy rcd_value="${map.value }" />
+					</c:when>
+					<c:when test="${uiType=='chart_bubble'}">
+						<src:mk_chart_bubble rcd_value="${map.value }" />
+					</c:when>
+					<c:when test="${uiType=='chart_line_ixy'}">
+						<src:mk_chart_line_ixy rcd_value="${map.value }" />
+					</c:when>
+					<c:when test="${uiType=='body'}"><%//설정된 UI가 아닌 소스상에 정의된 태그로 실행 %>
+						<c:set var="sourceData" scope="request" value="${map.value}"/>
+						<jsp:doBody/>
+						<c:remove var="sourceData" scope="request"/>
+					</c:when>
+				</c:choose>
+			</c:set>
+		</c:if>
 	
 		<c:set var="html">
 			${html }
@@ -74,7 +88,7 @@
 			<c:if test="${uiType=='tree'}"><%//TREE인 경우 %>
 				${src }
 			</c:if>
-			<c:if test="${uiType=='use'}"><%//TREE가 아닌 경우 %>
+			<c:if test="${uiType!='tree' && uiType!='unuse'}"><%//TREE가 아닌 경우 %>
 				<table class="${isList ? 'lst' : 'vw' }" border="0" cellspacing="0" cellpadding="0"  style="margin-bottom: 10px;">
 					${title }
 					${src }
@@ -86,34 +100,35 @@
 		</c:set>
 	</c:if>
 </c:forEach>
+
 <c:set var="buton_Html">
-		<div style="clear: both; height: 25px; margin-top: 10px;padding:3px; ">
-			<c:if test="${!empty(ui.add_param) }">
-				<div class="add_btn ui-widget-header ui-corner-all btn_right" style="" onclick="${ui.add_type}(${ui.add_param})">등록</div>
-			</c:if>
-			<c:forEach var="btn" items="${fn:split(ui.use_btn,',') }">
-				<c:choose>
-					<c:when test="${btn=='L' }">
-						<div class="close_btn ui-widget-header ui-corner-all btn_right" style=" " onclick="closePop('#auto_generated_uI_${page_id}')">닫기</div>
-					</c:when>
-					<c:when test="${btn=='C' }">
-						<div class="cancel_btn ui-widget-header ui-corner-all btn_right" style=" display: none;" onclick="cancel('#auto_generated_uI_${page_id}')">취소</div>
-					</c:when>
-					<c:when test="${!empty(add_param) }">
-						<div class="add_btn ui-widget-header ui-corner-all btn_right" style="" onclick="${ui.add_type}(${ui.add_param})">등록</div>
-					</c:when>
-					<c:when test="${btn=='U' }">
-						<div class="edit_btn ui-widget-header ui-corner-all btn_right" style="" onclick="edit('#auto_generated_uI_${page_id}')">수정</div>
-					</c:when>
-					<c:when test="${btn=='D' }">
-						<div class="del_btn ui-widget-header ui-corner-all btn_right" style="" onclick="del('#auto_generated_uI_${page_id}')">삭제</div>
-					</c:when>
-					<c:when test="${btn=='S' }">
-						<div class="save_btn ui-widget-header ui-corner-all btn_right" style=" display: none;" onclick="form_submit('#form_${page_id}')">저장</div>
-					</c:when>
-				</c:choose>
-			</c:forEach>
-		</div>
+	<div style="clear: both; height: 25px; margin-top: 10px;padding:3px; ">
+		<c:if test="${!empty(ui.add_param) }">
+			<div class="add_btn ui-widget-header ui-corner-all btn_right" style="" onclick="${ui.add_type}(${ui.add_param})">등록</div>
+		</c:if>
+		<c:forEach var="btn" items="${fn:split(ui.use_btn,',') }">
+			<c:choose>
+				<c:when test="${btn=='L' }">
+					<div class="close_btn ui-widget-header ui-corner-all btn_right" style=" " onclick="closePop('#auto_generated_uI_${page_id}')">닫기</div>
+				</c:when>
+				<c:when test="${btn=='C' }">
+					<div class="cancel_btn ui-widget-header ui-corner-all btn_right" style=" display: none;" onclick="cancel('#auto_generated_uI_${page_id}')">취소</div>
+				</c:when>
+				<c:when test="${!empty(add_param) }">
+					<div class="add_btn ui-widget-header ui-corner-all btn_right" style="" onclick="${ui.add_type}(${ui.add_param})">등록</div>
+				</c:when>
+				<c:when test="${btn=='U' }">
+					<div class="edit_btn ui-widget-header ui-corner-all btn_right" style="" onclick="edit('#auto_generated_uI_${page_id}')">수정</div>
+				</c:when>
+				<c:when test="${btn=='D' }">
+					<div class="del_btn ui-widget-header ui-corner-all btn_right" style="" onclick="del('#auto_generated_uI_${page_id}')">삭제</div>
+				</c:when>
+				<c:when test="${btn=='S' }">
+					<div class="save_btn ui-widget-header ui-corner-all btn_right" style=" display: none;" onclick="form_submit('#form_${page_id}')">저장</div>
+				</c:when>
+			</c:choose>
+		</c:forEach>
+	</div>
 </c:set>
 <%-- 페이지 출력 --%>
 <c:set var="script">
@@ -138,8 +153,9 @@
 </c:set>
 <c:choose>
 	<c:when test="${type == 'etc'}"><%//그래프가 안그려지는 문제로 예외처리함%>
-		<div id="auto_generated_uI_${page_id}"  style="height: 100%; width: 100%;">			
-			${src }
+		<div id="auto_generated_uI_${page_id}"  style="height: 100%; width: 100%;">	
+			${graph }
+			<div class="sheet" style="margin: 10px; display: none;">${html }</div>		
 		</div>
 		${script }
 	</c:when>

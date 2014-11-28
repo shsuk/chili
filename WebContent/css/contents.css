@@ -45,7 +45,7 @@ img{border:0;}
 .ui-resizable-helper { border: 2px dotted #00F; }
 
 .th {
-	background: url("../jquery/development-bundle/themes/redmond/images/ui-bg_glass_85_dfeffc_1x400.png") repeat-x scroll 50% 50% #dfeffc;
+	background: url("../jquery/jquery-ui-1.11.2.flick/images/ui-bg_highlight-soft_50_dddddd_1x100.png") repeat-x scroll 50% 50% #dfeffc;
 }
 
 
@@ -55,7 +55,7 @@ table td {height:25px;}
 table.lst {border-collapse: collapse; width: 100%; margin-top: 0px; border: 1px solid #c5dbec;}
 table.lst th {
 	padding:3px; 
-	background: url("../jquery/development-bundle/themes/redmond/images/ui-bg_glass_85_dfeffc_1x400.png") repeat-x scroll 50% 50% #dfeffc;
+	background: url("../jquery/jquery-ui-1.11.2.flick/images/ui-bg_highlight-soft_50_dddddd_1x100.png") repeat-x scroll 50% 50% #dfeffc;
     border: 1px solid #c5dbec;
     color: #2e6e9e;
     font-weight: bold;
@@ -67,7 +67,7 @@ table.lst td {
 table.vw {border-collapse: collapse; width: 100%; margin-top: 0px; border: 1px solid #c5dbec;}
 table.vw th {
 	padding:3px; 
-	background: url("../jquery/development-bundle/themes/redmond/images/ui-bg_glass_85_dfeffc_1x400.png") repeat-x scroll 50% 50% #dfeffc;
+	background: url("../jquery/jquery-ui-1.11.2.flick/images/ui-bg_highlight-soft_50_dddddd_1x100.png") repeat-x scroll 50% 50% #dfeffc;
     border: 1px solid #c5dbec;
     color: #2e6e9e;
     font-weight: bold;
@@ -137,16 +137,39 @@ table.tpl td {
 }
 
 .portlet-header {
+	min-height: 16px;
 	padding: 0.2em 0.3em;
 	margin-bottom: 0.5em;
 	position: relative;
 }
 
-.portlet-toggle {
+.portlet-toggle-sheet {
+	cursor: pointer;
 	position: absolute;
 	top: 50%;
-	right: 0;
+	right: 40px;
 	margin-top: -8px;
+	opacity: 0.2;
+	filter: alpha(opacity=20);
+}
+.portlet-toggle-sheet-view {
+	border: 1px solid #ffffff;
+	opacity: 1;
+	filter: alpha(opacity=100);
+}
+.portlet-toggle {
+	cursor: pointer;
+	position: absolute;
+	top: 50%;
+	right: 20px;
+	margin-top: -8px;
+}
+.portlet-toggle-full {
+	cursor: pointer;
+	margin-top: -8px;
+    position: absolute;
+    right: 0px;
+    top: 50%;
 }
 
 .portlet-content {

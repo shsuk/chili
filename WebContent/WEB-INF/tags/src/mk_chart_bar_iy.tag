@@ -9,6 +9,7 @@
 <%@ taglib prefix="tag"  tagdir="/WEB-INF/tags/tag" %> 
 <%@ taglib prefix="src"  tagdir="/WEB-INF/tags/src" %> 
 <%@ attribute name="rcd_value" required="true" type="java.util.List" description="리스트 레코드(key value set))"%>
+<c:set var="rcd_value" value="${empty(rcd_value) ? sourceData : rcd_value}"/>
 <c:set var="chartId" value="${sp:uuid()}"/>
 <c:forEach var="info" items="${rcd_value[0] }" >
 	<c:set var="key">${info.key}</c:set>
@@ -29,51 +30,67 @@
 <script type="text/javascript">
 	$(function() {
 		
-		var horizontal = false;
-		var data = ${sp:list2chart(rcd_value, xFld, yFld, lblFld)  };
+		var chartData = ${sp:list2chart(rcd_value, lblFld, xFld, yFld, null)  };
+		
+		$( window  ).resize(function() {
+			if($('#${chartId}').get(0).clientHeight==0){
+				return;
+			}
+			try {
+				drawBarIY('#${chartId}', chartData);
+			} catch (e) {
+				// TODO: handle exception
+			}
+		}).resize();		
+		
 		// Draw the graph
-		Flotr.draw($("#${chartId}").get(0), data.data, {
-			bars : {
-				show : true,
-				horizontal : horizontal,
-				//shadowSize : 0,
-				barWidth : 1
-			},
-			legend: {
-	            position: 'ne',
-	            // Position the legend 'south-east'.
-	            //labelFormatter: labelFn,
-	            // Format the labels.
-	            backgroundColor: '#D2E8FF' // A light blue background color.
-	        },
-			xaxis : {
-				noTicks: data.length+2, // Display n ticks.
-	            tickFormatter: function(n) {
-	                return '&nbsp;'; //''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ' + Math.ceil(n) + '월';
-	            },
-				showLabels: true
-			},
-			yaxis : {
-				min : 0,
-				autoscaleMargin : 1,
-				tickFormatter: function(n) {
-	                return Math.ceil(n);
+		function drawBarIY(selector, chartData){
+			var horizontal = false;
+
+			Flotr.draw($(selector).get(0), chartData.data, {
+				bars : {
+					show : true,
+					horizontal : horizontal,
+					//shadowSize : 0,
+					barWidth : 1
+				},
+				legend: {
+		            position: 'ne',
+		            // Position the legend 'south-east'.
+		            //labelFormatter: labelFn,
+		            // Format the labels.
+		            backgroundColor: '#D2E8FF' // A light blue background color.
+		        },
+				xaxis : {
+					noTicks: chartData.data.length+2, // Display n ticks.
+		            tickFormatter: function(n) {
+		                return '&nbsp;'; //''&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ' + Math.ceil(n) + '월';
+		            },
+					showLabels: true
+				},
+				yaxis : {
+					min : 0,
+					autoscaleMargin : 1,
+					tickFormatter: function(n) {
+		                return Math.ceil(n);
+		            }
+				},
+				mouse : {
+					track : true,
+					relative : true,
+	                position: 'ns',
+					trackFormatter: function(data) {
+						return data.series.label + ' : ' + Math.ceil(data.y)
+					}
+				},
+	            grid: {
+	                horizontalLines: true,
+	                verticalLines: false
 	            }
-			},
-			mouse : {
-				track : true,
-				relative : true,
-                position: 'ns',
-				trackFormatter: function(data) {
-					return data.series.label + ' : ' + Math.ceil(data.y)
-				}
-			},
-            grid: {
-                horizontalLines: true,
-                verticalLines: false
-            }
-		});
+			});
+			
+		}
 
 	});
 </script>
-<div id="${chartId }" style="height: 100%; width: 95%;margin: auto;"></div>
+<div id="${chartId }" style="height: 100%; width: 95%;margin: auto; max-height: 400px;"></div>

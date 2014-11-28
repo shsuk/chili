@@ -8,7 +8,10 @@
 <%@ taglib prefix="sp" uri="/WEB-INF/tlds/sp.tld"%>
 <%@ taglib prefix="tag"  tagdir="/WEB-INF/tags/tag" %> 
 <%@ taglib prefix="src"  tagdir="/WEB-INF/tags/src"%> 
-<%@ attribute name="rcd_value" required="true" type="java.util.List" description="리스트 레코드(key value set))"%>
+<%@ attribute name="refName" required="false" type="java.lang.String" description="리스트 레코드(key value set))"%>
+<%@ attribute name="rcd_value" required="false" type="java.util.List" description="리스트 레코드(key value set))"%>
+<c:set var="rcd_value" value="${empty(rcd_value) ? sourceData : rcd_value}"/>
+
 <c:set var="chartId" value="${sp:uuid()}"/>
 <c:forEach var="info" items="${rcd_value[0] }" >
 	<c:set var="key">${info.key}</c:set>
@@ -27,48 +30,61 @@
 	</c:choose>
 </c:forEach>
 <script type="text/javascript">
-	$(function() {
+	$(function() {		
+		var chartData = ${sp:list2chart(rcd_value, lblFld, xFld, yFld, null)  };
 		
-		var horizontal = false;
-		var chartData = ${sp:list2chart(rcd_value, xFld, yFld, lblFld) };
-		var data = chartData.data;
-		var itemCount = chartData.itemCount;
-		var chartType = chartData.type;
-		// Draw the graph
-		Flotr.draw($("#${chartId}").get(0), data, {
-			xaxis : {
-				mode: chartType,
-	            labelsAngle: 45,
-				noTicks: 5,
-				tickFormatter: function(n) {
-					var date = new Date();
-					date.setTime(n);
-					return '&nbsp;&nbsp;' + $.datepicker.formatDate(('mm-dd '), date);
-	            }
-			},
-			yaxis : {
-				min:0,
-				autoscaleMargin : 1,
-				tickFormatter: function(n) {
-	                return Math.ceil(n);
-	            }
-			},
-			mouse : {
-				track : true,
-				relative : true,
-                position: 'ns',
-				trackFormatter: function(data) {
-					var date = new Date();
-					date.setTime(data.x);
-					return data.series.label + ' : (' + $.datepicker.formatDate(('yy-mm-dd '), date) + ', ' + Math.ceil(data.y) + ')'
+		$( window  ).resize(function() {
+			try {
+				try {
+					if($('#${chartId}').get(0).clientHeight==0){
+						return;
+					}
+					drawPie('#${chartId}', chartData);
+				} catch (e) {
+					// TODO: handle exception
 				}
-			},
-            grid: {
-                horizontalLines: true,
-                verticalLines: true
-            }
-		});
-
+			} catch (e) {
+				// TODO: handle exception
+			}
+			drawLineIXY('#${chartId}', chartData);
+		}).resize();		
+		
+		// Draw the graph
+		function drawLineIXY(selector, chartData){
+			Flotr.draw($(selector).get(0), chartData.data, {
+				xaxis : {
+					mode: chartData.type,
+		            labelsAngle: 45,
+					noTicks: 5,
+					tickFormatter: function(n) {
+						var date = new Date();
+						date.setTime(n);
+						return '&nbsp;&nbsp;' + $.datepicker.formatDate(('mm-dd '), date);
+		            }
+				},
+				yaxis : {
+					min:0,
+					autoscaleMargin : 1,
+					tickFormatter: function(n) {
+		                return Math.ceil(n);
+		            }
+				},
+				mouse : {
+					track : true,
+					relative : true,
+	                position: 'ns',
+					trackFormatter: function(data) {
+						var date = new Date();
+						date.setTime(data.x);
+						return data.series.label + ' : (' + $.datepicker.formatDate(('yy-mm-dd '), date) + ', ' + Math.ceil(data.y) + ')'
+					}
+				},
+	            grid: {
+	                horizontalLines: true,
+	                verticalLines: true
+	            }
+			});
+		}
 	});
 </script>
-<div id="${chartId }" style="height: 100%; width: 95%;margin: auto;"></div>
+<div id="${chartId }" style="height: 100%; width: 95%;margin: auto; max-height: 400px;"></div>

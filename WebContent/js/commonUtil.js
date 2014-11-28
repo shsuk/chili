@@ -67,6 +67,31 @@
 				}
 			}
 		});
+		
+		
+		function getFixHeight(){
+			var fixHeights = $(".fix_height");
+			var fh = 60;
+			
+			for(var i=0; i<fixHeights.length; i++){
+				fh += fixHeights[i].clientHeight;
+			}
+			return fh;
+		}
+		//윈도우 리사이즈
+		$( window ).resize(function(e,e1) {
+			var h = window.innerHeight - getFixHeight();
+			var height = h + 'px';
+			var obj = $(".auto_height");
+			obj.css('height', height);
+			var sizeSyncs = $('[size_sync]');
+			for(var i=0; i<sizeSyncs.length ; i++){
+				var syncObj = $($(sizeSyncs[i]).attr('size_sync')).get(0);
+				$(sizeSyncs[i]).css('height', syncObj.clientHeight + 'px');
+				$(sizeSyncs[i]).css('width', (syncObj.clientWidth-5) + 'px');
+			}
+		}).resize();
+
 	});
 
 	//UI구성을 위한 jquery함수 추가
@@ -163,22 +188,102 @@
 		//포틀릿 초기화
 		initPortlet();
 	}
-
+	//포틀릿 초기화
 	function initPortlet(){
 		$(".portlet-column").sortable({
 			connectWith : ".portlet-column",
 			handle : ".portlet-header",
 			cancel : ".portlet-toggle",
-			placeholder : "portlet-placeholder ui-corner-all"
+			placeholder : "portlet-placeholder ui-corner-all",
+			
 		});
-		$(".portlet").addClass("ui-widget ui-widget-content ui-helper-clearfix ui-corner-all").find(".portlet-header").addClass("ui-widget-header ui-corner-all").prepend("<span class='ui-icon ui-icon-minusthick portlet-toggle'></span>");
+		
+		$( ".portlet-column" ).on( "sortstop", function( event, ui ) {
+			var portletColumn = $( ".portlet-column" );
+			
+			for(var n=0; n<portletColumn.length; n++){
+				var ids = "";
+				var items = $(portletColumn[n]).children();
+				
+				for(var i=0; i<items.length; i++){
+					ids += ',' + $(items[i]).attr('id');
+				}
+				
+				$.cookie('portlet_'+n, ids.substring(1), {expires:60});
+			}
+		});
+		
+		var header = $(".portlet").addClass("ui-widget ui-widget-content ui-helper-clearfix ui-corner-all").find(".portlet-header").addClass("ui-widget-header ui-corner-all");
+		header.prepend("<span class='ui-icon ui-icon-minusthick portlet-toggle' title='접기'></span>")
+		header.prepend("<span class='ui-icon ui-icon-arrow-4-diag portlet-toggle-full' title='전체화면'></span>");
+		header.prepend("<span class='ui-icon ui-icon-document portlet-toggle-sheet' title='시트보기'></span>");
+		
 		$(".portlet-toggle").click(function() {
 			var icon = $(this);
 			icon.toggleClass("ui-icon-minusthick ui-icon-plusthick");
-			icon.closest(".portlet").find(".portlet-content").toggle();
+			
+			icon.closest(".portlet-item").find(".portlet-content").slideToggle();
 		});
+		//표 보이기
+		$(".portlet-toggle-sheet").click(function() {
+			var icon = $(this);
+			icon.toggleClass("portlet-toggle-sheet-view");
+			
+			icon.closest(".portlet-item").find('.sheet').slideToggle();
+		});
+		//전체화면
+		$(".portlet-toggle-full").click(function() {
+			fullScreen($(this));
+		});
+		//전체화면
+		$(".portlet-header").dblclick(function() {
+			var portletItem = $(this).closest(".portlet-item");
+			fullScreen(portletItem.find(".portlet-toggle-full"));
+		});
+		//전체화면
+		function fullScreen(icon){
+			
+			icon.toggleClass("ui-icon-arrow-4-diag ui-icon-newwin");
+			
+			var portletItem = icon.closest(".portlet-item");
+			var portletCol = $('.portlet-column');
+			var portlet = portletItem.parent();
+			
+			portletCol.toggle();
 
-	}	
+			if(portlet.hasClass('portlet')){
+				portlet.addClass('move');
+				var portletContent = portletItem.find(".portlet-content");
+				$(portletCol.get(0)).parent().append(portletItem);
+				portlet.attr('height', portletContent.css('height'));
+				portletContent.addClass('auto_height');
+				portletContent.css({height: '97%'});
+				$( window ).resize();
+			}else{
+				portlet = $('.move');
+				portlet.removeClass('move');
+				portlet.append(portletItem);
+				var portletContent = portletItem.find(".portlet-content");
+				portletContent.removeClass('auto_height');
+				portletContent.css({height: portlet.attr('height')});
+			}
+			
+			$( window  ).resize();
+		}
+		//쿠키에 의한 위치 재조정
+		var portletColumn = $( ".portlet-column" );
+		
+		for(var n=0; n<portletColumn.length; n++){
+			var pCol = $(portletColumn[n]);
+			var ids = $.cookie('portlet_'+n).split(',');
+			
+			for(var i=0; i<ids.length; i++){
+				pCol.append($('#'+ids[i]));
+			}
+		}
+
+	}
+	
 	function getVal(name, obj) {
 		if (obj) {
 			var $row = $('.' + $(obj).attr('row_index'));
@@ -187,6 +292,7 @@
 			return $('[name=' + name + ']').attr('value');
 		}
 	}
+	
 	function addObject(target, source){
 
 		if(source) {
@@ -293,8 +399,9 @@
 	}
 	function mask_off(){
 		
-		setInterval(function () {
+		setTimeout(function () {
 			$('#mask').hide();
+			//alert(22);
 		}, 1000);		
 	}
 	//정합성 체크함수 구현
@@ -347,5 +454,5 @@
 			
 		}
 				
-	}
+	};
 	

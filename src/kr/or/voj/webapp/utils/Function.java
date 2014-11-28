@@ -208,7 +208,7 @@ public class Function {
 		}
 	}
 	
-	private static String list2chartiy(List<Map<String, Object>> list, String yFld, String labelFld){
+	private static String list2chartIY(List<Map<String, Object>> list, String yFld, String labelFld){
 
 		JSONObject result = new JSONObject();
 		String type = "";
@@ -229,7 +229,7 @@ public class Function {
 		return result.toString();
 	}
 	
-	private static String list2chartxy(List<Map<String, Object>> list, String xFld, String yFld){
+	private static String list2chartXY(List<Map<String, Object>> list, String xFld, String yFld){
 		long dum = 3600000*9;//그래프의 x축선이 9시에 그려지는 문제로 9시간을 더해 줌
 		String type = "";
 		
@@ -263,7 +263,8 @@ public class Function {
 		result.put("type", type);
 		return result.toString();
 	}
-	private static String list2chartxy(List<Map<String, Object>> list, String xFld, String yFld, String labelFld){
+	private static String list2chartIXYZ(List<Map<String, Object>> list, String xFld, String yFld, String zFld, String labelFld){
+		boolean hasZ = StringUtils.isNotEmpty(zFld);
 		long dum = 360000*115;//그래프의 x축선이 9시에 그려지는 문제로 9시간을 더해 줌
 		String type = "";
 		Map<String, Map<String, Object>> itemMap = new HashMap<String, Map<String,Object>>();
@@ -316,7 +317,7 @@ public class Function {
 				x = t.getTime() + dum + idx*width;
 			}
 			
-			data.add("[" + x + "," + row.get(yFld) + "]");
+			data.add("[" + x + "," + row.get(yFld) + (hasZ ? "," + row.get(yFld) : "") + "]");
 		}
 
 		result.put("data", dataList);
@@ -325,18 +326,21 @@ public class Function {
 		
 		return result.toString();
 	}
-	public static String list2chart(List<Map<String, Object>> list, String xFld, String yFld, String labelFld){
+	public static String list2chart(List<Map<String, Object>> list, String labelFld, String xFld, String yFld, String zFld){
+		boolean hasZ = StringUtils.isNotEmpty(zFld);
 		boolean hasX = StringUtils.isNotEmpty(xFld);
 		boolean hasL = StringUtils.isNotEmpty(labelFld);
 
-		if(hasX){
+		if(hasZ){
+			return list2chartIXYZ(list, xFld, yFld, zFld, labelFld);
+		}else if(hasX){
 			if(hasL){
-				return list2chartxy(list, xFld, yFld, labelFld);
+				return list2chartIXYZ(list, xFld, yFld, zFld, labelFld);
 			}else{
-				return list2chartxy(list, xFld, yFld);
+				return list2chartXY(list, xFld, yFld);
 			}
 		}else{
-			return list2chartiy(list, yFld, labelFld);
+			return list2chartIY(list, yFld, labelFld);
 		}
 	}
 }

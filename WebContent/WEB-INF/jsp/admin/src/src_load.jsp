@@ -18,9 +18,10 @@
 	chart_bar_iy=막대-(i.y),
 	chart_bar_ixy=막대-(i.x.y),
 	chart_bar_xy=막대-(x.y),
-	chart_pie_iy=Pie-(i.y),
 	chart_line_xy=Line-(x.y),
 	chart_line_ixy=Line-(i.x.y)
+	chart_pie_iy=Pie-(i.y),
+	chart_bubble=Bubble-(i.x.y)
 </c:set>
 <c:set var="colType">
 	text=문자열,
@@ -52,6 +53,7 @@
 	chart=[Chart]---------,
 	xFld=X값,
 	yFld=Y값,
+	zFld=Z값,
 	lblFld=라벨
 </c:set>
 <c:set var="ui_design" value="${ui.UI_DESIGN }"/>
