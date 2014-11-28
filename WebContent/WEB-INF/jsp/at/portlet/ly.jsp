@@ -7,8 +7,4 @@
 <%@ taglib prefix="sp" uri="/WEB-INF/tlds/sp.tld"%>
 <%@ taglib prefix="tag" tagdir="/WEB-INF/tags/tag"%>
 <%@ taglib prefix="src" tagdir="/WEB-INF/tags/src"%>
-<script>
-</script>
-<div class="no_auto_height main_layout" style=" overflow:auto; clear: both; margin: 5px auto;">
-	<c:import url="${IMPORT_PAGE }"/>
-</div>
+<c:import url="${IMPORT_PAGE }"/>

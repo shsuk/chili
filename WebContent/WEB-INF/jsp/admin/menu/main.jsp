@@ -20,19 +20,26 @@
 	    });
 		
 		$('#menu-btn').button().click(function( event ) {
-			$('body').append($('#menu_div'));
+			showMenu();
+		});
+		//모바일인 경우 메뉴를 바디로 옮기고 숨김
+		$('#menu_div${isMobile ? "" : "NO"}').hide( 'slide', {}, 500 );
+		$('body').append($('#menu_div${isMobile ? "" : "NO"}'));
+		
+		function showMenu(){
 			$('#menu_div').show( 'slide', {}, 500 );
+		}
+
+		var mc1 = new Hammer(document.getElementById('menu_div'));
+
+		mc1.on("panleft", function(ev) {
+			$('#menu_div').hide( 'slide', {}, 500 );
 		});
 		
-		var menuEl = document.getElementById('menu_div');
+		var mc2 = new Hammer(document.getElementById('menu_emp_div'));
 
-		// create a simple instance
-		// by default, it only adds horizontal recognizers
-		var mc = new Hammer(menuEl);
-
-		// listen to events...
-		mc.on("panleft", function(ev) {
-			$('#menu_div').hide( 'slide', {}, 500 );
+		mc2.on("panright", function(ev) {
+			showMenu();
 		});
 	});
 
@@ -48,16 +55,17 @@
 	}
 
 </script> 
-<div id="menu-btn" style="position: fixed;left: 0; bottom: 0;opacity: 0.8;filter: alpha(opacity=80);background: #ffffff;"><img src="../images/icon/menu-icon.png"></div>
+<div id="menu-btn" class="hide_web" style="position: fixed;left: 0; bottom: 0;opacity: 0.8;filter: alpha(opacity=80);background: #ffffff;;"><img src="../images/icon/menu-icon.png"></div>
+<div id="menu_emp_div" class="hide_web"  style="position: fixed;left: 0; top: 0; height: 100%;width: 10px;"></div>
 <div id="auto_generated_uI_main main_layout" style="margin: 5px auto;">
 	<table class="lst">
 		<tr>
-			<th class="${isMobile ? 'dis_none' : '' }">메 뉴</th>
+			<th class="hide_mb">메 뉴</th>
 			<th>UI 목록</th>
 		</tr>
 		<tr>
-			<td class="${isMobile ? 'dis_none' : '' }" style="width: 150px;; " valign="top">
-				<div id="menu_div" style${isMobile ? '' : 'No' }="position: fixed;left: 0; top: 0; height: 100%;background: #ffffff; border:1px solid #cccccc;">
+			<td class="hide_mb" style="width: 150px;; " valign="top">
+				<div id="menu_div" style${isMobile ? '' : 'No' }="position: fixed;left: 0; top: 0; height: 100%;background: #eeeeee; border:1px solid #cccccc;">
 					<ul id="menu">
 						<li class="ui-widget-header">개발 메뉴</li>
 						<li><a target="ui" href="../admin-src/main.sh">UI 생성</a></li>

@@ -62,8 +62,8 @@ $(function() {
 	<header class="fix_height main_layout">
 		<img src="../images/log3.jpg" height="100"><span style="font-size: 30px; margin-left:30px;">Chili프로젝트 <span id="header_title" style="font-size: 30px;"></span></span>
 	</header>
-	<div class="${isMobile ? 'body' : '' }">
-	<c:import url="${UI_TPL }"/>
+	<div class="main_layout" style="margin: 3px auto 3px; overflow:auto; ">
+		<c:import url="${UI_TPL }"/>
 	</div>
 	<footer class="fix_height main_layout" style="clear: both; ">
 		test
