@@ -171,7 +171,12 @@
 				$( window ).resize();
 			}
 		});
-
+		//모바일에서 처리
+		$( ".split_tab" ).tabs({
+			load: function( event, ui ) {
+				alert(1);
+			}});
+		
 		//수평분할
 		$( ".vsplit" ).resizable({
 			handles: "s",
@@ -187,6 +192,8 @@
 		initControl();
 		//포틀릿 초기화
 		initPortlet();
+		//메뉴 초기화
+		initMenu();
 	}
 	//포틀릿 초기화
 	function initPortlet(){
@@ -282,6 +289,47 @@
 			}
 		}
 
+	}
+	//메뉴 초기화
+	function initMenu(){
+		
+		var menu = $('.menu');
+		menu.menu({
+		      items: '> :not(.ui-widget-header)'
+	    });
+		
+		if(menu.length<1 || $.cookie('isMobile') != 'Y'){
+			return;
+		}
+		
+		var body = $('body');
+		body.append('<div id="menu_left_div" class="hide_web"  style="position: fixed;left: 0; top: 0; height: 100%;width: 10px;"></div>');
+		body.append('<div id="menu_div" style="position: fixed;left: 0; top: 0; height: 100%;background: #eeeeee; border:1px solid #cccccc;"></div>');
+		body.append('<div id="menu-btn" class="hide_web" style="position: fixed;left: 0; bottom: 0;opacity: 0.8;filter: alpha(opacity=80);background: #ffffff;;"><img src="../images/icon/menu-icon.png"></div>');
+
+		//메뉴버튼 생성
+		$('#menu-btn').button().click(function( event ) {
+			showMenu();
+		});
+		//모바일인 경우 메뉴를 바디로 옮기고 숨김
+		$('#menu_div').hide( 'slide', {}, 500 );
+		$('#menu_div').append(menu);
+		
+		function showMenu(){
+			$('#menu_div').show( 'slide', {}, 500 );
+		}
+
+		var mc1 = new Hammer(document.getElementById('menu_div'));
+
+		mc1.on("panleft", function(ev) {
+			$('#menu_div').hide( 'slide', {}, 500 );
+		});
+		
+		var mc2 = new Hammer(document.getElementById('menu_left_div'));
+
+		mc2.on("panright", function(ev) {
+			showMenu();
+		});
 	}
 	
 	function getVal(name, obj) {

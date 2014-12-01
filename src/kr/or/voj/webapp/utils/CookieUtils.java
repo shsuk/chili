@@ -39,6 +39,9 @@ public class CookieUtils {
 		setCookie(response, name, value, maxAge, null);
 	}
 	public static void setCookie(HttpServletResponse response, String name, String value, int maxAge, String domain) {
+		setCookie(response, name, value, maxAge, domain, true);
+	}
+	public static void setCookie(HttpServletResponse response, String name, String value, int maxAge, String domain, boolean isHttpOnly) {
 		Cookie cookie = null;
 
 		String cookieName = URLEncoder.encode(name);
@@ -53,7 +56,7 @@ public class CookieUtils {
 		if (maxAge > 0) {
 			cookie.setMaxAge(maxAge);
 		}
-		cookie.setHttpOnly(true);
+		cookie.setHttpOnly(isHttpOnly);
 		response.addCookie(cookie);
 	}
 	public static void removeCookie(HttpServletResponse response, String name) {

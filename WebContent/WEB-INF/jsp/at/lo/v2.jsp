@@ -15,7 +15,7 @@ $(function() {
 
 </script> 
 
-<div id="main_content" class="split_containment" style="margin: 5px auto; padding:3px; width: 90%; min-width:1040px; border:1px solid #cccccc; ">
+<div id="main_content" class="split_containment" style="margin: 0px auto; padding:3px; ${isMobile ? 'mb_' : ''}width: 90%; ${isMobile ? 'mb_' : ''}min-width:1040px; border:1px solid #cccccc; ">
 	<tag:splitV id="v" bodyIndex="1">
 		<src:auto_make_src  type="bf"/>
 	</tag:splitV>

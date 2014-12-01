@@ -1,12 +1,13 @@
 package kr.or.voj.webapp.interceptor;
 
-import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import kr.or.voj.webapp.utils.CookieUtils;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.collections.map.CaseInsensitiveMap;
@@ -33,8 +34,36 @@ public class ControllerInterceptor extends HandlerInterceptorAdapter{
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 	
 		//serReq(request);
-		checkMobile(request);
+		checkMobile(request, response);
 		return true;
+	}
+
+	private void checkMobile(HttpServletRequest request, HttpServletResponse response){
+		HttpSession session = request.getSession();
+		Boolean isMobile = (Boolean)session.getAttribute("isMobile");
+
+		//단말기가 모바일 인지 체크
+		if(isMobile==null){
+			isMobile = false;
+			String userAgent = request.getHeader("user-agent");
+
+			for(String ml : mbl){
+				if(StringUtils.containsIgnoreCase(userAgent, ml) ){
+					isMobile = true;
+					break;
+				}
+			}			
+		}
+		//모바일모드로 수동 변경 요청시 처리
+		String mb = request.getParameter("mb");
+		if(StringUtils.isNotEmpty(mb)){
+			isMobile = StringUtils.equalsIgnoreCase(mb, "Y");
+		}
+		
+		session.setAttribute("isMobile", isMobile);
+		request.setAttribute("isMobile", isMobile);
+		CookieUtils.setCookie(response, "isMobile", isMobile ? "Y" : "N", 0, "", false);
+		
 	}
 
 	private void serReq(HttpServletRequest request){
@@ -57,33 +86,4 @@ public class ControllerInterceptor extends HandlerInterceptorAdapter{
 		}
 	}
 	
-	private void checkMobile(HttpServletRequest request){
-		HttpSession session = request.getSession();
-		boolean isMobile = false;
-
-		//세션 초기화
-		if(session.getAttribute("isMobile")==null){
-			String userAgent = request.getHeader("user-agent");
-
-			for(String ml : mbl){
-				if(StringUtils.containsIgnoreCase(userAgent, ml) ){
-					isMobile = true;
-					break;
-				}
-			}
-						
-			session.setAttribute("isMobile", isMobile);
-		}
-		
-		//모바일모드로 수동 변경 요청시 처리
-		String mb = request.getParameter("mb");
-		if(StringUtils.isNotEmpty(mb)){
-			isMobile = StringUtils.equalsIgnoreCase(mb, "Y");
-			
-			session.setAttribute("isMobile", isMobile);
-		}
-		
-		request.setAttribute("isMobile", session.getAttribute("isMobile"));
-	}
-
 }

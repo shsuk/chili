@@ -87,4 +87,4 @@
 		}
 	});
 </script>
-<div id="${chartId }" style="height: 100%; width: 95%;margin: auto; max-height: 400px;"></div>
+<div id="${chartId }" style="height: 100%; width: 95%; max-height: 400px;"></div>

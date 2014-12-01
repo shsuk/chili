@@ -293,6 +293,16 @@ public class Function {
 		}
 		
 		long width = 3600000*20/itemCount;
+		long minX = Long.MAX_VALUE;
+		long maxX = 0;
+		long minY = Long.MAX_VALUE;
+		long maxY = 0;
+		long maxZ = 0;
+		long v;
+		Object valX = 0;
+		Object valY = 0;
+		Object valZ = 0;
+		String val;
 		
 		for(int i=0; i<list.size(); i++){
 			List<Object> data;
@@ -315,14 +325,53 @@ public class Function {
 				type = "time";
 				Date t = (Date) x;
 				x = t.getTime() + dum + idx*width;
+			}else{
+				valX = row.get(xFld) ;
+				val = StringUtils.split(valX.toString(), '.')[0];
+				v = Long.parseLong(val);
+				
+				if(maxX<v){
+					maxX = v;
+				}
+				if(minX>v){
+					minX = v;
+				}				
 			}
 			
-			data.add("[" + x + "," + row.get(yFld) + (hasZ ? "," + row.get(yFld) : "") + "]");
+
+			valY = row.get(yFld) ;
+			val = StringUtils.split(valY.toString(), '.')[0];
+			v = Long.parseLong(val);
+			
+			if(maxY<v){
+				maxY = v;
+			}
+			if(minY>v){
+				minY = v;
+			}
+			
+			if(hasZ){
+				valZ = row.get(zFld) ;
+				val = StringUtils.split(valZ.toString(), '.')[0];
+				v = Long.parseLong(val);
+				
+				if(maxZ<v){
+					maxZ = v;
+				}
+			}
+			
+			data.add("[" + x + "," + row.get(yFld) + (hasZ ? "," + valZ : "") + "]");
+			
 		}
 
 		result.put("data", dataList);
 		result.put("itemCount", itemCount);
 		result.put("type", type);
+		result.put("minX", minX);
+		result.put("maxX", maxX);
+		result.put("minY", minY);
+		result.put("maxY", maxY);
+		result.put("maxZ", maxZ);
 		
 		return result.toString();
 	}
@@ -331,16 +380,22 @@ public class Function {
 		boolean hasX = StringUtils.isNotEmpty(xFld);
 		boolean hasL = StringUtils.isNotEmpty(labelFld);
 
-		if(hasZ){
-			return list2chartIXYZ(list, xFld, yFld, zFld, labelFld);
-		}else if(hasX){
-			if(hasL){
+		try {
+			if(hasZ){
 				return list2chartIXYZ(list, xFld, yFld, zFld, labelFld);
+			}else if(hasX){
+				if(hasL){
+					return list2chartIXYZ(list, xFld, yFld, zFld, labelFld);
+				}else{
+					return list2chartXY(list, xFld, yFld);
+				}
 			}else{
-				return list2chartXY(list, xFld, yFld);
-			}
-		}else{
-			return list2chartIY(list, yFld, labelFld);
+				return list2chartIY(list, yFld, labelFld);
+			}			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
 		}
+
 	}
 }

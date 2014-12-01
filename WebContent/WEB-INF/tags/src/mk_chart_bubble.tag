@@ -50,7 +50,7 @@
 				// TODO: handle exception
 			}
 			drawLineIXY('#${chartId}', chartData);
-		}).resize();		
+		}).resize();
 		
 		// Draw the graph
 		function drawLineIXY(selector, chartData){
@@ -60,15 +60,15 @@
 		            baseRadius: 5
 		        },
 				xaxis : {
-					mode: chartData.type,
-		            labelsAngle: 45,
-					noTicks: 5,
+		            min: chartData.minX - chartData.maxZ,
+		            max: chartData.maxX + chartData.maxZ,
 					tickFormatter: function(n) {
 		                return Math.ceil(n);
 		            }
 				},
 				yaxis : {
-					min:0,
+		            min: chartData.minY - chartData.maxZ,
+		            max: chartData.maxY + chartData.maxZ,
 					autoscaleMargin : 1,
 					tickFormatter: function(n) {
 		                return Math.ceil(n);
@@ -90,4 +90,4 @@
 		}
 	});
 </script>
-<div id="${chartId }" style="height: 100%; width: 95%;margin: auto; max-height: 400px;"></div>
+<div id="${chartId }" style="height: 100%; width: 95%; max-height: 400px;"></div>

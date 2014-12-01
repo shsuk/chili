@@ -22,7 +22,7 @@
 
 <script src="../jquery/js/jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="../jquery/jquery-ui-1.11.2.custom/jquery-ui.min.js" type="text/javascript"></script>
-<script src='../jquery/js/jquery.cookie.js' type="text/javascript"></script>
+<script src='../jquery/js/cookies.js' type="text/javascript"></script>
 
 <script src='../jquery/dynatree/jquery.dynatree.js' type="text/javascript"></script>
 <!--[if IE]>

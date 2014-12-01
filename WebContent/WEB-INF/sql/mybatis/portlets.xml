@@ -38,11 +38,14 @@
 	</select>
 	<select id="testBubble_1_rows" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
 	<![CDATA[
-		SELECT tpl_path, count(*) cnt, count(*) * sin(count(*))*10 v1,  abs( count(*) * cos(count(*)))*10 v2
-		FROM sys_ui_tbl t1
-		WHERE tpl_path <> '' and tpl_path is not null
-		GROUP BY tpl_path
-		ORDER BY tpl_path
+		SELECT 'a' tpl_path, 5 cnt, 5 v1,  5 v2
+		union
+		SELECT 'b' tpl_path, 7 cnt, 3 v1,  6 v2
+		union
+		SELECT 'c' tpl_path, 8 cnt, 6 v1,  2 v2
+		union
+		SELECT 'd' tpl_path, 10 cnt, 9 v1,  3 v2
+
 	]]>
 	</select>
 

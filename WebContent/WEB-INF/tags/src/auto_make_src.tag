@@ -34,7 +34,6 @@
 					<src:mk_view rcd_key="${map.key }" rcd_value="${map.value }"/>
 				</c:when>
 				<c:when test="${uiType=='tree'}"><%//TREE인 경우 %>
-					<c:set var="type">etc</c:set>
 					<c:set var="ui_title"><tag:el source="${ui.ui_title}" param="${map.value[0]}"/></c:set>
 					<src:mk_tree rcd_value="${map.value }"/>
 				</c:when>
@@ -130,7 +129,7 @@
 		</c:forEach>
 	</div>
 </c:set>
-<%-- 페이지 출력 --%>
+
 <c:set var="script">
 <script type="text/javascript">
 	$(function() {
@@ -151,8 +150,10 @@
 	${links}
 </script> 
 </c:set>
+
+<%-- 페이지 출력 --%>
 <c:choose>
-	<c:when test="${type == 'etc'}"><%//그래프가 안그려지는 문제로 예외처리함%>
+	<c:when test="${type == 'etc'}"><%//그래프인 경우%>
 		<div id="auto_generated_uI_${page_id}"  style="height: 100%; width: 100%;">	
 			${graph }
 			<div class="sheet" style="margin: 10px; display: none;">${html }</div>		
