@@ -185,7 +185,7 @@
 						</td>
 						<td>
 							<tag:select_array name="${link_type}" codes="linkLoad=Load,linkPopup=팝업,linkPage=새페이지,linkFnc=함수"  selected="${ui_field[link_type]}" />
-							<input class="input_link" name="${link}" type="text" value="${ui_field[link] }" style="width: 100%;" title="<b>Load</b> : ui_id, {}, selector, <br><b>팝업</b> : ui_id, {}, <br><b>새페이지</b> : ui_id, {}, path, <br><b>함수</b> : function">
+							<input class="input_link" name="${link}" type="text" value="${ui_field[link] }" style="width: 100%;" title="<b>Load</b> : ui_id, {}, selector or 숫자, <br><b>팝업</b> : ui_id, {}, <br><b>새페이지</b> : ui_id, {}, path, <br><b>함수</b> : function">
 						</td>
 						<td>
 							<c:set var="valids">${valid}[]</c:set>

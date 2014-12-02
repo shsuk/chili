@@ -13,7 +13,7 @@
 			</c:forEach>
 			</ul>
 			<c:forEach begin="1" end="2" varStatus="status">
-					<div id="${id }_${status.index }" class=" auto_height" style=" overflow: auto; padding: 5px;">
+					<div id="${id }_${status.index }"  monitor="${status.index }" class="monitor monitor${status.index } auto_height" style=" overflow: auto; padding: 5px;">
 						<c:if test="${bodyIndex == status.index}"><jsp:doBody/></c:if>
 					</div>
 	
@@ -21,13 +21,15 @@
 		</div>
 	</c:when>
 	<c:otherwise>
-		<h3 id="${id }_1_title" class="ui-widget-header fix_height" style="padding:2px; margin: 0px;">&nbsp;</h3>
-		<div id="${id }_1" class="fix_height vsplit" style=" height:400px; overflow: auto;">
-			<c:if test="${bodyIndex == 1}"><jsp:doBody/></c:if>
-		</div>
-		<h3 id="${id }_2_title" class="ui-widget-header fix_height" style="padding:2px; margin: 0px;">&nbsp;</h3>
-		<div id="${id }_2" class="auto_height" style=" height:400px; overflow: auto; ">
-			<c:if test="${bodyIndex == 2}"><jsp:doBody/></c:if>
+		<div id="main_content" class="split_containment" >
+			<h3 id="${id }_1_title" class="ui-widget-header fix_height" style="padding:2px; margin: 0px;">&nbsp;</h3>
+			<div id="${id }_1"  monitor="1" class="monitor monitor1 fix_height vsplit" style=" height:400px; overflow: auto;">
+				<c:if test="${bodyIndex == 1}"><jsp:doBody/></c:if>
+			</div>
+			<h3 id="${id }_2_title" class="ui-widget-header fix_height" style="padding:2px; margin: 0px;">&nbsp;</h3>
+			<div id="${id }_2" monitor="2" class="monitor monitor2 auto_height" style=" height:400px; overflow: auto; ">
+				<c:if test="${bodyIndex == 2}"><jsp:doBody/></c:if>
+			</div>
 		</div>
 	</c:otherwise>
 </c:choose>

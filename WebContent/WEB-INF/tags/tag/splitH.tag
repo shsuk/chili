@@ -14,7 +14,7 @@
 			</c:forEach>
 			</ul>
 			<c:forEach begin="1" end="${splitCount }" varStatus="status">
-					<div id="${id }_${status.index }" class=" auto_height" style=" overflow: auto; padding: 5px;">
+					<div id="${id }_${status.index }"  monitor="${status.index }" class="monitor monitor${status.index } auto_height" style=" overflow: auto; padding: 5px;">
 						<c:if test="${bodyIndex == status.index}"><jsp:doBody/></c:if>
 					</div>
 	
@@ -27,14 +27,14 @@
 				<c:forEach begin="1" end="${splitCount-1 }" varStatus="status">
 					<td valign="top" class="hsplit"  style="width:300px;padding-right: 8px;">
 						<h3 id="${id }_${status.index }_title" class="fix_height ui-widget-header" style="padding:2px; margin: 0px;">&nbsp;</h3>
-						<div id="${id }_${status.index }" class=" auto_height" style=" overflow: auto;">
+						<div id="${id }_${status.index }" monitor="${status.index }" class="monitor monitor${status.index } auto_height" style=" overflow: auto;">
 							<c:if test="${bodyIndex == status.index}"><jsp:doBody/></c:if>
 						</div>
 					</td>
 				</c:forEach>
 				<td valign="top">
 					<h3 id="${id }_${splitCount }_title" class="fix_height ui-widget-header" style="padding:2px; margin: 0px;">&nbsp;</h3>
-					<div id="${id }_${splitCount }" class="auto_height" style="overflow: auto; ">
+					<div id="${id }_${splitCount }"  monitor="${splitCount }" class="monitor monitor${splitCount } auto_height" style="overflow: auto; ">
 						<c:if test="${bodyIndex == splitCount}"><jsp:doBody/></c:if>
 					</div>
 				</td>

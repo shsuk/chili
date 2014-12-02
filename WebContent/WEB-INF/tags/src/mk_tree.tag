@@ -10,6 +10,8 @@
 <%@ taglib prefix="src"  tagdir="/WEB-INF/tags/src" %> 
 <%@ attribute name="rcd_value" required="true" type="java.util.List" description="리스트 레코드(key value set))"%>
 
+<c:set var="uuid" value="${sp:uuid()}"/>
+
 <c:forEach var="info" items="${rcd_value[0] }" >
 	<c:set var="key">${info.key}</c:set>
 	<c:set var="label">${key}_label</c:set>
@@ -38,7 +40,7 @@
 	</c:choose>
 	
 	<c:if test="${!empty(ui_field[link]) }">
-		<c:set var="link_value">${ui_field[link_type] }(<tag:el source="${ui_field[link] }" param="${rcd_value[0] }"/>)</c:set>
+		<c:set var="link_value">${ui_field[link_type] }('#tree_${uuid }', <tag:el source="${ui_field[link] }" param="${rcd_value[0] }"/>)</c:set>
 	</c:if>
 </c:forEach>
 <script type="text/javascript">
@@ -46,7 +48,7 @@ $(function(){
 
 	var treeData = ${sp:list2tree(rcd_value, upperFld, codeFld, titleFld, idFld, rootId) };
 	
-    $("#tree_${key }").dynatree({
+    $("#tree_${uuid }").dynatree({
         onActivate: function(node) {
             ${link_value};
         },
@@ -58,4 +60,4 @@ $(function(){
 });
 	
 </script> 
-<div id="tree_${key }"></div>
+<div id="tree_${uuid }"></div>

@@ -219,11 +219,23 @@ function setTitle(selector,title){
 	$('#'+$(selector).parent().attr('id')+'_title').text(title);
 
 }
-function linkLoad(ui_id, data, selector){
-
-	$(selector ? selector : '#auto_generated_uI_main').load('../piece/-'+ui_id+'-bf.sh',data);
+function linkLoad(ele, ui_id, data, selector){
+	var target;
+	
+	if($.isNumeric(selector)){
+		target = $(ele).closest(".monitor");
+		var idx = parseInt(target.attr('monitor')) + parseInt(selector);
+		target = $('.monitor' + idx);
+	}else{
+		target = $(selector ? selector : '#auto_generated_uI_main');//없는 경우는 자신에 로딩
+	}
+	if(target.length<1){//로딩될 타켓이 없는 경우
+		alert('페이지를 불러올 selector : ' + selector + ' 를 찾을수 없습니다.');
+		return;
+	}
+	target.load('../piece/-'+ui_id+'-bf.sh',data);
 }
-function linkPopup(ui_id, data){
+function linkPopup(ele, ui_id, data){
 	data['ui_id'] = ui_id;
 	var dialog = $( "#dialog" );
 	if(dialog.length==0){
@@ -247,7 +259,7 @@ function linkPopup(ui_id, data){
 	dialog.load('../piece/-'+ui_id+'-bf.sh',data);
 	dialog.dialog('open');
 }
-function linkPage(ui_id, data, path){
+function linkPage(ele, ui_id, data, path){
 	
 	if(ui_id==''){
 		document.location.href = path + '?' + $.param(data);

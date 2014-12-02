@@ -16,8 +16,7 @@ $(function() {
 
 </script> 
 
-<div  id="content_main"  style="margin: 0px auto; padding:3px; ${isMobile ? 'mb_' : ''}width: 90%; ${isMobile ? 'mb_' : ''}min-width:1040px;">
-	<tag:splitH id="h" splitCount="3" bodyIndex="1">
-		<src:auto_make_src  type="bf"/>
-	</tag:splitH>
-</div>
+<tag:splitH id="splitH" splitCount="3" bodyIndex="1">
+	<src:auto_make_src  type="bf"/>
+</tag:splitH>
+

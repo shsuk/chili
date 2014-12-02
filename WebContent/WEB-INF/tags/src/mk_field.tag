@@ -94,7 +94,7 @@
 </c:set>
 
 <c:if test="${!empty(link) }">
-	<c:set var="link_value">onclick="${link_type }(<tag:el source="${link }" param="${values }"/>)" class="link"</c:set>
+	<c:set var="link_value">onclick="${link_type }(this, <tag:el source="${link }" param="${values }"/>)" class="link"</c:set>
 	<c:set var="link_class">link</c:set>
 </c:if>
 
