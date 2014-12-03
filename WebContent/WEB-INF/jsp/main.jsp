@@ -38,6 +38,9 @@
 <script src="../js/chart.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(function() {
+	if(isMobile){
+		return;
+	}
 	$( document ).tooltip({
 		items: "[title]",
 		content: function() {
@@ -66,6 +69,23 @@ $(function() {
 	<div class="main_layout" style="margin: 3px auto 3px; overflow:auto; ">
 		<c:import url="${UI_TPL }"/>
 	</div>
+	<ul class="menu">
+		<li class="ui-widget-header">개발 메뉴</li>
+		<li><a target="ui" href="../admin-src/main.sh">UI 생성</a></li>
+		
+		<li class="ui-widget-header">XML to DB 연동</li>
+		<li><a target="new" href="../-admin-mapper-main/createtbl.sh">1. 테이블 생성</a></li>
+		<li><a target="new" href="../-admin-mapper-main/xml2db_mapping.sh">2. XPath에 필드 매핑</a></li>
+		<li><a target="new" href="../-admin-mapper-main/trigger_mapping.sh">3. XPath에 연동쿼리 매핑</a></li>
+
+		<li class="ui-widget-header">페이지 로딩 예제</li>
+		<li onclick="openUrl('../-at-portlet-ly/sample1.sh')">포틀릿 예제</li>
+		<li onclick="load('../at-portlet/sample1.sh')">포틀릿 예제(레이어)</li>
+		<li onclick="openUrl('../-at-lo-h3/-group_list.sh')">코드 관리</li>
+		<li onclick="load('../at-lo-h3/-group_list.sh')">코드 관리(레이어)</li>
+		<li class="ui-widget-header">기타</li>
+		<li onclick="load('../-admin-menu-manual/.sh')">메뉴얼</li>
+	</ul>
 	<footer class="fix_height main_layout" style="clear: both; ">
 		test
 	</footer>

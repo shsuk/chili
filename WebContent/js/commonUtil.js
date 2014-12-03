@@ -10,8 +10,11 @@
 		changeMonth: true
 
 	};
+	var isMobile = false;
 	
 	$(function() {
+		isMobile = $.cookie('isMobile') == 'Y';
+
 		try {
 			initDefControl();
 		} catch (e) {
@@ -314,16 +317,17 @@
 			}
 	    });
 		
-		if(menu.length<1 || $.cookie('isMobile') != 'Y'){//모바일이 아닌 경우 
-			return;
-		}
+		//if(menu.length<1 || $.cookie('isMobile') != 'Y'){//모바일이 아닌 경우 
+		//	return;
+		//}
+		
 		menu.removeClass('menu');
 		//모바일인 경우
 		var body = $('body');
-		body.append('<div id="menu_left_div" class="hide_web"  style="position: fixed; left: 0; top: 0; height: 100%;width: 15px;"></div>');
+		body.append('<div id="menu_left_div" class=""  style="position: fixed; left: 0; top: 0; height: 100%;width: 15px;"></div>');
 		body.append('<div id="menu_div" style="position: fixed;left: 0; top: 0; height: 100%; background: #D9E5FF; border:1px solid #cccccc; z-index:1001;"></div>');
 		body.append('<div id="menu_mask" style="position: fixed;left: 0; top: 0; width:100%; height: 100%; background:#D9E5FF; border:1px solid #cccccc; opacity: 0.3; filter: alpha(opacity=30); z-index:1000; disply:none;"></div>');
-		body.append('<div id="menu-btn" class="hide_web" style="position: fixed;left: 0; bottom: 0; opacity: 0.8; filter: alpha(opacity=80); background: #ffffff; z-index:1002;"><img src="../images/icon/menu-icon.png"></div>');
+		body.append('<div id="menu-btn" class="" style="position: fixed;left: 0; bottom: 0; opacity: 0.6; filter: alpha(opacity=60); background: #DB0000; z-index:1002;"><img src="../images/icon/menu-icon.png"></div>');
 
 		//메뉴버튼 생성
 		$('#menu-btn').button().click(function( event ) {
@@ -344,10 +348,19 @@
 		}
 		function hideMenu(t){
 			$('#menu_div').hide( 'slide', {}, t ? t : 700 );
-			$('#menu_mask').hide( 'slide', {}, t ? t : 1000 );
+			$('#menu_mask').hide();
 			$('#menu-btn').show();
 		}
 
+		if(!isMobile){
+			$('#menu_left_div, #menu-btn').mouseenter(function( event ) {
+				showMenu();
+			});
+			$('#menu_div').mouseleave(function( event ) {
+				hideMenu();
+			});
+		}
+		
 		var mc1 = new Hammer(document.getElementById('menu_div'));
 
 		mc1.on("panleft", function(ev) {

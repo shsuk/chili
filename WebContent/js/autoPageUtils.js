@@ -1,4 +1,7 @@
+var isMobile = false;
+
 $(function() {
+	isMobile = $.cookie('isMobile') == 'Y';
 	//수정모드에서 필드클릭시 에디트모드로 전환
 	$(document).on('click', '.view_control', function(e){
 		var trg = $(e.currentTarget);
@@ -244,7 +247,6 @@ function linkPopup(ele, ui_id, data){
 	data['ui_id'] = ui_id;
 	var dialog = $( "#dialog" );
 	if(dialog.length==0){
-		var isMobile = $.cookie('isMobile') == 'Y';
 
 		dialog = $('<div id="dialog"></div>');
 		$('body').append(dialog);
