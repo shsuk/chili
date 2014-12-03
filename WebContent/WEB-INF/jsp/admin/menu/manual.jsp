@@ -36,7 +36,7 @@
 	<table class="vw" style="width: 500px;">
 		<tr>
 			<th align="left">1. -{TemplatePath}/-{ui_id}.sh</th>
-			<td>전체 레이아웃이 있는 자동 생성된 페이지</td>
+			<td>전체 레이아웃을 사용 하는 자동 생성된 페이지</td>
 		</tr>
 		<tr>
 			<th align="left">2. piece/-{uiId}-{pieceType}.sh</th>
@@ -48,7 +48,7 @@
 		</tr>
 		<tr>
 			<th align="left">4. -{TemplatePath}/{page}.sh</th>
-			<td>전체 레이아웃이 있는 개발자가 만든 페이지</td>
+			<td>전체 레이아웃을 사용 하는 개발자가 만든 페이지</td>
 		</tr>
 		<tr>
 			<th align="left">5. {path}/{page}.sh</th>

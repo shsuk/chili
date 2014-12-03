@@ -74,7 +74,7 @@ function initControl(){
 		if(ctl.length<1){
 			continue;
 		}
-		
+		fld.removeClass('field');
 		fld.attr('init', true);
 		
 		var val;
@@ -230,22 +230,30 @@ function linkLoad(ele, ui_id, data, selector){
 		target = $(selector ? selector : '#auto_generated_uI_main');//없는 경우는 자신에 로딩
 	}
 	if(target.length<1){//로딩될 타켓이 없는 경우
-		alert('페이지를 불러올 selector : ' + selector + ' 를 찾을수 없습니다.');
+		linkPopup(ele, ui_id, data);
+		//alert('페이지를 불러올 selector : ' + selector + ' 를 찾을수 없습니다.');
 		return;
+	}
+	if(target.attr('monitor')){
+		target.closest('.split_tab').tabs( "option", "active", parseInt(target.attr('monitor'))-1 );
 	}
 	target.load('../piece/-'+ui_id+'-bf.sh',data);
 }
 function linkPopup(ele, ui_id, data){
+	
 	data['ui_id'] = ui_id;
 	var dialog = $( "#dialog" );
 	if(dialog.length==0){
+		var isMobile = $.cookie('isMobile') == 'Y';
+
 		dialog = $('<div id="dialog"></div>');
 		$('body').append(dialog);
 		dialog.dialog({
 			autoOpen: false,
 			modal: true,
-			position:{ my: "top", at: "top", of: '#auto_generated_uI_main' },
-			minWidth: 1040, 
+			position: isMobile ? {} : { my: "top", at: "top", of: '#auto_generated_uI_main' },
+			minWidth: isMobile ? 300 : 1000,
+			width: isMobile ? '100%' : 1000,
 			show: {
 				 effect: "blind",
 				 duration: 1500
@@ -269,4 +277,15 @@ function linkPage(ele, ui_id, data, path){
 }
 function linkFnc(obj){
 	;
+}
+
+function openPage(ui_id, tpl_path){
+	var form = $('#new_form');
+	
+	if(form.length<1){
+		form = $('<form id="new_form" method="post" style="disply:none;"></form>');
+		$('body').append(form);
+	}
+	form.attr('action', '../' + tpl_path + '/-' + ui_id + '.sh');
+	form.submit();
 }

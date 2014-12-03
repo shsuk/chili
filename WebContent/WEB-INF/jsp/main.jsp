@@ -35,6 +35,7 @@
  -->
 <script src="../js/commonUtil.js" type="text/javascript"></script>
 <script src="../js/autoPageUtils.js" type="text/javascript"></script>
+<script src="../js/chart.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(function() {
 	$( document ).tooltip({

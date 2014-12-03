@@ -7,8 +7,8 @@
 <c:set var="portlet_id" scope="request" value="${empty(portlet_id) ? 1 :portlet_id + 1 }"/>
 <c:set var="id" value="id${sp:uuid() }"/>
 
-<div id="portlet_${portlet_id}" class="portlet">
-	<div class="portlet-item"  style="height:100%;" >
+<div id="portlet_${portlet_id}" class="portlet no_init_portlet_item">
+	<div class="portlet-item"   >
 		<div class="portlet-header"><span id="${id }_title"></span></div>
 		<div class="portlet-content" style="height:${height}" id="${id }">
 			<c:catch var="ex">

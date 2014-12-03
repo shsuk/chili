@@ -68,7 +68,6 @@
 			}
 		});
 		
-		
 		function getFixHeight(){
 			var fixHeights = $(".fix_height");
 			var fh = 60;
@@ -219,34 +218,37 @@
 				$.cookie('portlet_'+n, ids.substring(1), {expires:60});
 			}
 		});
+		var initItem = $(".no_init_portlet_item");
+		initItem.removeClass('no_init_portlet_item');
 		
-		var header = $(".portlet").addClass("ui-widget ui-widget-content ui-helper-clearfix ui-corner-all").find(".portlet-header").addClass("ui-widget-header ui-corner-all");
+		var header = initItem.addClass("ui-widget ui-widget-content ui-helper-clearfix ui-corner-all").find(".portlet-header").addClass("ui-widget-header ui-corner-all");
 		header.prepend("<span class='ui-icon ui-icon-minusthick portlet-toggle' title='접기'></span>")
 		header.prepend("<span class='ui-icon ui-icon-arrow-4-diag portlet-toggle-full' title='전체화면'></span>");
 		header.prepend("<span class='ui-icon ui-icon-document portlet-toggle-sheet' title='시트보기'></span>");
 		
-		$(".portlet-toggle").click(function() {
+		$(".portlet-toggle", initItem).click(function() {
 			var icon = $(this);
 			icon.toggleClass("ui-icon-minusthick ui-icon-plusthick");
 			
 			icon.closest(".portlet-item").find(".portlet-content").slideToggle();
 		});
 		//표 보이기
-		$(".portlet-toggle-sheet").click(function() {
+		$(".portlet-toggle-sheet", initItem).click(function() {
 			var icon = $(this);
 			icon.toggleClass("portlet-toggle-sheet-view");
 			
 			icon.closest(".portlet-item").find('.sheet').slideToggle();
 		});
 		//전체화면
-		$(".portlet-toggle-full").click(function() {
+		$(".portlet-toggle-full", initItem).click(function() {
 			fullScreen($(this));
 		});
 		//전체화면
-		$(".portlet-header").dblclick(function() {
+		$(".portlet-header", initItem).dblclick(function() {
 			var portletItem = $(this).closest(".portlet-item");
 			fullScreen(portletItem.find(".portlet-toggle-full"));
-		});
+		});			
+		
 		//전체화면
 		function fullScreen(icon){
 			
@@ -264,7 +266,7 @@
 				$(portletCol.get(0)).parent().append(portletItem);
 				portlet.attr('height', portletContent.css('height'));
 				portletContent.addClass('auto_height');
-				portletContent.css({height: '97%'});
+				portletContent.css({height: portletContent.children()[0].clientHeight});
 				$( window ).resize();
 			}else{
 				portlet = $('.move');
@@ -275,14 +277,21 @@
 				portletContent.css({height: portlet.attr('height')});
 			}
 			
-			$( window  ).resize();
+			$(window).resize();
+			$(window).scrollTop(0);
 		}
 		//쿠키에 의한 위치 재조정
 		var portletColumn = $( ".portlet-column" );
 		
 		for(var n=0; n<portletColumn.length; n++){
 			var pCol = $(portletColumn[n]);
-			var ids = $.cookie('portlet_'+n).split(',');
+			var ids = $.cookie('portlet_'+n);
+			
+			if(ids){
+				ids = ids.split(',');
+			}else{
+				continue;
+			}
 			
 			for(var i=0; i<ids.length; i++){
 				pCol.append($('#'+ids[i]));
@@ -292,37 +301,57 @@
 	}
 	//메뉴 초기화
 	function initMenu(){
-		
 		var menu = $('.menu');
-		menu.menu({
-		      items: '> :not(.ui-widget-header)'
-	    });
-		
-		if(menu.length<1 || $.cookie('isMobile') != 'Y'){
+
+		if(menu.length<1){
 			return;
 		}
+
+		menu.menu({
+			items: '> :not(.ui-widget-header)',
+			select: function( event, ui ) {
+				hideMenu();	  
+			}
+	    });
 		
+		if(menu.length<1 || $.cookie('isMobile') != 'Y'){//모바일이 아닌 경우 
+			return;
+		}
+		menu.removeClass('menu');
+		//모바일인 경우
 		var body = $('body');
-		body.append('<div id="menu_left_div" class="hide_web"  style="position: fixed;left: 0; top: 0; height: 100%;width: 10px;"></div>');
-		body.append('<div id="menu_div" style="position: fixed;left: 0; top: 0; height: 100%;background: #eeeeee; border:1px solid #cccccc;"></div>');
-		body.append('<div id="menu-btn" class="hide_web" style="position: fixed;left: 0; bottom: 0;opacity: 0.8;filter: alpha(opacity=80);background: #ffffff;;"><img src="../images/icon/menu-icon.png"></div>');
+		body.append('<div id="menu_left_div" class="hide_web"  style="position: fixed; left: 0; top: 0; height: 100%;width: 15px;"></div>');
+		body.append('<div id="menu_div" style="position: fixed;left: 0; top: 0; height: 100%; background: #D9E5FF; border:1px solid #cccccc; z-index:1001;"></div>');
+		body.append('<div id="menu_mask" style="position: fixed;left: 0; top: 0; width:100%; height: 100%; background:#D9E5FF; border:1px solid #cccccc; opacity: 0.3; filter: alpha(opacity=30); z-index:1000; disply:none;"></div>');
+		body.append('<div id="menu-btn" class="hide_web" style="position: fixed;left: 0; bottom: 0; opacity: 0.8; filter: alpha(opacity=80); background: #ffffff; z-index:1002;"><img src="../images/icon/menu-icon.png"></div>');
 
 		//메뉴버튼 생성
 		$('#menu-btn').button().click(function( event ) {
 			showMenu();
 		});
-		//모바일인 경우 메뉴를 바디로 옮기고 숨김
-		$('#menu_div').hide( 'slide', {}, 500 );
+		$('#menu_mask').click(function( event ) {
+			hideMenu();
+		});
+		//메뉴를 바디로 옮기고 숨김
+		hideMenu(1);
+		
 		$('#menu_div').append(menu);
 		
 		function showMenu(){
+			$('#menu_mask').show();
 			$('#menu_div').show( 'slide', {}, 500 );
+			$('#menu-btn').hide();
+		}
+		function hideMenu(t){
+			$('#menu_div').hide( 'slide', {}, t ? t : 700 );
+			$('#menu_mask').hide( 'slide', {}, t ? t : 1000 );
+			$('#menu-btn').show();
 		}
 
 		var mc1 = new Hammer(document.getElementById('menu_div'));
 
 		mc1.on("panleft", function(ev) {
-			$('#menu_div').hide( 'slide', {}, 500 );
+			hideMenu();
 		});
 		
 		var mc2 = new Hammer(document.getElementById('menu_left_div'));

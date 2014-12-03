@@ -33,6 +33,14 @@ public class AutoController {
 		mv.addObject("UI_ID", uiId);
 		return mv;
 	}
+	@RequestMapping(value = "{tplPath}/-{uiId}.sh")
+	public ModelAndView autoTpl(HttpServletRequest request, HttpServletResponse response, @PathVariable("tplPath") String tplPath, @PathVariable("uiId") String uiId) throws Exception {
+		tplPath = tplPath.replace('-', '/');
+		LOGGER.info("AutoController");
+		ModelAndView mv = new ModelAndView(tplPath);
+		mv.addObject("UI_ID", uiId);
+		return mv;
+	}
 	@RequestMapping(value = "piece/-{uiId}-{type}.sh")
 	public ModelAndView autoPiece(HttpServletRequest request, HttpServletResponse response, @PathVariable("uiId") String uiId, @PathVariable("type") String type) throws Exception {
 		ModelAndView mv = new ModelAndView("at/piece");

@@ -9,11 +9,6 @@
 <%@ taglib prefix="src" tagdir="/WEB-INF/tags/src"%>
 <tag:portlet width="33%">
 	<tag:portletItem height="250px"><src:auto_make_src uiId="stsPgmCountDate" type="nf"/></tag:portletItem>
-	<tag:portletItem height="250px">
-		<src:auto_make_src ui_type="body" uiId="stsPgmCountDate" type="nf">
-			<src:mk_chart_line_ixy/>
-		</src:auto_make_src>
-	</tag:portletItem>
 	<tag:portletItem height="250px"><src:auto_make_src uiId="stsPgmCountDate" ui_type="chart_line_ixy" type="nf"/></tag:portletItem>
 </tag:portlet>
 <tag:portlet width="34%">

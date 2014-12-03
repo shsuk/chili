@@ -14,20 +14,23 @@
 		$('#header_title').text('메뉴');
 	});
 
-	function openPage(ui_id, tpl_path){
-		var form = $('#new_form');
-		
-		if(form.length<1){
-			form = $('<form id="new_form" method="post" style="disply:none;" target="_new"></form>');
-			$('body').append(form);
-		}
-		form.attr('action', '../' + tpl_path + '/-' + ui_id + '.sh');
-		form.submit();
+	function load(url){
+		var target = $('#main_contents${isMobile ? "" : "_td"}');
+		target.load(url);
 	}
+	function openUrl(url){
 
+		document.location.href = url;
+	}
+	function check(chartId){
+		if(chartId.length>0 && chartId.get(0).clientHeight==0){
+			return;
+		}
+		
+	}
 </script> 
 
-<div id="auto_generated_uI_main main_layout" style="margin: 5px auto;">
+<div id="main_contents" >
 	<table class="lst">
 		<tr>
 			<th class="hide_mb">메 뉴</th>
@@ -44,12 +47,16 @@
 					<li><a target="new" href="../-admin-mapper-main/xml2db_mapping.sh">2. XPath에 필드 매핑</a></li>
 					<li><a target="new" href="../-admin-mapper-main/trigger_mapping.sh">3. XPath에 연동쿼리 매핑</a></li>
 
+					<li class="ui-widget-header">페이지 로딩 예제</li>
+					<li onclick="openUrl('../-at-portlet-ly/sample1.sh')">포틀릿 예제</li>
+					<li onclick="load('../at-portlet/sample1.sh')">포틀릿 예제(레이어)</li>
+					<li onclick="openUrl('../-at-lo-h3/-group_list.sh')">코드 관리</li>
+					<li onclick="load('../at-lo-h3/-group_list.sh')">코드 관리(레이어)</li>
 					<li class="ui-widget-header">기타</li>
-					<li><a target="new" href="../-at-portlet-ly/sample1.sh">포틀릿 예제</a></li>
-					<li><a target="new" href="../-admin-menu-manual/.sh">메뉴얼</a></li>
+					<li><a target="new" href="../-admin-menu-manual/.sh">메뉴얼</li>
 				</ul>
 			</td>
-			<td>
+			<td id="main_contents_td" valign="top">
 				<src:auto_make_src type="bf"/>
 			</td>
 		</tr>

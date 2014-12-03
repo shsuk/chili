@@ -174,7 +174,7 @@ table.tpl td {
 
 .portlet-content {
 	padding: 0.4em;
-	overflow: auto;
+	overflow-y: auto;
 }
 
 .portlet-placeholder {
@@ -183,7 +183,6 @@ table.tpl td {
 	margin: 0.5em;
 	height: 50px;
 }
-
 /*메뉴*/
 .ui-menu { width: 200px; }
 .ui-widget-header { padding: 0.2em; }

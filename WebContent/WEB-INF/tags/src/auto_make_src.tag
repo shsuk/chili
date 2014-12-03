@@ -10,7 +10,7 @@
 <%@ taglib prefix="src"  tagdir="/WEB-INF/tags/src" %> 
 <%@ attribute name="uiId" type="java.lang.String" description="UI ID"%>
 <%@ attribute name="type" required="true" type="java.lang.String" description="bf=버튼&폼, f=폼, nf=폼없음, t=테이블, trh=헤더포함tr단위, tr=tr단위"%>
-<%@ attribute name="ui_type" required="false" type="java.lang.String" description="uiType을 동적으로 설정한다. 값이 body이면 body에 있는 태그가 처리한다.unuse,use,tree,chart_.."%>
+<%@ attribute name="ui_type" required="false" type="java.lang.String" description="uiType을 동적으로 설정한다. unuse,use,tree,chart_.."%>
 <c:set var="UI_ID" value="${empty(uiId) ? UI_ID : uiId}"/>
 
 <sp:sp var="ui_info" queryPath="ui" action="design" processorList="mybatis" exception="false">{ui_id:'${UI_ID}'}</sp:sp>
@@ -28,7 +28,7 @@
 		<c:set scope="request" var="title" value=""/>
 		<c:set var="isList" value="${sp:isType(map.value,'list') }"/>
 		<c:set var="uiType" value="${empty(ui_type) ? ui_field[use_set] : ui_type }"/>
-		<c:set var="src">
+		<c:set var="src"><%// 타입별 ui생성 %>
 			<c:choose>
 				<c:when test="${uiType=='unuse'}">
 					<src:mk_view rcd_key="${map.key }" rcd_value="${map.value }"/>
@@ -46,38 +46,14 @@
 					<src:mk_view rcd_key="${map.key }" rcd_value="${map.value }"/>
 				</c:otherwise>
 			</c:choose>
-			
 		</c:set>
 
-		<c:if test="${fn:startsWith(uiType,'chart_') || uiType=='body'}"><%//그래프인 경우 %>
+		<c:if test="${fn:startsWith(uiType,'chart_')}"><%//그래프인 경우 그래프 생성(그래프는 그래프와 표를 둘다 생성한다.)%>
 			<c:set var="graph">
 				<c:set var="type">etc</c:set>
 				<c:set var="ui_title"><tag:el source="${ui.ui_title}" param="${map.value[0]}"/></c:set>
-				<c:choose>
-					<c:when test="${uiType=='chart_bar_iy'}">
-						<src:mk_chart_bar_iy rcd_value="${map.value }" />
-					</c:when>
-					<c:when test="${uiType=='chart_bar_ixy'}">
-						<src:mk_chart_bar_ixy rcd_value="${map.value }" />
-					</c:when>
-					<c:when test="${uiType=='chart_bar_xy'}">
-						<src:mk_chart_bar_xy rcd_value="${map.value }" />
-					</c:when>
-					<c:when test="${uiType=='chart_pie_iy'}">
-						<src:mk_chart_pie_iy rcd_value="${map.value }" />
-					</c:when>
-					<c:when test="${uiType=='chart_bubble'}">
-						<src:mk_chart_bubble rcd_value="${map.value }" />
-					</c:when>
-					<c:when test="${uiType=='chart_line_ixy'}">
-						<src:mk_chart_line_ixy rcd_value="${map.value }" />
-					</c:when>
-					<c:when test="${uiType=='body'}"><%//설정된 UI가 아닌 소스상에 정의된 태그로 실행 %>
-						<c:set var="sourceData" scope="request" value="${map.value}"/>
-						<jsp:doBody/>
-						<c:remove var="sourceData" scope="request"/>
-					</c:when>
-				</c:choose>
+				
+				<src:mk_chart chartType="${uiType}" rcd_value="${map.value }" />
 			</c:set>
 		</c:if>
 	
@@ -156,7 +132,7 @@
 	<c:when test="${type == 'etc'}"><%//그래프인 경우%>
 		<div id="auto_generated_uI_${page_id}"  style="height: 100%; width: 100%;">	
 			${graph }
-			<div class="sheet" style="margin: 10px; display: none;">${html }</div>		
+			<div class="sheet" style="margin: 10px auto; display: none;"><br>${html }</div>		
 		</div>
 		${script }
 	</c:when>
