@@ -38,9 +38,13 @@
 <script src="../js/chart.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(function() {
-	if(isMobile){
-		return;
+
+	if(!isMobile){
+		tooltip();
 	}
+	
+});
+function tooltip(){
 	$( document ).tooltip({
 		items: "[title]",
 		content: function() {
@@ -58,15 +62,28 @@ $(function() {
 			}
 		}
 	});
+}
+function load(url){
+	var target = $('#main_layout');
+	target.load(url);
+}
+function openUrl(url){
+
+	document.location.href = url;
+}
+function check(chartId){
+	if(chartId.length>0 && chartId.get(0).clientHeight==0){
+		return;
+	}
 	
-});
+}
 </script> 
 </head>
 <body >
 	<header class="fix_height main_layout">
 		<img src="../images/log3.jpg" height="100"><span style="font-size: 30px; margin-left:30px;">Chili프로젝트 <span id="header_title" style="font-size: 30px;"></span></span>
 	</header>
-	<div class="main_layout" style="margin: 3px auto 3px; overflow:auto; ">
+	<div id="main_layout" class="main_layout" style="margin: 3px auto 3px; overflow:auto; ">
 		<c:import url="${UI_TPL }"/>
 	</div>
 	<ul class="menu">

@@ -13,21 +13,6 @@
 	$(function() {
 		$('#header_title').text('메뉴');
 	});
-
-	function load(url){
-		var target = $('#main_contents${isMobile ? "" : "_td"}');
-		target.load(url);
-	}
-	function openUrl(url){
-
-		document.location.href = url;
-	}
-	function check(chartId){
-		if(chartId.length>0 && chartId.get(0).clientHeight==0){
-			return;
-		}
-		
-	}
 </script> 
 
 <div id="main_contents" >
