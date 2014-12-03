@@ -7,7 +7,6 @@
 <%@ taglib prefix="sp" uri="/WEB-INF/tlds/sp.tld"%>
 <%@ taglib prefix="tag"  tagdir="/WEB-INF/tags/tag" %> 
 <%@ taglib prefix="src"  tagdir="/WEB-INF/tags/src" %> 
-<script src="../jquery/js/hammer.min.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 	$(function() {
