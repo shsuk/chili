@@ -1,18 +1,43 @@
 function drawChart(type, chart_id, chartData){
-	$( window  ).resize(function() {
-		try {
-			var chartId = $(chart_id);
-			if(chartId.length<1 || chartId.get(0).clientHeight==0){
-				return;
-			}
-			$.chart_fnc[type](chart_id, chartData);
-		} catch (e) {
-			// TODO: handle exception
+	try {
+		_drawChart(type, chart_id, chartData);
+		$.chart_data.push({type : type, chart_id : chart_id, chartData : chartData});
+	} catch (e) {
+		// TODO: handle exception
+	}
+}
+function _drawChart(type, chart_id, chartData){
+	var chartId = $(chart_id);
+	var isEnable = chartId.length > 0;
+	try {
+		if(chartId.length<1 || chartId.get(0).clientHeight==0){
+			return isEnable;
 		}
-	}).resize();		
-
+		$.chart_fnc[type](chart_id, chartData);
+		
+	} catch (e) {
+		return isEnable;
+	}
+	
+	return isEnable;
+}
+//차트 다시 그리기
+$['reDrawChartByReSize'] = function(){
+	var chart_data = [];
+	
+	for(var i=0; i<$.chart_data.length ; i++){
+		var data = $.chart_data[i];
+		
+		if(_drawChart(data.type, data.chart_id, data.chartData)){
+			chart_data.push(data);
+		}
+	}
+	
+	$.chart_data = chart_data;
 }
 
+
+$.chart_data = [];
 $.chart_fnc = {
 	chart_bar_iy : function(selector, chartData){
 		drawBarIY(selector, chartData);

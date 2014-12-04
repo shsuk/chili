@@ -19,6 +19,8 @@
 <script src="../jquery/jquery-ui-1.11.2.custom/jquery-ui.min.js" type="text/javascript"></script>
 <script src="../jquery/jqGrid/js/i18n/grid.locale-en.js" type="text/javascript"></script>
 <script src="../jquery/jqGrid/js/jquery.jqGrid.min.js" type="text/javascript"></script>
+<script src='../jquery/js/cookies.js' type="text/javascript"></script>
+
 <script src="../js/commonUtil.js" type="text/javascript"></script>
 <script src="../js/autoPageUtils.js" type="text/javascript"></script>
 <script type="text/javascript">

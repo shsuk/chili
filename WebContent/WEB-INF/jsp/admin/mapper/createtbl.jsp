@@ -103,8 +103,8 @@ function selectNode(tree){
         	list.append(fld);
     	}
     }
-    
-    initDefControl();
+    //table의 필드를 동적으로 생성후 콘트롤 초기화
+    initLoadingPage();
   	
 }
 

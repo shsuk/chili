@@ -62,7 +62,7 @@ function closePop(page_id){
 	$( "#dialog" ).dialog('close');	
 }
 //콘트롤을 초기화 한다.
-function initControl(){	
+function initLoadingControl(){	
 	var fields = $('.field');
 	
 	for(var i=0; i< fields.length; i++){
@@ -281,13 +281,14 @@ function linkFnc(obj){
 	;
 }
 
-function openPage(ui_id, tpl_path){
+function openPage(url){
 	var form = $('#new_form');
 	
 	if(form.length<1){
-		form = $('<form id="new_form" method="post" style="disply:none;"></form>');
+		form = $('<form id="new_form" method="post" style="disply:none;" target="_new"></form>');
 		$('body').append(form);
 	}
-	form.attr('action', '../' + tpl_path + '/-' + ui_id + '.sh');
+	
+	form.attr('action', url);
 	form.submit();
 }

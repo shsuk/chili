@@ -91,8 +91,8 @@ function selectNode(tree){
     
     $("[remove=Y]", $("#field_list")).remove();
 
-    initDefControl();
-   // $( "#field_list" ).disableSelection();    	
+  	//연동 매핑정보를 동적으로 생성후 콘트롤 초기화
+    initLoadingPage();   	
 }
 
 </script> 

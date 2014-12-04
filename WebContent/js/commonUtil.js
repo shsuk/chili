@@ -14,16 +14,30 @@
 	
 	$(function() {
 		isMobile = $.cookie('isMobile') == 'Y';
-
-		try {
-			initDefControl();
-		} catch (e) {
-			// TODO: handle exception
-		}
-		
+		//초기 로딩이나 ajx로딩 완료시 콘트롤 초기화
+		initLoadingPage();
 		//콘트롤값 변경시 정합성 체크(미사용시 삭제)
 		checkValidOnChange();
+		//AJAX 호출시, 완료시 초기화 및 기타 처리
+		initAjaxEvent();
 		
+		//***************************************
+		//UI구성을 위한 jquery함수 추가
+		//초기화 위치 확인 필요
+		//***************************************
+		appendQueryFun();
+		
+		//메뉴 초기화
+		initMenu();
+		//영문 숫자 입력 제한 처리
+		initKeypressEvent();
+		//윈도우 리사이즈
+		resizeWindow();
+		//포틀릿 이벤트 처리 (한번만 초기화함)
+		initPortletEvent();
+	});
+	//AJAX 호출시, 완료시 초기화 및 기타 처리
+	function initAjaxEvent(){
 		try {
 			//캐시를 무시하기 위해 더미 파라메터 추가
 			$.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
@@ -37,15 +51,44 @@
 
 			$( document ).ajaxComplete(function() {
 				mask_off();
-				initDefControl();
+				initLoadingPage();
 			});
 		} catch (e) {
 			// TODO: handle exception
 		}
-		//UI구성을 위한 jquery함수 추가
-		appendQueryFun();
-
-		//영문 숫자 입력 제한 처리
+		
+	}
+	//윈도우 리사이즈
+	function resizeWindow(){
+		$( window ).resize(function(e,e1) {
+			var h = window.innerHeight - getFixHeight();
+			var height = h + 'px';
+			var obj = $(".auto_height");
+			obj.css('height', height);
+			var sizeSyncs = $('[size_sync]');
+			for(var i=0; i<sizeSyncs.length ; i++){
+				var syncObj = $($(sizeSyncs[i]).attr('size_sync')).get(0);
+				$(sizeSyncs[i]).css('height', syncObj.clientHeight + 'px');
+				$(sizeSyncs[i]).css('width', (syncObj.clientWidth-5) + 'px');
+			}
+			//차트 다시 그리기
+			if($['reDrawChartByReSize']){
+				setInterval( $['reDrawChartByReSize'], 100);
+			}
+		}).resize();
+	}
+	
+	function getFixHeight(){
+		var fixHeights = $(".fix_height");
+		var fh = 60;
+		
+		for(var i=0; i<fixHeights.length; i++){
+			fh += fixHeights[i].clientHeight;
+		}
+		return fh;
+	}
+	//영문 숫자 입력 제한 처리
+	function initKeypressEvent(){
 		$(document).on('keypress', '[key_press=alpa]', function(event){
 			return alpa(event);
 		});
@@ -70,31 +113,7 @@
 				}
 			}
 		});
-		
-		function getFixHeight(){
-			var fixHeights = $(".fix_height");
-			var fh = 60;
-			
-			for(var i=0; i<fixHeights.length; i++){
-				fh += fixHeights[i].clientHeight;
-			}
-			return fh;
-		}
-		//윈도우 리사이즈
-		$( window ).resize(function(e,e1) {
-			var h = window.innerHeight - getFixHeight();
-			var height = h + 'px';
-			var obj = $(".auto_height");
-			obj.css('height', height);
-			var sizeSyncs = $('[size_sync]');
-			for(var i=0; i<sizeSyncs.length ; i++){
-				var syncObj = $($(sizeSyncs[i]).attr('size_sync')).get(0);
-				$(sizeSyncs[i]).css('height', syncObj.clientHeight + 'px');
-				$(sizeSyncs[i]).css('width', (syncObj.clientWidth-5) + 'px');
-			}
-		}).resize();
-
-	});
+	}
 
 	//UI구성을 위한 jquery함수 추가
 	function appendQueryFun(){
@@ -144,67 +163,68 @@
 		
 	}
 	//초기 로딩이나 ajx로딩 완료시 콘트롤 초기화
-	function initDefControl(){
-		$('.datepicker').datepicker(option);
-		$('.spinner').spinner({ min: 1 });
-		
-		$('[key_press=]').removeAttr('key_press');
-		$('[valid=]').removeAttr('valid');
-		
-		var btns = $( ".button" );
-		for(var i=0; i<btns.length;i++){
-			var btn = $(btns[i]);
-			btn.button({
-				icons: {
-					primary: btn.attr('icons_primary')
+	function initLoadingPage(){
+		try {
+			$('.datepicker').datepicker(option);
+			$('.spinner').spinner({ min: 1 });
+			
+			$('[key_press=]').removeAttr('key_press');
+			$('[valid=]').removeAttr('valid');
+			
+			var btns = $( ".button" );
+			for(var i=0; i<btns.length;i++){
+				var btn = $(btns[i]);
+				btn.button({
+					icons: {
+						primary: btn.attr('icons_primary')
+					}
+				});
+			}
+			
+			
+			//수직분할
+			$( ".hsplit" ).resizable({
+				handles: "e",
+				containment: ".split_containment",
+				create: function( event, ui ) {
+					$('.ui-resizable-e',$(this)).css({right: '0px', background: '#eeeeee', 'z-index':100});
+				},
+				stop: function(){
+					$( window ).resize();
 				}
 			});
+			//모바일에서 처리
+			$( ".split_tab" ).tabs({
+				load: function( event, ui ) {
+					alert(1);
+				}});
+			
+			//수평분할
+			$( ".vsplit" ).resizable({
+				handles: "s",
+				containment: ".split_containment",
+				create: function( event, ui ) {
+					$('.ui-resizable-s',$(this)).css({bottom: '0px', background: '#eeeeee'});
+				},
+				stop: function(){
+					$( window ).resize();
+				}
+			});
+			//콘트롤 초기화
+			initLoadingControl();
+			//포틀릿 초기화
+			initLoadingPortlet();
+		} catch (e) {
+			alert(e.message);
 		}
-		
-		
-		//수직분할
-		$( ".hsplit" ).resizable({
-			handles: "e",
-			containment: ".split_containment",
-			create: function( event, ui ) {
-				$('.ui-resizable-e',$(this)).css({right: '0px', background: '#eeeeee', 'z-index':100});
-			},
-			stop: function(){
-				$( window ).resize();
-			}
-		});
-		//모바일에서 처리
-		$( ".split_tab" ).tabs({
-			load: function( event, ui ) {
-				alert(1);
-			}});
-		
-		//수평분할
-		$( ".vsplit" ).resizable({
-			handles: "s",
-			containment: ".split_containment",
-			create: function( event, ui ) {
-				$('.ui-resizable-s',$(this)).css({bottom: '0px', background: '#eeeeee'});
-			},
-			stop: function(){
-				$( window ).resize();
-			}
-		});
-		//콘트롤 초기화
-		initControl();
-		//포틀릿 초기화
-		initPortlet();
-		//메뉴 초기화
-		initMenu();
 	}
 	//포틀릿 초기화
-	function initPortlet(){
+	function initLoadingPortlet(){
 		$(".portlet-column").sortable({
 			connectWith : ".portlet-column",
 			handle : ".portlet-header",
 			cancel : ".portlet-toggle",
-			placeholder : "portlet-placeholder ui-corner-all",
-			
+			placeholder : "portlet-placeholder ui-corner-all"			
 		});
 		
 		$( ".portlet-column" ).on( "sortstop", function( event, ui ) {
@@ -223,66 +243,8 @@
 		});
 		var initItem = $(".no_init_portlet_item");
 		initItem.removeClass('no_init_portlet_item');
+		initItem.find('.sheet').closest(".portlet").find(".portlet-toggle-sheet").show();
 		
-		var header = initItem.addClass("ui-widget ui-widget-content ui-helper-clearfix ui-corner-all").find(".portlet-header").addClass("ui-widget-header ui-corner-all");
-		header.prepend("<span class='ui-icon ui-icon-minusthick portlet-toggle' title='접기'></span>")
-		header.prepend("<span class='ui-icon ui-icon-arrow-4-diag portlet-toggle-full' title='전체화면'></span>");
-		header.prepend("<span class='ui-icon ui-icon-document portlet-toggle-sheet' title='시트보기'></span>");
-		
-		$(".portlet-toggle", initItem).click(function() {
-			var icon = $(this);
-			icon.toggleClass("ui-icon-minusthick ui-icon-plusthick");
-			
-			icon.closest(".portlet-item").find(".portlet-content").slideToggle();
-		});
-		//표 보이기
-		$(".portlet-toggle-sheet", initItem).click(function() {
-			var icon = $(this);
-			icon.toggleClass("portlet-toggle-sheet-view");
-			
-			icon.closest(".portlet-item").find('.sheet').slideToggle();
-		});
-		//전체화면
-		$(".portlet-toggle-full", initItem).click(function() {
-			fullScreen($(this));
-		});
-		//전체화면
-		$(".portlet-header", initItem).dblclick(function() {
-			var portletItem = $(this).closest(".portlet-item");
-			fullScreen(portletItem.find(".portlet-toggle-full"));
-		});			
-		
-		//전체화면
-		function fullScreen(icon){
-			
-			icon.toggleClass("ui-icon-arrow-4-diag ui-icon-newwin");
-			
-			var portletItem = icon.closest(".portlet-item");
-			var portletCol = $('.portlet-column');
-			var portlet = portletItem.parent();
-			
-			portletCol.toggle();
-
-			if(portlet.hasClass('portlet')){
-				portlet.addClass('move');
-				var portletContent = portletItem.find(".portlet-content");
-				$(portletCol.get(0)).parent().append(portletItem);
-				portlet.attr('height', portletContent.css('height'));
-				portletContent.addClass('auto_height');
-				portletContent.css({height: portletContent.children()[0].clientHeight});
-				$( window ).resize();
-			}else{
-				portlet = $('.move');
-				portlet.removeClass('move');
-				portlet.append(portletItem);
-				var portletContent = portletItem.find(".portlet-content");
-				portletContent.removeClass('auto_height');
-				portletContent.css({height: portlet.attr('height')});
-			}
-			
-			$(window).resize();
-			$(window).scrollTop(0);
-		}
 		//쿠키에 의한 위치 재조정
 		var portletColumn = $( ".portlet-column" );
 		
@@ -301,6 +263,61 @@
 			}
 		}
 
+	}
+	//포틀릿 이벤트 처리 (한번만 초기화함)
+	function initPortletEvent(){
+		$( "body" ).on( "click", '.portlet-toggle', function() {
+			var icon = $(this);
+			icon.toggleClass("ui-icon-minusthick ui-icon-plusthick");
+			icon.closest(".portlet-item").find(".portlet-content").slideToggle();
+		});
+		//표 보이기
+		$( "body" ).on( "click", '.portlet-toggle-sheet', function() {
+			var icon = $(this);
+			icon.toggleClass("portlet-toggle-sheet-view");
+			icon.closest(".portlet-item").find('.sheet').slideToggle();
+		});
+		//전체화면
+		$( "body" ).on( "click", '.portlet-toggle-full', function() {
+			fullScreen($(this));
+		});
+		//전체화면
+		$( "body" ).on( "dblclick", '.portlet-header', function() {
+			var portletItem = $(this).closest(".portlet-item");
+			fullScreen(portletItem.find(".portlet-toggle-full"));
+		});			
+
+	}
+	//포틀릿 전체화면 처리
+	function fullScreen(icon){
+		
+		icon.toggleClass("ui-icon-arrow-4-diag ui-icon-newwin");
+		
+		var portletItem = icon.closest(".portlet-item");
+		var portletCol = $('.portlet-column');
+		var portlet = portletItem.parent();
+		
+		portletCol.toggle();
+
+		if(portlet.hasClass('portlet')){
+			portlet.addClass('move');
+			var portletContent = portletItem.find(".portlet-content");
+			$(portletCol.get(0)).parent().append(portletItem);
+			portlet.attr('height', portletContent.css('height'));
+			portletContent.addClass('auto_height');
+			portletContent.css({height: portletContent.children()[0].clientHeight});
+			$( window ).resize();
+		}else{
+			portlet = $('.move');
+			portlet.removeClass('move');
+			portlet.append(portletItem);
+			var portletContent = portletItem.find(".portlet-content");
+			portletContent.removeClass('auto_height');
+			portletContent.css({height: portlet.attr('height')});
+		}
+		
+		$(window).resize();
+		$(window).scrollTop(0);
 	}
 	//메뉴 초기화
 	function initMenu(){
@@ -353,7 +370,7 @@
 		}
 
 		if(!isMobile){
-			$('#menu_left_div, #menu-btn').mouseenter(function( event ) {
+			$('#menu_left_div').mouseenter(function( event ) {
 				showMenu();
 			});
 			$('#menu_div').mouseleave(function( event ) {

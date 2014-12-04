@@ -7,9 +7,14 @@
 <c:set var="portlet_id" scope="request" value="${empty(portlet_id) ? 1 :portlet_id + 1 }"/>
 <c:set var="id" value="id${sp:uuid() }"/>
 
-<div id="portlet_${portlet_id}" class="portlet no_init_portlet_item">
+<div id="portlet_${portlet_id}" class="portlet ui-widget ui-widget-content ui-helper-clearfix ui-corner-all no_init_portlet_item">
 	<div class="portlet-item"   >
-		<div class="portlet-header"><span id="${id }_title"></span></div>
+		<div class="portlet-header ui-widget-header ui-corner-all">
+			<span id="${id }_title"></span>
+			<span class="ui-icon ui-icon-minusthick portlet-toggle" title="접기"></span>
+			<span class="ui-icon ui-icon-arrow-4-diag portlet-toggle-full" title="전체화면"></span>
+			<span class="ui-icon ui-icon-document portlet-toggle-sheet" style="display: none;"  title="시트보기"></span>
+		</div>
 		<div class="portlet-content" style="height:${height}" id="${id }">
 			<c:catch var="ex">
 				<jsp:doBody/>
