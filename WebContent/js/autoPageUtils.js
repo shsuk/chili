@@ -253,7 +253,7 @@ function linkPopup(ele, ui_id, data){
 		dialog.dialog({
 			autoOpen: false,
 			modal: true,
-			position: isMobile ? {} : { my: "top", at: "top", of: '#auto_generated_uI_main' },
+			position: isMobile ? {} : { my: "center top", at: "center center", of: 'body' },
 			minWidth: isMobile ? 300 : 1000,
 			width: isMobile ? '100%' : 1000,
 			show: {
@@ -281,14 +281,16 @@ function linkFnc(obj){
 	;
 }
 
-function openPage(url){
+function openPage(ui_id, tpl_path){
+	var url = tpl_path ? '../' + tpl_path + '/-' + ui_id + '.sh' : ui_id;
 	var form = $('#new_form');
 	
 	if(form.length<1){
-		form = $('<form id="new_form" method="post" style="disply:none;" target="_new"></form>');
+		form = $('<form id="new_form" method="post" style="disply:none;" target="_blank"></form>');
 		$('body').append(form);
 	}
 	
+
 	form.attr('action', url);
 	form.submit();
 }

@@ -344,7 +344,7 @@
 		body.append('<div id="menu_left_div" class=""  style="position: fixed; left: 0; top: 0; height: 100%;width: 15px;"></div>');
 		body.append('<div id="menu_div" style="position: fixed;left: 0; top: 0; height: 100%; background: #D9E5FF; border:1px solid #cccccc; z-index:1001;"></div>');
 		body.append('<div id="menu_mask" style="position: fixed;left: 0; top: 0; width:100%; height: 100%; background:#D9E5FF; border:1px solid #cccccc; opacity: 0.3; filter: alpha(opacity=30); z-index:1000; disply:none;"></div>');
-		body.append('<div id="menu-btn" class="" style="position: fixed;left: 0; bottom: 0; opacity: 0.6; filter: alpha(opacity=60); background: #DB0000; z-index:1002;"><img src="../images/icon/menu-icon.png"></div>');
+		body.append('<div id="menu-btn" class="" style="position: fixed;left: 0; bottom: 0; opacity: 0.6; filter: alpha(opacity=60); background: #2F9D27; z-index:1002;"><img src="../images/icon/menu-icon.png"></div>');
 
 		//메뉴버튼 생성
 		$('#menu-btn').button().click(function( event ) {
