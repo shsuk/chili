@@ -32,9 +32,9 @@ $(function() {
 	
 });
 
-function edit(page_id){
+function edit(page_id, action_type){
 	var page = $(page_id ? page_id : 'form');
-	$('[name=action_type]', page).val('U');
+	$('[name=action_type]', page).val(action_type ? action_type : 'U');
 	
 	var view_controls = $('.view_control', page);
 	view_controls.hide();
@@ -230,7 +230,7 @@ function linkLoad(ele, ui_id, data, selector){
 		var idx = parseInt(target.attr('monitor')) + parseInt(selector);
 		target = $('.monitor' + idx);
 	}else{
-		target = $(selector ? selector : '#auto_generated_uI_main');//없는 경우는 자신에 로딩
+		target = $(ele).closest(".monitor");
 	}
 	if(target.length<1){//로딩될 타켓이 없는 경우
 		linkPopup(ele, ui_id, data);
@@ -240,12 +240,21 @@ function linkLoad(ele, ui_id, data, selector){
 	if(target.attr('monitor')){
 		target.closest('.split_tab').tabs( "option", "active", parseInt(target.attr('monitor'))-1 );
 	}
-	target.load('../piece/-'+ui_id+'-bf.sh',data);
+	target.load('../piece/-'+ui_id+'-bf.sh',data, function(){
+		
+		var type = $(ele).attr('type');
+		var isEdit = type=='add' || type=='edit';
+		if(isEdit){//수정모드로 전환
+			setTimeout(function(){
+				edit($('[type=page]', target), (type=='add' ? 'I' : 'U'));
+			},1000);
+		}
+	});
 }
 function linkPopup(ele, ui_id, data){
-	
 	data['ui_id'] = ui_id;
 	var dialog = $( "#dialog" );
+	
 	if(dialog.length==0){
 
 		dialog = $('<div id="dialog"></div>');
@@ -253,20 +262,28 @@ function linkPopup(ele, ui_id, data){
 		dialog.dialog({
 			autoOpen: false,
 			modal: true,
-			position: isMobile ? {} : { my: "center top", at: "center center", of: 'body' },
+			position: isMobile ? {} : { my: "center top", at: "center top", of: 'body' },
 			minWidth: isMobile ? 300 : 1000,
 			width: isMobile ? '100%' : 1000,
 			show: {
 				 effect: "blind",
-				 duration: 1500
+				 duration: 1000
 			},
 			hide: {
-				effect: "explode",
+				effect: "blind",
 				duration: 1000
 			}
 		});
 	}
-	dialog.load('../piece/-'+ui_id+'-bf.sh',data);
+	dialog.load('../piece/-'+ui_id+'-bf.sh',data, function(){
+		var type = $(ele).attr('type');
+		var isEdit = type=='add' || type=='edit';
+		if(isEdit){//수정모드로 전환
+			setTimeout(function(){
+				edit($('[type=page]', dialog), (type=='add' ? 'I' : 'U'));
+			},1000);
+		}
+	});
 	dialog.dialog('open');
 }
 function linkPage(ele, ui_id, data, path){
