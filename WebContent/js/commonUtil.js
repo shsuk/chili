@@ -326,18 +326,20 @@
 		if(menu.length<1){
 			return;
 		}
-
-		menu.menu({
-			items: '> :not(.ui-widget-header)',
-			select: function( event, ui ) {
-				hideMenu();	  
-			}
-	    });
+		if(menu.attr('type')!='user'){
+			menu.menu({
+				items: '> :not(.ui-widget-header)',
+				select: function( event, ui ) {
+					hideMenu();
+				}
+		    });
+		}
 		
 		//if(menu.length<1 || $.cookie('isMobile') != 'Y'){//모바일이 아닌 경우 
 		//	return;
 		//}
 		
+		menu.removeClass('_menu');
 		menu.removeClass('menu');
 		//모바일인 경우
 		var body = $('body');
@@ -358,17 +360,6 @@
 		
 		$('#menu_div').append(menu);
 		
-		function showMenu(){
-			$('#menu_mask').show();
-			$('#menu_div').show( 'slide', {}, 500 );
-			$('#menu-btn').hide();
-		}
-		function hideMenu(t){
-			$('#menu_div').hide( 'slide', {}, t ? t : 700 );
-			$('#menu_mask').hide();
-			$('#menu-btn').show();
-		}
-
 		if(!isMobile){
 			$('#menu_left_div').mouseenter(function( event ) {
 				showMenu();
@@ -389,6 +380,16 @@
 		mc2.on("panright", function(ev) {
 			showMenu();
 		});
+	}
+	function showMenu(){
+		$('#menu_mask').show();
+		$('#menu_div').show( 'slide', {}, 500 );
+		$('#menu-btn').hide();
+	}
+	function hideMenu(t){
+		$('#menu_div').hide( 'slide', {}, t ? t : 700 );
+		$('#menu_mask').hide();
+		$('#menu-btn').show();
 	}
 	
 	function getVal(name, obj) {
@@ -511,11 +512,14 @@
 			//alert(22);
 		}, 1000);		
 	}
+	function getFieldName(ctl){
+		return $('[label='+ctl.attr('name')+']',ctl.closest('form')).text();
+	}
 	//정합성 체크함수 구현
 	$.valid_fnc = {
 		notempty : function(ctl){
 			if(ctl.val().trim()=='' || ctl.val().trim()=='<br>'){
-				alert($('[label='+ctl.attr('name')+']').text() + '에 값이 없습니다.');
+				alert(getFieldName(ctl) + '에 값이 없습니다.');
 				ctl.focus();
 				return false;
 			}
@@ -529,7 +533,7 @@
 			try{
 				$.datepicker.parseDate( option.dateFormat, ctl.val());
 			}catch(e){
-				alert($('[label='+ctl.attr('name')+']').text() + '의 값이 올바른 날짜의 값이 아닙니다. 날짜를 입력하세요.');
+				alert(getFieldName(ctl) + '의 값이 올바른 날짜의 값이 아닙니다. 날짜를 입력하세요.');
 				ctl.focus();
 				return false;
 			}
@@ -538,7 +542,7 @@
 		},
 		rangedate : function(ctl, opt){
 			if($('#'+opt[1]).val() > $('#'+opt[2]).val()){
-				alert($('[label='+ctl.attr('name')+']').text() + "의 시작일이 종료일보다 클 수 없습니다.");
+				alert(getFieldName(ctl) + "의 시작일이 종료일보다 클 수 없습니다.");
 				ctl.focus();
 				return false;
 			}
@@ -555,7 +559,7 @@
 				}
 			}
 			
-			alert($('[label='+ctl.attr('name')+']').text() + "에 첨부한 문서 종류는 등록 할 수 없습니다.");
+			alert(getFieldName(ctl) + "에 첨부한 문서 종류는 등록 할 수 없습니다.");
 			ctl.focus();
 			return false;
 			

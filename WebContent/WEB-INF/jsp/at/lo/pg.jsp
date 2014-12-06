@@ -7,7 +7,6 @@
 <%@ taglib prefix="sp" uri="/WEB-INF/tlds/sp.tld"%>
 <%@ taglib prefix="tag"  tagdir="/WEB-INF/tags/tag" %> 
 <%@ taglib prefix="src"  tagdir="/WEB-INF/tags/src" %> 
-
-<div id="auto_generated_uI_main" style="margin: 5px auto; padding:3px; width: 90%; min-width:1000px; border:1px solid #cccccc; ">
-		<src:auto_make_src type="bf"/>
+<div monitor="1" class="monitor monitor1 auto_height" style=" overflow: auto; padding: 3px;">
+	<src:auto_make_src type="bf"/>
 </div>

@@ -25,17 +25,19 @@
 </c:if>
 <c:set var="tot_width">${w_unit=='%' ? 100/tot_width : 1}</c:set>
 <%//컬럼타이틀 생성%>
-<c:forEach var="info" items="${__META__[rcd_key]}" >
+<c:set var="infos" value="${__META__[rcd_key]}"/>
+<c:forEach var="info" items="${infos}" >
 	<c:set var="key">${info.key}</c:set>
 	<c:set var="label">${key}_label</c:set>
 	<c:set var="type">${key}_type</c:set>
 	<c:set var="width">${key}_width</c:set>
-	<c:set scope="request" var="title">${title }<th style="${ui_field[type]=='hidden' ? 'display: none;' : ''}" label="${key}" width="${ui_field[width]=='*' ? '*' : ui_field[width]*tot_width }${ui_field[width]=='*' ? '' : w_unit}">${ui_field[label] }</th></c:set>
+	<c:set var="hide">${key}_hide</c:set>
+	<c:set scope="request" var="title">${title }<th class="${ui_field[hide]=='hide' ? 'hide_mb' : '' }" style="${ui_field[type]=='hidden' ? 'display: none;' : ''}" label="${key}" width="${ui_field[width]=='*' ? '*' : ui_field[width]*tot_width }${ui_field[width]=='*' ? '' : w_unit}">${ui_field[label] }</th></c:set>
 </c:forEach>
 <%//목록 생성%>
 <c:forEach var="row" items="${rcd_value }" varStatus="status">
 	<tr class="row_${status.index + 1}">
-		<c:forEach var="info" items="${row }" >
+		<c:forEach var="info" items="${infos}">
 			<c:set var="key">${info.key}</c:set>
 			<c:set var="label">${key}_label</c:set>
 			<c:set var="type">${key}_type</c:set>
@@ -44,16 +46,17 @@
 			<c:set var="valid">${key}_valid</c:set>
 			<c:set var="keyValid">${key}_key_valid</c:set>
 			<c:set var="width">${key}_width</c:set>
+			<c:set var="hide">${key}_hide</c:set>
 			<c:set var="maxlength">${key}_maxlength</c:set>
 
 			<c:choose>
 				<c:when test="${type!='total_record'}">
 				<%//캐쉬처리%>
-					<td  style="${ui_field[type]=='hidden' ? 'display: none;' : ''}" ${fn:startsWith(ui_field[type],'date') || ui_field[type] == 'select' || ui_field[type] == 'code' || ui_field[type] == 'button' ? 'align="center"' : (fn:startsWith(ui_field[type],'number') ? 'align="right"' : '') }>
+					<td class="${ui_field[hide]=='hide' ? 'hide_mb' : '' }" style="${ui_field[type]=='hidden' ? 'display: none;' : ''}" ${fn:startsWith(ui_field[type],'date') || ui_field[type] == 'select' || ui_field[type] == 'code' || ui_field[type] == 'button' ? 'align="center"' : (fn:startsWith(ui_field[type],'number') ? 'align="right"' : '') }>
 						<src:mk_field name="${key }" type="${ui_field[type] }" values="${row }" link="${ui_field[link] }"  link_type="${ui_field[link_type] }" valid="${ui_field[valid] }"  keyValid="${ui_field[keyValid] }" maxlength="${ui_field[maxlength] }" label="${ui_field[label] }"/> 
 					</td>
 				</c:when>
-				<c:otherwise>
+				<c:otherwise><%//뷰에서 처리됨(사용안될것 같음) %>
 					<c:if test="${empty(paging) }">
 						<c:set scope="request" var="paging">
 							<src:paging totCount="${rcd_value[key]}" _start="${rcd_value['_start'] }" rows="${rcd_value['_rows']}"/>

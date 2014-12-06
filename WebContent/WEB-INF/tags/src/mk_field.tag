@@ -38,9 +38,13 @@
 			${values[name_fmt]}
 		</c:when>
 
+		<c:when test="${type=='read'}">
+			<span name="${name }">${values[name]}</span>
+			<input type="hidden" name="${name }"  value="${values[name]}">
+		</c:when>
 		<c:when test="${type=='text'}">
 			<c:set var="idEditable" value="${true}"/>
-			<input class="control" type="text" name="${name }"  value="${values[name]}" style="width: 99%;" maxlength="${maxlength }" valid="${valid }" key_press="${keyValid }"} >
+			<input class="control" type="text" name="${name }"  value="${values[name]}" style="width: 99%;" maxlength="${maxlength }" valid="${valid }" key_press="${keyValid }" >
 		</c:when>
 		<c:when test="${type=='number'}">
 			<c:set var="idEditable" value="${true}"/>

@@ -79,7 +79,7 @@
 <c:set var="buton_Html">
 	<div style="clear: both; height: 25px; margin-top: 10px;padding:3px; ">
 		<c:if test="${!empty(ui.add_param) }">
-			<div class="add_btn ui-widget-header ui-corner-all btn_right" style="" onclick="${ui.add_type}(${ui.add_param})">등록</div>
+			<div class="add_btn ui-widget-header ui-corner-all btn_right" type="add" layerId="#auto_generated_uI_${page_id}" onclick="${ui.add_type}(this,${ui.add_param})">등록</div>
 		</c:if>
 		<c:forEach var="btn" items="${fn:split(ui.use_btn,',') }">
 			<c:choose>
@@ -89,9 +89,7 @@
 				<c:when test="${btn=='C' }">
 					<div class="cancel_btn ui-widget-header ui-corner-all btn_right" style=" display: none;" onclick="cancel('#auto_generated_uI_${page_id}')">취소</div>
 				</c:when>
-				<c:when test="${!empty(add_param) }">
-					<div class="add_btn ui-widget-header ui-corner-all btn_right" style="" onclick="${ui.add_type}(${ui.add_param})">등록</div>
-				</c:when>
+				
 				<c:when test="${btn=='U' }">
 					<div class="edit_btn ui-widget-header ui-corner-all btn_right" style="" onclick="edit('#auto_generated_uI_${page_id}')">수정</div>
 				</c:when>
@@ -130,7 +128,7 @@
 <%-- 페이지 출력 --%>
 <c:choose>
 	<c:when test="${type == 'etc'}"><%//그래프인 경우%>
-		<div id="auto_generated_uI_${page_id}"  style="height: 100%; width: 100%;">	
+		<div id="auto_generated_uI_${page_id}"  type="page" style="height: 100%; width: 100%;">	
 			${graph }
 			<div class="sheet" style="margin: 10px auto; display: none;"><br>${html }</div>		
 		</div>
@@ -164,7 +162,7 @@
 		${script }
 	</c:when>
 	<c:when test="${type=='t' }">
-		<table id="auto_generated_uI_${page_id}" class="${isList ? 'lst' : 'vw' }" border="0" cellspacing="0" cellpadding="0"  style="margin-bottom: 10px;">
+		<table id="auto_generated_uI_${page_id}" class="${isList ? 'lst' : 'vw' }"  type="page" border="0" cellspacing="0" cellpadding="0"  style="margin-bottom: 10px;">
 			<thead>
 				${title }
 			</thead>

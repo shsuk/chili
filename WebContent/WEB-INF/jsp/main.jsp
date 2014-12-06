@@ -103,6 +103,7 @@ function check(chartId){
 		<li onclick="load('at-lo-h3/-group_list.sh')">코드 관리(레이어)</li>
 		<li class="ui-widget-header">기타</li>
 		<li onclick="openUrl('admin-menu-manual/.sh')">메뉴얼</li>
+		<li onclick="openUrl('at-lo-pg/-devReqList.sh')">요구사항리스트</li>
 	</ul>
 	<footer class="fix_height main_layout" style="clear: both; ">
 		test

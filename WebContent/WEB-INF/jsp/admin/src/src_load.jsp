@@ -24,6 +24,8 @@
 	chart_bubble=Bubble-(i.x.y)
 </c:set>
 <c:set var="colType">
+	unuse=미사용,
+	read=읽기전용,
 	text=문자열,
 	textarea=문장,
 	date=날짜,
@@ -92,17 +94,18 @@
 	</tr>
 </table>
 
-<table id="resizable_container" class="ui_design_form" style="clear: both;width:${col_count*100+800 }px; "><tr><td valign="top">
+<table id="resizable_container" class="ui_design_form" style="clear: both;width:100%; "><tr><td valign="top" width="*">
 
-	<table id="ui_source_config" style="width:800px ;" class="lst" border="0" cellspacing="0" cellpadding="0" >
+	<table id="ui_source_config" style="width:100% ;" class="lst" border="0" cellspacing="0" cellpadding="0" >
 		<colgroup>
 			<col width="100">
 			<col width="100">
 			<col width="100">
-			<col width="100">
+			<col width="300">
 			<col width="*">
-			<col width="130">
-			<col width="50">
+			<col width="180">
+			<col width="40">
+			<col width="40">
 		</colgroup>
 		<c:forEach var="map" items="${RESULT }">
 			
@@ -112,9 +115,10 @@
 				</c:forEach>
 				<tr>
 					<td colspan="10" style="text-align: left; background: #D9E5FF;">
-						<div  style="display:inline;width: 50%; "><b>레코드 아이디</b> : ${map.key}</div>
+						<div  style="float:left; width: 50%; "><b>레코드 아이디</b> : ${map.key}</div>
 						<c:set var="use_set" value="use_${map.key}"/>
-						<div style=""><tag:radio_array name="${use_set}" codes="${use_set_code }"  checked="${empty(ui_field[use_set]) ? 'use' : ui_field[use_set] }" /></div>
+						<div style="float: right;"><tag:radio_array name="${use_set}" codes="${use_set_code }"  checked="${empty(ui_field[use_set]) ? 'use' : ui_field[use_set] }" /></div>
+						<div style="float: right;"><b>UI타입 :</b> &nbsp;</div>
 					</td>
 				</tr>
 				<tr>
@@ -124,7 +128,8 @@
 					<th class="ui-state-default ui-th-column ui-th-ltr">링크</th>
 					<th class="ui-state-default ui-th-column ui-th-ltr">정합성</th>
 					<th class="ui-state-default ui-th-column ui-th-ltr">key필터</th>
-					<th class="ui-state-default ui-th-column ui-th-ltr">Width</th>
+					<th class="ui-state-default ui-th-column ui-th-ltr">폭</th>
+					<th class="ui-state-default ui-th-column ui-th-ltr" title="리스트인 경우 스마트폰에서 숨김">숨김</th>
 				</tr>
 				
 				<c:forEach var="info" items="${__META__[map.key]}">
@@ -136,6 +141,7 @@
 						<c:set var="valid">${info.key}_valid</c:set>
 						<c:set var="keyValid">${info.key}_key_valid</c:set>
 						<c:set var="width">${info.key}_width</c:set>
+						<c:set var="hide">${info.key}_hide</c:set>
 						<c:set var="maxlength">${info.key}_maxlength</c:set>
 						
 						<c:set var="isInit" value="${!empty(ui_field[label])}"/>
@@ -146,8 +152,10 @@
 						</td>
 						<td><!-- 필드명 -->
 							<c:set var="label_lang"><src:lang id="${info.key }"/></c:set>
+							<c:set var="label_val">${ui_field[label] }</c:set>
+							
 							<div class="field_name${isList } drg${isList } th${isList }" type="field_name" title="${info.key }" style="border${isList }: 1px solid #c5dbec; height: 20px;cursor${isList }: move; display: inline;">
-								${isList=='Y' ? '' : '☺' }<input class="field_label" type="text" name="${label}" style="width: 70px;" value="${(empty(ui_field[label]) || info.key==ui_field[label]) ? label_lang : ui_field[label] }">
+								${isList=='Y' ? '' : '☺' }<input class="field_label" type="text" name="${label}" style="width: 70px;" value="${(empty(label_val) || info.key==label_val) ? label_lang : label_val }">
 							</div>
 						</td>
 						<td title="Tree의 그룹타입으로 지정한 경우 필드명에 최상위 아이디를 넣으세요."><!-- 필드타입 -->
@@ -185,7 +193,7 @@
 						</td>
 						<td>
 							<tag:select_array name="${link_type}" codes="linkLoad=Load,linkPopup=팝업,linkPage=새페이지,linkFnc=함수"  selected="${ui_field[link_type]}" />
-							<input class="input_link" name="${link}" type="text" value="${ui_field[link] }" style="width: 100%;" title="<b>Load</b> : ui_id, {}, selector or 숫자, <br><b>팝업</b> : ui_id, {}, <br><b>새페이지</b> : ui_id, {}, path, <br><b>함수</b> : function">
+							<input class="input_link" name="${link}" type="text" value="${ui_field[link] }" style="width: 200px;" title="<b>Load</b> : ui_id, {}, selector or 숫자, <br><b>팝업</b> : ui_id, {}, <br><b>새페이지</b> : ui_id, {}, path, <br><b>함수</b> : function">
 						</td>
 						<td>
 							<c:set var="valids">${valid}[]</c:set>
@@ -194,6 +202,9 @@
 						</td>
 						<td><tag:radio_array name="${keyValid}" codes="alpa=영문,numeric=숫자,alpa_numeric=영숫자"  checked="${isInit ? ui_field[keyValid] : (fieldType=='number' ? 'numeric' : '') }" /></td>
 						<td><input type="text" name="${width}" style="width: 100%;" value="${isInit ? ui_field[width] : 10 }"></td>
+						<td align="center">
+							<tag:check_array name="${hide}" codes="hide= "  checked="${isInit ? ui_field[hide] : false}" />
+						</td>
 					</tr>
 				</c:forEach>
 	
@@ -201,7 +212,7 @@
 		</c:forEach>
 	</table>
 
-</td><td valign="top"  style="width:${col_count*100*2 }px; ">
+</td><td valign="top"  style="display: none; ">
 
 	<div style="text-align:left;  ; background: #cccccc;">
 		<b>UI 디자인</b><br>☺아이콘을 드래그하여 배치하세요.

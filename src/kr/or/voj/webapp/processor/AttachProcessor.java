@@ -70,6 +70,10 @@ public class AttachProcessor implements ProcessorService{
 		params.put("_atach_all", attchFileList);
 		params.put("_atach", result);
 		
+		if(!params.containsKey("del_file_id_")){
+			String[] delId = {"0"};
+			params.put("del_file_id_", delId);
+		}
 		ProcessorServiceFactory.executeQuery("attach", "insert", params);
 		return null;
 	}

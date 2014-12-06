@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   
+<mapper namespace="develop">
+	<!-- 요구사항 리스트 -->
+	<select id="list_1_rows"  useCache="true" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
+		SELECT SQL_CALC_FOUND_ROWS 
+			req_id,req_type,subject,sch_end_dt,exp_end_dt,req_status,req_name,developer_id,
+			(SELECT count(file_id) FROM sys_attach_tbl WHERE file_group_id = t1.file_group_id) attach
+		FROM sys_dev_req_tbl t1
+		WHERE del_yn = 'N' 
+		
+		<if test="search_type=='subject'">
+			and subject  like concat('%', #{search_text}, '%') 
+		</if>
+		<if test="search_type=='reg_id'">
+			and reg_id  like concat('%', #{search_text}, '%') 
+		</if>
+		<if test="search_type=='contents'">
+			and contents  like concat('%', #{search_text}, '%') 
+		</if>
+		ORDER BY req_id desc
+		LIMIT ${_start==null ? 0 : _start} , ${_rows==null  ? 20 : _rows}
+	</select>
+	<!-- 요구사항 리스트 레코드 갯수 -->
+	<select id="list_2_#cnt"  parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
+		SELECT FOUND_ROWS() cnt, ${_start==null ? 0 : _start} _start, ${_rows==null  ? 20 : _rows} _rows
+	</select>
+	<!-- 조회 -->
+	<select id="view_1_#row"  useCache="true" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap" resultType="kr.or.voj.webapp.utils.DefaultLowerCaseMap">
+		SELECT t1.*
+		FROM sys_dev_req_tbl t1
+		WHERE req_id = #{req_id}
+	</select>
+	<!-- 등록 -->
+   	<update id="insert_1" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap">
+		INSERT INTO sys_dev_req_tbl(
+			subject, contents, req_type, 
+			end_dt,
+			sch_end_dt,
+			exp_end_dt,
+			req_status,req_name,developer_id,
+			reg_id,reg_dt,
+			chg_id,chg_dt,
+			file_group_id
+		)VALUES(
+			#{subject}, #{contents}, #{req_type}, 
+			if(#{end_dt}='', null, #{end_dt}),
+			if(#{sch_end_dt}='', null, #{sch_end_dt}),
+			#{exp_end_dt},
+			#{req_status},#{req_name},#{developer_id},
+			#{session.user_id}, now(),
+			#{session.user_id}, now(),
+			#{file_group_id}
+		)
+	</update>
+	<!-- 수정 -->
+   	<update id="update_1" parameterType="org.apache.commons.collections.map.CaseInsensitiveMap">
+ 		UPDATE sys_dev_req_tbl
+		SET 
+			subject = #{subject}, 
+			req_type = #{req_type},
+			contents = #{contents}, 
+			end_dt = if(#{end_dt}='', null, #{end_dt}),
+			sch_end_dt = if(#{sch_end_dt}='', null, #{sch_end_dt}),
+			exp_end_dt = #{exp_end_dt},
+			req_status = #{req_status},
+			req_name = #{req_name},
+			developer_id = #{developer_id},
+			chg_id = #{session.user_id}, 
+			chg_dt = now(),
+			file_group_id = #{file_group_id}
+		WHERE req_id = #{req_id}
+   	</update>
+	
+</mapper>
