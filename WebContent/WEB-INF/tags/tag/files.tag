@@ -35,7 +35,14 @@
 		<c:forEach var="row" items="${files }">
 			<div style="display: ${type=='files_img' ? 'inline' : '' };"><a href="../../dl.sh?file_id=${row.file_id}">
 				<c:if test="${type=='files_img' }">
-					<img src="../dl.sh?file_id=${row.file_id}" height="100">
+					<c:choose>
+						<c:when test="${row.file_ext=='jpg' || row.file_ext=='png' || row.file_ext=='gif'}">
+							<img src="../dl.sh?file_id=${row.file_id}" height="100">
+						</c:when>
+						<c:otherwise>
+							<img src="../images/icon/documents-icon.png" height="100">
+						</c:otherwise>
+					</c:choose>
 				</c:if>
 				<c:if test="${type!='files_img' }">
 					${row.file_name }
