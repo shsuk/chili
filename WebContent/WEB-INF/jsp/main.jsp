@@ -89,7 +89,7 @@ function check(chartId){
 	</div>
 	<ul class="menu">
 		<li class="ui-widget-header">개발 메뉴</li>
-		<li onclick="openPage('../admin-src/main.sh')">UI 생성</li>
+		<li onclick="openPage('../admin-src/main.sh')"><img src="../images/icon/program-group-icon.png"> UI 생성</li>
 		
 		<li class="ui-widget-header">XML to DB 연동</li>
 		<li onclick="openUrl('admin-mapper-main/createtbl.sh')">1. 테이블 생성</a></li>
@@ -102,8 +102,8 @@ function check(chartId){
 		<li onclick="openUrl('at-lo-h3/-group_list.sh')">코드 관리</li>
 		<li onclick="load('at-lo-h3/-group_list.sh')">코드 관리(레이어)</li>
 		<li class="ui-widget-header">기타</li>
-		<li onclick="openUrl('admin-menu-manual/.sh')">메뉴얼</li>
-		<li onclick="openUrl('at-lo-pg/-devReqList.sh')">요구사항리스트</li>
+		<li onclick="openUrl('admin-menu-manual/.sh')"><img src="../images/icon/help-file-icon.png"> 메뉴얼</li>
+		<li onclick="openUrl('at-lo-pg/-devReqList.sh')"><img src="../images/icon/network-checklist-icon.png"> 요구사항 리스트</li>
 	</ul>
 	<footer class="fix_height main_layout" style="clear: both; ">
 		test
